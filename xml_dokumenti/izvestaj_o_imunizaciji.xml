@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<izvestaj_o_imunizaciji>
+    <period>
+        <od>
+            01.08.2021.
+        </od>
+        <do>
+            01.09.2021.
+        </do>
+    </period>
+    <broj_interesovanja_o_imunizaciji>
+        2758
+    </broj_interesovanja_o_imunizaciji>
+    <broj_zahteva_za_digiatlni_sertifikat>
+        453
+    </broj_zahteva_za_digiatlni_sertifikat>
+    <broj_izdatih_digitalnih_sertifikata>
+        428
+    </broj_izdatih_digitalnih_sertifikata>
+    <broj_primljenih_doza_vakcina>
+        3225
+    </broj_primljenih_doza_vakcina>
+    <broj_novo_vakcinisanih>
+        1789
+    </broj_novo_vakcinisanih>
+    <raspodela_proizvodjaca>
+        <vakcina tip="Pfizer, BioNTech">
+            1625
+        </vakcina>
+        <vakcina tip="Sinopharm">
+            1100
+        </vakcina>
+        <vakcina tip="Sputnik V">
+            356
+        </vakcina>
+        <vakcina tip="AstraZeneca, Oxford">
+            144
+        </vakcina>
+    </raspodela_proizvodjaca>
+    <datum_izdavanja>
+        11.09.2021.
+    </datum_izdavanja>
+</izvestaj_o_imunizaciji>

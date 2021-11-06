@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interesovanje_za_vakcinisanje>
+    <licni_podaci>
+        <drzavljanstvo>
+            Drzavljanjin Republike Srbije
+        </drzavljanstvo>
+        <jmbg>
+            1234567891234
+        </jmbg>
+        <ime>
+            Jovana
+        </ime>
+        <prezime>
+            Jevtic
+        </prezime>
+        <adresa_elektronske_poste>
+            jovana@gmail.com
+        </adresa_elektronske_poste>
+        <broj_mobilnog_telefona>
+            061474749390
+        </broj_mobilnog_telefona>
+        <broj_fiksnog_telefona>
+            0214658939
+        </broj_fiksnog_telefona>
+    </licni_podaci>
+    <podaci_o_vakcinisanju>
+        <opstina_vakcinisanja>
+            Novi Sad
+        </opstina_vakcinisanja>
+        <tip_vakcine>
+            Pfizer-BioNTech
+        </tip_vakcine>
+        <dobrovoljni_davalac_krvi ></dobrovoljni_davalac_krvi>
+    </podaci_o_vakcinisanju>
+    <datum_podnosenja>
+        06.11.2021.
+    </datum_podnosenja>
+</interesovanje_za_vakcinisanje>
