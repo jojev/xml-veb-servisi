@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1" targetNamespace="http://www.ftn.uns.ac.rs/zahtev_za_sertifikat"
+    xmlns="http://www.ftn.uns.ac.rs/zahtev_za_sertifikat">
+
+    <xs:element name="zahtev_za_izdavanje_sertifikata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="podnosilac_zahteva" type="osoba"/>
+                <xs:element name="razlog_za_podnosenje" type="xs:string"/>
+                <xs:element name="mesto_podnosenja_zahteva" type="xs:string"/>
+                <xs:element name="datum_podnosenja_zahteva" type="xs:date"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="osoba">
+        <xs:sequence>
+            <xs:element name="ime_prezime" type="xs:string"/>
+            <xs:element name="datum_rodjenja">
+                <xs:simpleType>
+                    <xs:restriction base="xs:date">
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="pol" type="pol"/>
+            <xs:element name="jmbg">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="\d{13}"/>
+                        <xs:length value="13"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="broj_pasosa">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:length value="9"/>
+                        <xs:pattern value="\d{9}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType final="" name="pol">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Zenski"/>
+            <xs:enumeration value="Muski"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

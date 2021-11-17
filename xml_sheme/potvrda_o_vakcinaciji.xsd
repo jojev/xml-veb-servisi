@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1" targetNamespace="http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji"
+    xmlns="http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji">
+
+    <xs:element name="potvrda_o_vakcinaciji">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="sifra_potvrde_vakcinacije">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="\d{7}-\d{7}"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="licni_podaci" type="osoba"/>
+                <xs:element name="podaci_o_vakcinaciji" type="vakcinacija"/>
+                <xs:element name="datum_izdavanja_potvrde" type="xs:date"/>
+                <xs:element name="qr-kod" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="osoba">
+        <xs:sequence>
+            <xs:element name="ime_prezime" type="xs:string"/>
+            <xs:element name="datum_rodjenja" type="xs:date"/>
+            <xs:element name="pol">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Musko"/>
+                        <xs:enumeration value="Zensko"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="jmbg">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:length value="13"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="vakcinacija">
+        <xs:sequence>
+            <xs:element name="doze">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" name="doza" type="doza"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="zdravstvena_ustanova" type="xs:string"/>
+            <xs:element name="naziv_vakcine" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="doza">
+        <xs:sequence>
+            <xs:element name="datum_davanja" type="xs:date"/>
+            <xs:element name="serija" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="redni_broj">
+            <xs:simpleType>
+                <xs:restriction base="xs:integer">
+                    <xs:minInclusive value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+</xs:schema>

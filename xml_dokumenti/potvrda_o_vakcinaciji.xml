@@ -1,36 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<potvrda_o_vakcinaciji>
-    <sifra_potvrde_vakcinacije>
-        1234567-7654321
-    </sifra_potvrde_vakcinacije>
+<potvrda_o_vakcinaciji
+    xmlns="http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji
+    ../xml_sheme/potvrda_o_vakcinaciji.xsd">
+    <sifra_potvrde_vakcinacije>1234567-7654321</sifra_potvrde_vakcinacije>
     <licni_podaci>
-        <ime_prezime>
-            Dragana Filipovic
-        </ime_prezime>
-        <datum_rodjenja>
-            21.12.1998.
-        </datum_rodjenja>
-        <pol>
-            Zensko
-        </pol>
-        <jmbg>
-            1234567891234
-        </jmbg>
+        <ime_prezime>Dragana Filipovic</ime_prezime>
+        <datum_rodjenja>1998-12-24</datum_rodjenja>
+        <pol>Zensko</pol>
+        <jmbg>1234567891234</jmbg>
     </licni_podaci>
     <podaci_o_vakcinaciji>
         <doze>
             <doza redni_broj="1">
-                <datum_davanja>
-                    02.07.2021.
-                </datum_davanja>
+                <datum_davanja>2021-02-07</datum_davanja>
                 <serija>
                     FC3098
                 </serija>
             </doza>
             <doza redni_broj="2">
-                <datum_davanja>
-                    23.07.2021.
-                </datum_davanja>
+                <datum_davanja>2021-07-23</datum_davanja>
                 <serija>
                     FC3143
                 </serija>
@@ -43,9 +33,7 @@
             Pfizer BioNTech COVID-19 Vaccine
         </naziv_vakcine>
     </podaci_o_vakcinaciji>
-    <datum_izdavanja_potvrde>
-        02.07.2021.
-    </datum_izdavanja_potvrde>
+    <datum_izdavanja_potvrde>2021-07-02</datum_izdavanja_potvrde>
     <qr-kod>
         url.com
     </qr-kod>
