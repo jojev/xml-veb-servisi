@@ -1,29 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<zahtev_za_izdavanje_sertifikata>
+<zahtev_za_izdavanje_sertifikata
+    xmlns="http://www.ftn.uns.ac.rs/zahtev_za_sertifikat"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/zahtev_za_sertifikat
+    ../xml_sheme/zahtev_za_sertifikat.xsd">
     <podnosilac_zahteva>
-        <ime_prezime>
-            Dragana Filipovic
-        </ime_prezime>
-        <datum_rodjenja>
-            24.12.1998.
-        </datum_rodjenja>
-        <pol>
-            Zenski
-        </pol>
-        <jmbg>
-            1234567891234
-        </jmbg>
-        <broj_pasosa>
-            123456789
-        </broj_pasosa>
+        <ime_prezime>Dragana Filipovic</ime_prezime>
+        <datum_rodjenja>1998-12-24</datum_rodjenja>
+        <pol>Muski</pol>
+        <jmbg>1234567891234</jmbg>
+        <broj_pasosa>123456789</broj_pasosa>
     </podnosilac_zahteva>
-    <razlog_za_podnosenje>
-        razlog podnosenja zahteva
-    </razlog_za_podnosenje>
-    <mesto_podnosenja_zahteva>
-        Novi Sad
-    </mesto_podnosenja_zahteva>
-    <datum_podnosenja_zahteva>
-        06.11.2021.
-    </datum_podnosenja_zahteva>
+    <razlog_za_podnosenje>razlog podnosenja zahteva</razlog_za_podnosenje>
+    <mesto_podnosenja_zahteva>Novi Sad</mesto_podnosenja_zahteva>
+    <datum_podnosenja_zahteva>2021-06-12</datum_podnosenja_zahteva>
 </zahtev_za_izdavanje_sertifikata>
