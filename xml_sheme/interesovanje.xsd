@@ -27,7 +27,6 @@
             <xs:element name="jmbg">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
-                        <xs:length value="13"/>
                         <xs:pattern value="\d{13}"/>
                     </xs:restriction>
                 </xs:simpleType>
