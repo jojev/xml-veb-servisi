@@ -4,11 +4,11 @@ http://www.ftn.uns.ac.rs/digitalni_sertifikat/123456/21
 http://www.ftn.uns.ac.rs/interesovanje/jmbg
 http://www.ftn.uns.ac.rs/interesovanje/1234567891234
 
-http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji/period_od
-http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji/2021-08-01
+http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji/period_od/period_do
+http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji/2021-08-01/2021-09-01
 
-http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/jmbg(broj_pasosa)
-http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/1234567891234
+http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/jmbg(broj_pasosa)/datum
+http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/1234567891234/2021-06-11
 
 http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji/jmbg
 http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji/1234567891234
