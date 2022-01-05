@@ -1,6 +1,6 @@
-package com.xml.officialbackend;
+package test.java.com.xml.officialbackend;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
