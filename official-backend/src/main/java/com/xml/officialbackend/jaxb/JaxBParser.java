@@ -24,6 +24,7 @@ public class JaxBParser {
     public <T> OutputStream marshall(Class genericClass,T objectToMarshall) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(genericClass);
         Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         OutputStream os = new ByteArrayOutputStream();
         marshaller.marshal(objectToMarshall, os);
         return os;
