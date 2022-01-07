@@ -18,11 +18,10 @@ public class ExistDbManager {
     
     public void openConnection() throws XMLDBException, IOException, ClassNotFoundException,
             InstantiationException, IllegalAccessException {
-        Class<?> cl = Class.forName(AuthenticationUtilities.loadProperties().driver);
 
+        Class<?> cl = Class.forName(AuthenticationUtilities.loadProperties().driver);
         Database database = (Database) cl.newInstance();
         database.setProperty("create-database", "true");
-
         DatabaseManager.registerDatabase(database);
     }
 
@@ -45,18 +44,17 @@ public class ExistDbManager {
                     AuthenticationUtilities.loadProperties().password);
             collection.setProperty(OutputKeys.INDENT, "yes");
             resource = (XMLResource) collection.getResource(documentId);
-            return resource;
-        } finally {
-            closeConnection(collection,resource);
-
+        } catch (Exception e) {
+            closeConnection(collection, resource);
         }
-
+        return resource;
     }
 
     public void store(String collectionId, String documentId, String xmlString) throws Exception  {
         openConnection();
         Collection col = null;
         XMLResource res = null;
+
         try {
             col = getOrCreateCollection(collectionId, 0);
             res = (XMLResource) col.createResource(documentId, XMLResource.RESOURCE_TYPE);
@@ -95,10 +93,10 @@ public class ExistDbManager {
                         AuthenticationUtilities.loadProperties().password);
 
                 if (startCol == null) {
-
                     // child collection does not exist
 
                     String parentPath = path.substring(0, path.lastIndexOf("/"));
+
                     Collection parentCol = DatabaseManager.getCollection(AuthenticationUtilities.loadProperties().uri + parentPath,
                             AuthenticationUtilities.loadProperties().user,
                             AuthenticationUtilities.loadProperties().password);

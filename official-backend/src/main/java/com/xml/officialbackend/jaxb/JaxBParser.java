@@ -12,13 +12,14 @@ import org.xmldb.api.modules.XMLResource;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.io.StringReader;
 
 @Component
 public class JaxBParser {
     public <T> T unmarshall(XMLResource resource, Class genericClass) throws JAXBException, XMLDBException {
         JAXBContext context = JAXBContext.newInstance(genericClass);
         Unmarshaller unmarshaller = context.createUnmarshaller();
-        return (T) unmarshaller.unmarshal(resource.getContentAsDOM());
+        return (T) unmarshaller.unmarshal(new StringReader(resource.getContent().toString()));
     }
 
     public <T> OutputStream marshall(Class genericClass,T objectToMarshall) throws JAXBException {

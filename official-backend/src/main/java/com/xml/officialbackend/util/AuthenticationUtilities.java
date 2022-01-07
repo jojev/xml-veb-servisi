@@ -44,11 +44,14 @@ public class AuthenticationUtilities {
      * @return the configuration object
      */
     public static ConnectionProperties loadProperties() throws IOException {
-        String propsName = "exist.properties";
+        String propsName = "main/resources/application.properties";
 
         InputStream propsStream = openStream(propsName);
-        if (propsStream == null)
+
+        if (propsStream == null){
             throw new IOException("Could not read properties " + propsName);
+        }
+
 
         Properties props = new Properties();
         props.load(propsStream);
