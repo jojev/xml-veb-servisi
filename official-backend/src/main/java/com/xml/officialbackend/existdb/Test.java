@@ -20,8 +20,8 @@ public class Test {
             "<interesovanje_za_vakcinisanje\n" +
             "    xmlns=\"http://www.ftn.uns.ac.rs/interesovanje\"\n" +
             "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
-            "    xsi:schemaLocation=\"http://www.ftn.uns.ac.rs/interesovanje\n" +
-            "    ../xml_sheme/interesovanje.xsd\">\n" +
+            "    xsi:schemaLocation=\"http://www.ftn.uns.ac.rs/interesovanje" +
+            " ./data/interesovanje.xsd\">\n" +
             "    <licni_podaci>\n" +
             "        <drzavljanstvo>Drzavljanin Republike Srbije</drzavljanstvo>\n" +
             "        <jmbg>1234567891234</jmbg>\n" +
