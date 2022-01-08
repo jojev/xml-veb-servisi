@@ -39,12 +39,14 @@ public class JaxBParser {
         shemaLocationRegistry.put(PotvrdaOVakcinaciji.class, "./data/potvrda_o_vakcinaciji.xsd");
         shemaLocationRegistry.put(ZahtevZaIzdavanjeSertifikata.class, "./data/zahtev_za_sertifikat.xsd");
     }
+
     public <T> T unmarshall(XMLResource resource, Class genericClass) throws JAXBException, XMLDBException, SAXException {
         JAXBContext context = JAXBContext.newInstance(genericClass);
         Unmarshaller unmarshaller = context.createUnmarshaller();
 
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = schemaFactory.newSchema(new File(shemaLocationRegistry.get(genericClass)));
+        File schemaFile = new File(shemaLocationRegistry.get(genericClass));
+        Schema schema = schemaFactory.newSchema(schemaFile);
 
         unmarshaller.setSchema(schema);
         unmarshaller.setEventHandler(new ShemaValidationHandler());

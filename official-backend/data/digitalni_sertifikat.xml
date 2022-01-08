@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<digitalni_zeleni_sertifikat 
+    xmlns="http://www.ftn.uns.ac.rs/digitalni_sertifikat"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/digitalni_sertifikat
+    digitalni_sertifikat.xsd">
+    <qr_kod>url.com</qr_kod>
+    <podaci_o_sertifikatu>
+        <broj_sertifikata>123456/21</broj_sertifikata>
+        <datum_vreme_izdavanja>2021-07-26T10:33:09</datum_vreme_izdavanja>
+        <sertifikat_izdaje>Institut za javno zdravlje Srbije "Dr Milan Jovanovic Batut"</sertifikat_izdaje>
+        <digitalni_potpis>
+            <uprava>REPUBLIKA SRBIJA Vlada Republike Srbije
+                    Kancelarija za informacione tehnologije i elektronsku upravu
+            </uprava>
+            <adresa>Nemanjina 11, BEOGRAD</adresa>
+            <datum>2021-05-12</datum>
+        </digitalni_potpis>
+    </podaci_o_sertifikatu>
+    <licni_podaci>
+        <ime_prezime>Dragana Filipovic</ime_prezime>
+        <pol>Zensko</pol>
+        <datum_rodjenja>1998-12-24</datum_rodjenja>
+        <jmbg>1234567891234</jmbg>
+        <broj_pasosa>123456789</broj_pasosa>
+    </licni_podaci>
+    <podaci_o_vakcinaciji>
+        <doze>
+            <doza redni_broj="1">
+                <tip>Pfizer-BioNTech</tip>
+                <proizvodjac_serija>BIONTECH MANUFACTURING GMBH</proizvodjac_serija>
+                <datum>2021-07-02</datum>
+                <zdravstvena_ustanova>Dom zdravlja "Novi Sad", Novi Sad</zdravstvena_ustanova>
+            </doza>
+            <doza redni_broj="2">
+                <tip>Pfizer-BioNTech</tip>
+                <proizvodjac_serija>BIONTECH MANUFACTURING GMBH</proizvodjac_serija>
+                <datum>2021-07-23</datum>
+                <zdravstvena_ustanova>Dom zdravlja "Novi Sad", Novi Sad</zdravstvena_ustanova>
+            </doza>
+        </doze>
+    </podaci_o_vakcinaciji>
+    <testovi>
+        <test tip="SARS-CoV-2 RT Real-time PCR">
+            <vrsta_uzorka>N/A</vrsta_uzorka>
+            <proizvodjac_testa>N/A</proizvodjac_testa>
+            <datum_vreme_uzorkovanja>N/A</datum_vreme_uzorkovanja>
+            <datum_vreme_izdavanja_rezultata>N/A</datum_vreme_izdavanja_rezultata>
+            <rezultat>N/A</rezultat>
+            <laboratorija>N/A</laboratorija>
+        </test>
+        <test tip="SARS-CoV-2 Ag-RDT (Antigen Rapid Detection test)">
+            <vrsta_uzorka>N/A</vrsta_uzorka>
+            <proizvodjac_testa>N/A</proizvodjac_testa>
+            <datum_vreme_uzorkovanja>N/A</datum_vreme_uzorkovanja>
+            <datum_vreme_izdavanja_rezultata>N/A</datum_vreme_izdavanja_rezultata>
+            <rezultat>N/A</rezultat>
+            <laboratorija>N/A</laboratorija>
+        </test>
+        <test tip="SARS-CoV-2 RBD S-Protein Immunoglobulin G (IgG) test">
+            <vrsta_uzorka>N/A</vrsta_uzorka>
+            <proizvodjac_testa>N/A</proizvodjac_testa>
+            <datum_vreme_uzorkovanja>N/A</datum_vreme_uzorkovanja>
+            <datum_vreme_izdavanja_rezultata>N/A</datum_vreme_izdavanja_rezultata>
+            <rezultat>N/A</rezultat>
+            <laboratorija>N/A</laboratorija>
+        </test>
+    </testovi>
+</digitalni_zeleni_sertifikat>

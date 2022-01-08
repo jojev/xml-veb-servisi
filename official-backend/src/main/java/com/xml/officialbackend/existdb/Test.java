@@ -1,12 +1,16 @@
 package main.java.com.xml.officialbackend.existdb;
 
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
+import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xmldb.api.modules.XMLResource;
 
+import java.io.File;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class Test {
@@ -16,38 +20,16 @@ public class Test {
     @Autowired
     private JaxBParser jaxBParser;
 
-    String fajl = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-            "<interesovanje_za_vakcinisanje\n" +
-            "    xmlns=\"http://www.ftn.uns.ac.rs/interesovanje\"\n" +
-            "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
-            "    xsi:schemaLocation=\"http://www.ftn.uns.ac.rs/interesovanje" +
-            " ./data/interesovanje.xsd\">\n" +
-            "    <licni_podaci>\n" +
-            "        <drzavljanstvo>Drzavljanin Republike Srbije</drzavljanstvo>\n" +
-            "        <jmbg>1234567891234</jmbg>\n" +
-            "        <ime>Jovana</ime>\n" +
-            "        <prezime>Jevtic</prezime>\n" +
-            "        <adresa_elektronske_poste>jovana@gmail.com</adresa_elektronske_poste>\n" +
-            "        <broj_mobilnog_telefona>061474749390</broj_mobilnog_telefona>\n" +
-            "        <broj_fiksnog_telefona>0214658939</broj_fiksnog_telefona>\n" +
-            "    </licni_podaci>\n" +
-            "    <podaci_o_vakcinisanju>\n" +
-            "        <opstina_vakcinisanja>Novi Sad</opstina_vakcinisanja>\n" +
-            "        <tip_vakcine>Pfizer-BioNTech</tip_vakcine>\n" +
-            "        <dobrovoljni_davalac_krvi>Da</dobrovoljni_davalac_krvi>\n" +
-            "    </podaci_o_vakcinisanju>\n" +
-            "    <datum_podnosenja>2021-06-11</datum_podnosenja>\n" +
-            "</interesovanje_za_vakcinisanje>";
-
     public void test() throws Exception {
-        existDbManager.store("/db/interesovanje", "2.xml", fajl);
-        XMLResource resource = existDbManager.load("/db/interesovanje", "2.xml");
+        File file = new File("./data/digitalni_sertifikat.xml");
+        existDbManager.store("/db/digitalni_sertifikat", "2.xml", FileUtils.readFileToString(file, StandardCharsets.UTF_8));
+        XMLResource resource = existDbManager.load("/db/digitalni_sertifikat", "2.xml");
 
-        InteresovanjeZaVakcinisanje interesovanje = jaxBParser.unmarshall(resource, InteresovanjeZaVakcinisanje.class);
-        interesovanje.getLicniPodaci().setAdresaElektronskePoste("test@gmail.com");
+        DigitalniZeleniSertifikat interesovanje = jaxBParser.unmarshall(resource, DigitalniZeleniSertifikat.class);
+        interesovanje.getLicniPodaci().setImePrezime("Imeee ii Prezimeeee");
 
-        OutputStream os = jaxBParser.marshall(InteresovanjeZaVakcinisanje.class, interesovanje);
+        OutputStream os = jaxBParser.marshall(DigitalniZeleniSertifikat.class, interesovanje);
 
-        existDbManager.store("/db/interesovanje", "2.xml", os.toString());
+        existDbManager.store("/db/digitalni_sertifikat", "2.xml", os.toString());
     }
 }
