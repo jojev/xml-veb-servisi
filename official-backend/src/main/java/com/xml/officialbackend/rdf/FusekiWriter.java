@@ -1,5 +1,6 @@
 package main.java.com.xml.officialbackend.rdf;
 
+import main.java.com.xml.officialbackend.util.FusekiAuthenticationUtilities;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
@@ -22,7 +23,7 @@ import java.io.IOException;
 public class FusekiWriter {
 
     public static void saveRDF(ByteArrayInputStream rdfTriples, String graphUri) throws IOException {
-        AuthenticationUtilities.ConnectionProperties conn = AuthenticationUtilities.loadProperties();
+        FusekiAuthenticationUtilities.ConnectionProperties conn = FusekiAuthenticationUtilities.loadProperties();
 
         CredentialsProvider provider = new BasicCredentialsProvider();
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("admin", "pw123");
