@@ -74,6 +74,17 @@
             <version>5.3.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-arq</artifactId>
+            <version>3.13.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>jena-rdfconnection</artifactId>
+            <version>3.11.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -111,7 +122,7 @@
                         <include>*.xsd</include>
                     </schemaIncludes>
                 </configuration>
-            </plugin><plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><configuration><source>7</source><target>7</target></configuration></plugin>
+            </plugin><plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><configuration><source>8</source><target>8</target></configuration></plugin>
 <!--            			<plugin>-->
 <!--            				<groupId>org.springframework.boot</groupId>-->
 <!--            				<artifactId>spring-boot-maven-plugin</artifactId>-->
