@@ -1,6 +1,6 @@
 package main.java.com.xml.officialbackend.existdb;
 
-import main.java.com.xml.officialbackend.util.AuthenticationUtilities;
+import main.java.com.xml.officialbackend.util.ExistAuthenticationUtilities;
 import org.springframework.stereotype.Service;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
@@ -19,7 +19,7 @@ public class ExistDbManager {
     public void openConnection() throws XMLDBException, IOException, ClassNotFoundException,
             InstantiationException, IllegalAccessException {
 
-        Class<?> cl = Class.forName(AuthenticationUtilities.loadProperties().driver);
+        Class<?> cl = Class.forName(ExistAuthenticationUtilities.loadProperties().driver);
         Database database = (Database) cl.newInstance();
         database.setProperty("create-database", "true");
         DatabaseManager.registerDatabase(database);
@@ -39,9 +39,9 @@ public class ExistDbManager {
         Collection collection = null;
         XMLResource resource =  null;
         try {
-            collection = DatabaseManager.getCollection(AuthenticationUtilities.loadProperties().uri + collectionUri,
-                    AuthenticationUtilities.loadProperties().user,
-                    AuthenticationUtilities.loadProperties().password);
+            collection = DatabaseManager.getCollection(ExistAuthenticationUtilities.loadProperties().uri + collectionUri,
+                    ExistAuthenticationUtilities.loadProperties().user,
+                    ExistAuthenticationUtilities.loadProperties().password);
             collection.setProperty(OutputKeys.INDENT, "yes");
             resource = (XMLResource) collection.getResource(documentId);
         } catch (Exception e) {
@@ -68,9 +68,9 @@ public class ExistDbManager {
 
     private static Collection getOrCreateCollection(String collectionUri, int pathSegmentOffset) throws XMLDBException, IOException {
 
-        Collection col = DatabaseManager.getCollection(AuthenticationUtilities.loadProperties().uri + collectionUri,
-                AuthenticationUtilities.loadProperties().user,
-                AuthenticationUtilities.loadProperties().password);
+        Collection col = DatabaseManager.getCollection(ExistAuthenticationUtilities.loadProperties().uri + collectionUri,
+                ExistAuthenticationUtilities.loadProperties().user,
+                ExistAuthenticationUtilities.loadProperties().password);
 
         // create the collection if it does not exist
         if(col == null) {
@@ -88,18 +88,18 @@ public class ExistDbManager {
                     path.append("/" + pathSegments[i]);
                 }
 
-                Collection startCol = DatabaseManager.getCollection(AuthenticationUtilities.loadProperties().uri + path,
-                        AuthenticationUtilities.loadProperties().user,
-                        AuthenticationUtilities.loadProperties().password);
+                Collection startCol = DatabaseManager.getCollection(ExistAuthenticationUtilities.loadProperties().uri + path,
+                        ExistAuthenticationUtilities.loadProperties().user,
+                        ExistAuthenticationUtilities.loadProperties().password);
 
                 if (startCol == null) {
                     // child collection does not exist
 
                     String parentPath = path.substring(0, path.lastIndexOf("/"));
 
-                    Collection parentCol = DatabaseManager.getCollection(AuthenticationUtilities.loadProperties().uri + parentPath,
-                            AuthenticationUtilities.loadProperties().user,
-                            AuthenticationUtilities.loadProperties().password);
+                    Collection parentCol = DatabaseManager.getCollection(ExistAuthenticationUtilities.loadProperties().uri + parentPath,
+                            ExistAuthenticationUtilities.loadProperties().user,
+                            ExistAuthenticationUtilities.loadProperties().password);
 
                     CollectionManagementService mgt = (CollectionManagementService) parentCol.getService("CollectionManagementService", "1.0");
 

@@ -1,6 +1,5 @@
 package main.java.com.xml.officialbackend.util;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -8,7 +7,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 @Component
-public class AuthenticationUtilities {
+public class ExistAuthenticationUtilities {
     private static String connectionUri = "xmldb:exist://%1$s:%2$s/exist/xmlrpc";
 
     /**
@@ -68,7 +67,7 @@ public class AuthenticationUtilities {
      * @throws IOException
      */
     public static InputStream openStream(String fileName) throws IOException {
-        return AuthenticationUtilities.class.getClassLoader().getResourceAsStream(fileName);
+        return ExistAuthenticationUtilities.class.getClassLoader().getResourceAsStream(fileName);
     }
 
 

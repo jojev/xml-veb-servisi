@@ -1,5 +1,6 @@
 package main.java.com.xml.officialbackend.rdf;
 
+import main.java.com.xml.officialbackend.util.FusekiAuthenticationUtilities;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
@@ -22,7 +23,7 @@ import java.io.IOException;
 public class FusekiWriter {
 
     public static void saveRDF(ByteArrayInputStream rdfTriples, String graphUri) throws IOException {
-        AuthenticationUtilities.ConnectionProperties conn = AuthenticationUtilities.loadProperties();
+        FusekiAuthenticationUtilities.ConnectionProperties conn = FusekiAuthenticationUtilities.loadProperties();
 
         CredentialsProvider provider = new BasicCredentialsProvider();
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("admin", "pw123");
@@ -42,14 +43,11 @@ public class FusekiWriter {
         model.write(out, SparqlUtil.NTRIPLES);
         model.write(System.out, SparqlUtil.RDF_XML);
 
-        UpdateRequest request = UpdateFactory.create();
-        UpdateProcessor processor = UpdateExecutionFactory.createRemote(request, conn.updateEndpoint);
-        processor.execute();
         String sparqlUpdate = SparqlUtil.insertData(conn.dataEndpoint + "/" + graphUri,
                 new String(out.toByteArray()));
 
         UpdateRequest update = UpdateFactory.create(sparqlUpdate);
-        processor = UpdateExecutionFactory.createRemote(update,conn.updateEndpoint);
+        UpdateProcessor processor = UpdateExecutionFactory.createRemote(update, conn.updateEndpoint, client, context);
         processor.execute();
     }
 }
