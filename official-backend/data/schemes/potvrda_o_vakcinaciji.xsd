@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-     elementFormDefault="qualified"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji"
     xmlns="http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji">
 
@@ -16,9 +15,27 @@
                 </xs:element>
                 <xs:element name="licni_podaci" type="osoba"/>
                 <xs:element name="podaci_o_vakcinaciji" type="vakcinacija"/>
-                <xs:element name="datum_izdavanja_potvrde" type="xs:date"/>
-                <xs:element name="qr-kod" type="xs:string"/>
+                <xs:element name="datum_izdavanja_potvrde">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:date">
+                                <xs:attribute name="property"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="qr-kod">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="property"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
+            <xs:attribute name="about"/>
+            <xs:attribute name="typeof"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="osoba">
@@ -33,13 +50,7 @@
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
-            <xs:element name="jmbg">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:pattern value="\d{13}"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
+            <xs:element name="jmbg" type="jmbg"> </xs:element>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="vakcinacija">
@@ -68,4 +79,16 @@
             </xs:simpleType>
         </xs:attribute>
     </xs:complexType>
+    <xs:complexType name="jmbg">
+        <xs:simpleContent>
+            <xs:extension base="jmbg-restriction">
+                <xs:attribute name="property" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="jmbg-restriction">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{13}"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>

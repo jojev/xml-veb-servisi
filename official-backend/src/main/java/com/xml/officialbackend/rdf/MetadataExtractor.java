@@ -59,10 +59,7 @@ public class MetadataExtractor {
 
         System.out.println("[INFO] " + MetadataExtractor.class.getSimpleName());
 
-        InputStream in = new FileInputStream(new File("data/contacts.xml"));
-
         byte[] out =  extractMetadata("data/documents/obrazac_za_sprovodjenje_imunizacije.xml");
-        System.out.println(out);
 
     }
 
