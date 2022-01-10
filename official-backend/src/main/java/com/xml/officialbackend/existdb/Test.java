@@ -5,6 +5,7 @@ import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZel
 import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import main.java.com.xml.officialbackend.rdf.FusekiReader;
 import main.java.com.xml.officialbackend.rdf.RDFReadResult;
+import main.java.com.xml.officialbackend.rdf.FusekiWriter;
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xmldb.api.modules.XMLResource;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
