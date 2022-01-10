@@ -3,7 +3,6 @@
            elementFormDefault="qualified"
            targetNamespace="http://www.ftn.uns.ac.rs/interesovanje"
            xmlns="http://www.ftn.uns.ac.rs/interesovanje">
-
     <xs:element name="interesovanje_za_vakcinisanje">
         <xs:complexType>
             <xs:sequence>

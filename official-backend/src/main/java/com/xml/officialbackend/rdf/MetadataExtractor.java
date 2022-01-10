@@ -15,7 +15,7 @@ public class MetadataExtractor {
     private TransformerFactory transformerFactory;
 
     private static final String XSLT_FILE = "data/xsl/grddl.xsl";
-    private static final String RDF_FILE = "data/rdf/rdfOutput.rdf";
+    private static final String RDF_FILE = "data/rdfOutput.rdf";
 
     public MetadataExtractor() {
 
