@@ -54,8 +54,8 @@ public class JaxBParser {
         return (T) unmarshaller.unmarshal(new StringReader(resource.getContent().toString()));
     }
 
-    public <T> OutputStream marshall(Class genericClass,T objectToMarshall) throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance(genericClass);
+    public <T> OutputStream marshall(T objectToMarshall) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(objectToMarshall.getClass());
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         OutputStream os = new ByteArrayOutputStream();
