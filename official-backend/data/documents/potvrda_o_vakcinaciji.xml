@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<potvrda_o_vakcinaciji
+    xmlns="http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji
+    ../schemes/potvrda_o_vakcinaciji.xsd"
+    xmlns:pred="http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/"
+    about="http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/1" typeof="pred:IdentifikatorDokumenta">
+    <sifra_potvrde_vakcinacije>1234567-7654321</sifra_potvrde_vakcinacije>
+    <licni_podaci>
+        <ime_prezime>Dragana Filipovic</ime_prezime>
+        <datum_rodjenja>1998-12-24</datum_rodjenja>
+        <pol>Zensko</pol>
+        <jmbg property="pred:KreiranZa">1234567891231</jmbg>
+    </licni_podaci>
+    <podaci_o_vakcinaciji>
+        <doze>
+            <doza redni_broj="1">
+                <datum_davanja>2021-02-07</datum_davanja>
+                <serija>
+                    FC3098
+                </serija>
+            </doza>
+            <doza redni_broj="2">
+                <datum_davanja>2021-07-23</datum_davanja>
+                <serija>
+                    FC3143
+                </serija>
+            </doza>
+        </doze>
+        <zdravstvena_ustanova>
+            Dom zdravlja "Novi Sad", Novi Sad
+        </zdravstvena_ustanova>
+        <naziv_vakcine>
+            Pfizer BioNTech COVID-19 Vaccine
+        </naziv_vakcine>
+    </podaci_o_vakcinaciji>
+    <datum_izdavanja_potvrde property="pred:Izdat">2021-07-02</datum_izdavanja_potvrde>
+    <qr-kod property="pred:Linkuje">
+        url.com
+    </qr-kod>
+</potvrda_o_vakcinaciji>
