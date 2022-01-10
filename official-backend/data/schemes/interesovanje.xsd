@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.ftn.uns.ac.rs/interesovanje"
+           xmlns="http://www.ftn.uns.ac.rs/interesovanje">
+
+    <xs:element name="interesovanje_za_vakcinisanje">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="licni_podaci" type="osoba"/>
+                <xs:element name="podaci_o_vakcinisanju" type="vakcinacija"/>
+                <xs:element name="datum_podnosenja">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:date">
+                                <xs:attribute name="property"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="about"/>
+            <xs:attribute name="typeof"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="osoba">
+        <xs:sequence>
+            <xs:element name="drzavljanstvo">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Drzavljanin Republike Srbije"/>
+                        <xs:enumeration value="Strani drzavljanin sa boravkom u RS"/>
+                        <xs:enumeration value="Strani drzavljanin bez boravka u RS"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="jmbg" type="jmbg"/>
+            <xs:element name="ime" type="xs:string"/>
+            <xs:element name="prezime" type="xs:string"/>
+            <xs:element name="adresa_elektronske_poste">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[^@]+@[^.]+..+"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="broj_mobilnog_telefona">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="06\d{8,10}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="broj_fiksnog_telefona">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="0\d{8,9}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="jmbg">
+        <xs:simpleContent>
+            <xs:extension base="jmbg_restrikcija">
+                <xs:attribute name="property" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="jmbg_restrikcija">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{13}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="vakcinacija">
+        <xs:sequence>
+            <xs:element name="opstina_vakcinisanja" type="xs:string"/>
+            <xs:element name="tip_vakcine" type="tip_vakcine"/>
+            <xs:element name="dobrovoljni_davalac_krvi">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Da"/>
+                        <xs:enumeration value="Ne"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="tip_vakcine">
+        <xs:simpleContent>
+            <xs:extension base="tip_vakcine_restrikcija">
+                <xs:attribute name="property" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="tip_vakcine_restrikcija">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Pfizer-BioNTech"/>
+            <xs:enumeration value="Sputnik V"/>
+            <xs:enumeration value="Sinopharm"/>
+            <xs:enumeration value="AstraZeneca"/>
+            <xs:enumeration value="Moderna"/>
+            <xs:enumeration value="Bilo koja"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

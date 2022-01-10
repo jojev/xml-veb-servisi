@@ -32,12 +32,12 @@ public class JaxBParser {
     private HashMap<Class, String> shemaLocationRegistry = new HashMap<>();
 
     public JaxBParser() {
-        shemaLocationRegistry.put(DigitalniZeleniSertifikat.class, "./data/digitalni_sertifikat.xsd");
-        shemaLocationRegistry.put(InteresovanjeZaVakcinisanje.class, "./data/interesovanje.xsd");
-        shemaLocationRegistry.put(IzvestajOImunizaciji.class, "./data/izvestaj_o_imunizaciji.xsd");
-        shemaLocationRegistry.put(ObrazacZaSprovodjenjeImunizacije.class, "./data/obrazac_za_sprovodjenje_imunizacije.xsd");
-        shemaLocationRegistry.put(PotvrdaOVakcinaciji.class, "./data/potvrda_o_vakcinaciji.xsd");
-        shemaLocationRegistry.put(ZahtevZaIzdavanjeSertifikata.class, "./data/zahtev_za_sertifikat.xsd");
+        shemaLocationRegistry.put(DigitalniZeleniSertifikat.class, "./data/schemes/digitalni_sertifikat.xsd");
+        shemaLocationRegistry.put(InteresovanjeZaVakcinisanje.class, "./data/schemes/interesovanje.xsd");
+        shemaLocationRegistry.put(IzvestajOImunizaciji.class, "./data/schemes/izvestaj_o_imunizaciji.xsd");
+        shemaLocationRegistry.put(ObrazacZaSprovodjenjeImunizacije.class, "./data/schemes/obrazac_za_sprovodjenje_imunizacije.xsd");
+        shemaLocationRegistry.put(PotvrdaOVakcinaciji.class, "./data/schemes/potvrda_o_vakcinaciji.xsd");
+        shemaLocationRegistry.put(ZahtevZaIzdavanjeSertifikata.class, "./data/schemes/zahtev_za_sertifikat.xsd");
     }
 
     public <T> T unmarshall(XMLResource resource, Class genericClass) throws JAXBException, XMLDBException, SAXException {
@@ -54,8 +54,8 @@ public class JaxBParser {
         return (T) unmarshaller.unmarshal(new StringReader(resource.getContent().toString()));
     }
 
-    public <T> OutputStream marshall(Class genericClass,T objectToMarshall) throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance(genericClass);
+    public <T> OutputStream marshall(T objectToMarshall) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(objectToMarshall.getClass());
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         OutputStream os = new ByteArrayOutputStream();

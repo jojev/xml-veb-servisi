@@ -28,13 +28,13 @@ public class Test {
 
     public void test() throws Exception {
 
-        File file = new File("./data/interesovanje.xml");
+        File file = new File("data/documents/interesovanje.xml");
         existDbManager.store("/db/interesovanje", "2.xml", FileUtils.readFileToString(file, StandardCharsets.UTF_8));
         XMLResource resource = existDbManager.load("/db/interesovanje", "2.xml");
 
         InteresovanjeZaVakcinisanje interesovanje = jaxBParser.unmarshall(resource, InteresovanjeZaVakcinisanje.class);
 
-        OutputStream os = jaxBParser.marshall(InteresovanjeZaVakcinisanje.class, interesovanje);
+        OutputStream os = jaxBParser.marshall(interesovanje);
 
         existDbManager.store("/db/interesovanje", "2.xml", os.toString());
 

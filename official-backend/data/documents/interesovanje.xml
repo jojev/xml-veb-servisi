@@ -2,10 +2,12 @@
 <interesovanje_za_vakcinisanje
         xmlns="http://www.ftn.uns.ac.rs/interesovanje"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:pred="http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/">
+        xmlns:pred="http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/"
+        about="http://www.ftn.uns.ac.rs/interesovanje/1"
+        typeof="pred:IdentifikatorDokumenta">
     <licni_podaci>
         <drzavljanstvo>Drzavljanin Republike Srbije</drzavljanstvo>
-        <jmbg>1234567891234</jmbg>
+        <jmbg property="pred:Kreirao">1234567891234</jmbg>
         <ime>Jovana</ime>
         <prezime>Jevtic</prezime>
         <adresa_elektronske_poste>jovana@gmail.com</adresa_elektronske_poste>
@@ -14,7 +16,7 @@
     </licni_podaci>
     <podaci_o_vakcinisanju>
         <opstina_vakcinisanja>Novi Sad</opstina_vakcinisanja>
-        <tip_vakcine>Pfizer-BioNTech</tip_vakcine>
+        <tip_vakcine property="pred:Zeljena">Pfizer-BioNTech</tip_vakcine>
         <dobrovoljni_davalac_krvi>Da</dobrovoljni_davalac_krvi>
     </podaci_o_vakcinisanju>
     <datum_podnosenja property="pred:Kreiran">2021-06-11</datum_podnosenja>
