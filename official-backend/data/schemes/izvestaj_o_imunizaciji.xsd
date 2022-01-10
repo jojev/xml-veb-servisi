@@ -10,8 +10,24 @@
                 <xs:element name="period">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="od" type="xs:date"/>
-                            <xs:element name="do" type="xs:date"/>
+                            <xs:element name="od">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:date">
+                                            <xs:attribute name="property"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="do">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:date">
+                                            <xs:attribute name="property"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
@@ -65,8 +81,18 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="datum_izdavanja" type="xs:date"/>
+                <xs:element name="datum_izdavanja">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:date">
+                                <xs:attribute name="property"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
+            <xs:attribute name="about"/>
+            <xs:attribute name="typeof"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

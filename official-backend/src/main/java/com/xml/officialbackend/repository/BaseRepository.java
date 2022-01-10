@@ -27,5 +27,5 @@ public class BaseRepository {
         T loadedObject = jaxBParser.unmarshall(resource, genericClass);
         return loadedObject;
     }
-    
+
 }
