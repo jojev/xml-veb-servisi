@@ -10,8 +10,18 @@
                 <xs:element name="podnosilac_zahteva" type="osoba"/>
                 <xs:element name="razlog_za_podnosenje" type="xs:string"/>
                 <xs:element name="mesto_podnosenja_zahteva" type="xs:string"/>
-                <xs:element name="datum_podnosenja_zahteva" type="xs:date"/>
+                <xs:element name="datum_podnosenja_zahteva">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:date">
+                                <xs:attribute name="property"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
+            <xs:attribute name="about"/>
+            <xs:attribute name="typeof"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="osoba">
@@ -24,27 +34,40 @@
                 </xs:simpleType>
             </xs:element>
             <xs:element name="pol" type="pol"/>
-            <xs:element name="jmbg">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:pattern value="\d{13}"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="broj_pasosa">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:length value="9"/>
-                        <xs:pattern value="\d{9}"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
+            <xs:element name="jmbg" type="jmbg"/>
+            <xs:element name="broj_pasosa" type="broj_pasosa"/>
         </xs:sequence>
     </xs:complexType>
     <xs:simpleType final="" name="pol">
         <xs:restriction base="xs:string">
             <xs:enumeration value="Zenski"/>
             <xs:enumeration value="Muski"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="jmbg">
+        <xs:simpleContent>
+            <xs:extension base="jmbg-restriction">
+                <xs:attribute name="property" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="jmbg-restriction">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{13}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="broj_pasosa">
+        <xs:simpleContent>
+            <xs:extension base="broj-pasosa-restriction">
+                <xs:attribute name="property" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="broj-pasosa-restriction">
+        <xs:restriction base="xs:string">
+            <xs:length value="9"/>
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

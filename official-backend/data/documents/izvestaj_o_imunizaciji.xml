@@ -3,10 +3,13 @@
     xmlns="http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji
-    ../schemes/izvestaj_o_imunizaciji.xsd">
+    ../schemes/izvestaj_o_imunizaciji.xsd"
+    xmlns:pred="http://izvestaj-o-imunizaciji.com/#"
+    about="http://izvjestaj-o-imunizaciji/identifikatorDokumenta/1"
+    typeof="pred:IdentifikatorDokumenta">
     <period>
-        <od>2021-08-01</od>
-        <do>2021-09-01</do>
+        <od property="pred:PeriodOdDatum">2021-08-01</od>
+        <do property="pred:PeriodDoDatum">2021-09-01</do>
     </period>
     <broj_interesovanja_o_imunizaciji>2758</broj_interesovanja_o_imunizaciji>
     <broj_zahteva_za_digiatlni_sertifikat>453</broj_zahteva_za_digiatlni_sertifikat>
@@ -19,5 +22,5 @@
         <vakcina tip="Sputnik V">356</vakcina>
         <vakcina tip="AstraZeneca, Oxford">144</vakcina>
     </raspodela_proizvodjaca>
-    <datum_izdavanja>2021-09-11</datum_izdavanja>
+    <datum_izdavanja property="pred:IzdatDatuma" >2021-09-11</datum_izdavanja>
 </izvestaj_o_imunizaciji>
