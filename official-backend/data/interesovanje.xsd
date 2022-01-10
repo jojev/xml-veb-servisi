@@ -2,14 +2,22 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            elementFormDefault="qualified"
            targetNamespace="http://www.ftn.uns.ac.rs/interesovanje"
-    xmlns="http://www.ftn.uns.ac.rs/interesovanje">
+           xmlns="http://www.ftn.uns.ac.rs/interesovanje">
 
     <xs:element name="interesovanje_za_vakcinisanje">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="licni_podaci" type="osoba"/>
                 <xs:element name="podaci_o_vakcinisanju" type="vakcinacija"/>
-                <xs:element name="datum_podnosenja" type="xs:date"/>
+                <xs:element name="datum_podnosenja">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:date">
+                                <xs:attribute name="property"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

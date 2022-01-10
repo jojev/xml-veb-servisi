@@ -2,8 +2,7 @@
 <interesovanje_za_vakcinisanje
         xmlns="http://www.ftn.uns.ac.rs/interesovanje"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.ftn.uns.ac.rs/interesovanje
-    interesovanje.xsd">
+        xmlns:pred="http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/">
     <licni_podaci>
         <drzavljanstvo>Drzavljanin Republike Srbije</drzavljanstvo>
         <jmbg>1234567891234</jmbg>
@@ -18,5 +17,5 @@
         <tip_vakcine>Pfizer-BioNTech</tip_vakcine>
         <dobrovoljni_davalac_krvi>Da</dobrovoljni_davalac_krvi>
     </podaci_o_vakcinisanju>
-    <datum_podnosenja>2021-06-11</datum_podnosenja>
+    <datum_podnosenja property="pred:Kreiran">2021-06-11</datum_podnosenja>
 </interesovanje_za_vakcinisanje>
