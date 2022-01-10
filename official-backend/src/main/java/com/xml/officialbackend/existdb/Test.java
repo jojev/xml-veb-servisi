@@ -3,8 +3,12 @@ package main.java.com.xml.officialbackend.existdb;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
+import main.java.com.xml.officialbackend.rdf.FusekiReader;
+import main.java.com.xml.officialbackend.rdf.RDFReadResult;
 import main.java.com.xml.officialbackend.rdf.FusekiWriter;
 import org.apache.commons.io.FileUtils;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.query.ResultSetFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xmldb.api.modules.XMLResource;
@@ -23,6 +27,7 @@ public class Test {
     private JaxBParser jaxBParser;
 
     public void test() throws Exception {
+        /*
         File file = new File("./data/digitalni_sertifikat.xml");
         existDbManager.store("/db/digitalni_sertifikat", "2.xml", FileUtils.readFileToString(file, StandardCharsets.UTF_8));
         XMLResource resource = existDbManager.load("/db/digitalni_sertifikat", "2.xml");
@@ -32,6 +37,11 @@ public class Test {
 
         OutputStream os = jaxBParser.marshall(DigitalniZeleniSertifikat.class, interesovanje);
 
-        existDbManager.store("/db/digitalni_sertifikat", "2.xml", os.toString());
+        existDbManager.store("/db/digitalni_sertifikat", "2.xml", os.toString()); */
+
+
+        try(RDFReadResult result = FusekiReader.readRDF("/test")) {
+            ResultSetFormatter.outputAsXML(result.getResult());
+        }
     }
 }
