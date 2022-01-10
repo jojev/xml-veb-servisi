@@ -28,7 +28,7 @@
 
 
     <target name="generate_classes_1" depends="init">
-        <xjc schema="${data.dir}/schemes/digitalni_sertifikat.xsd" destdir="${gen.dir}"/>
+        <xjc schema="${data.dir}/digitalni_sertifikat.xsd" destdir="${gen.dir}"/>
     </target>
 
     <target name="generate_classes_2" depends="init">
@@ -36,7 +36,7 @@
     </target>
 
     <target name="generate_classes_5" depends="init">
-        <xjc schema="${data.dir}/schemes/potvrda_o_vakcinaciji.xsd" destdir="${gen.dir}"/>
+        <xjc schema="${data.dir}/potvrda_o_vakcinaciji.xsd" destdir="${gen.dir}"/>
     </target>
 
     <target name="generate_classes_6" depends="init">
