@@ -35,7 +35,7 @@ public class Test {
 
         InteresovanjeZaVakcinisanje interesovanje = jaxBParser.unmarshall(resource, InteresovanjeZaVakcinisanje.class);
 
-        OutputStream os = jaxBParser.marshall(InteresovanjeZaVakcinisanje.class, interesovanje);
+        OutputStream os = jaxBParser.marshall(interesovanje);
 
         existDbManager.store("/db/interesovanje", "2.xml", os.toString());
 
