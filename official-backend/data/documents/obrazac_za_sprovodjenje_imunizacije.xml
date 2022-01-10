@@ -3,11 +3,14 @@
     xmlns="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije
-    ../schemes/obrazac_za_sprovodjenje_imunizacije.xsd">
+    ../schemes/obrazac_za_sprovodjenje_imunizacije.xsd"
+    xmlns:pred="http://obrazac-za-sprovodjenje-imunizacije.com/"
+    about="http://obrazac-za-sprovodjenje-imunizacije/identifikatorDokumenta/1"
+    typeof="pred:IdentifikatorDokumenta">
     <podaci_koje_je_popunio_pacijent>
         <licni_podaci>
                 <drzavljanstvo>Republike Srbije</drzavljanstvo>
-                <jmbg>1234567891234</jmbg>
+                <jmbg property="pred:Kreirao">1234567891234</jmbg>
             <prezime>Filipovic</prezime>
             <ime>Dragana</ime>
             <ime_roditelja>Slobodan</ime_roditelja>
@@ -27,8 +30,8 @@
             <naziv_sedista_ustanove>Novi Sad</naziv_sedista_ustanove>
         </licni_podaci>
         <saglasnost>SAGLASAN SAM</saglasnost>
-        <zeljena_vakcina>Pfizer, BioNTech</zeljena_vakcina>
-        <datum>2021-06-11</datum>
+        <zeljena_vakcina property="pred:ZeljenaVakcina">Pfizer, BioNTech</zeljena_vakcina>
+        <datum property="pred:KreiranDatuma">2021-06-11</datum>
     </podaci_koje_je_popunio_pacijent>
     <podaci_koje_je_popunio_zdravstveni_radnik>
         <zdravstvena_ustanova>Dom zdravlja Novi Sad</zdravstvena_ustanova>
@@ -37,7 +40,7 @@
         <doze>
             <doza>
                 <vakcina>Pfizer, BioNTech</vakcina>
-                <datum_davanja_vakcine>2021-06-11</datum_davanja_vakcine>
+                <datum_davanja_vakcine property="pred:VakcinisanDatuma">2021-06-11</datum_davanja_vakcine>
                 <nacin_davanja_vakcine>IM</nacin_davanja_vakcine>
                 <ekstremitet>DR</ekstremitet>
                 <serija_vakcine>FC3098</serija_vakcine>

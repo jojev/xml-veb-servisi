@@ -4,9 +4,13 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xml:base="http://obrazac-za-sprovodjenje-imunizacije.com/#">
 
-    <rdfs:Class rdf:ID="DocumentId">
+    <rdfs:Class rdf:ID="IdentifikatorDokumenta">
 
-    <rdf:Property rdf:ID="Created">
+    <rdf:Property rdf:ID="KreiranDatuma">
 
+    <rdf:Property rdf:ID="Kreirao">
 
+    <rdf:Property rdf:ID="VakcinisanDatuma">
+
+    <rdf:Property rdf:ID="ZeljenaVakcina">
 </rdf:RDF>
