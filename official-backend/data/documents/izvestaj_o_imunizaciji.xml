@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<izvestaj_o_imunizaciji
+    xmlns="http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji
+    ../schemes/izvestaj_o_imunizaciji.xsd">
+    <period>
+        <od>2021-08-01</od>
+        <do>2021-09-01</do>
+    </period>
+    <broj_interesovanja_o_imunizaciji>2758</broj_interesovanja_o_imunizaciji>
+    <broj_zahteva_za_digiatlni_sertifikat>453</broj_zahteva_za_digiatlni_sertifikat>
+    <broj_izdatih_digitalnih_sertifikata>428</broj_izdatih_digitalnih_sertifikata>
+    <broj_primljenih_doza_vakcina>3225</broj_primljenih_doza_vakcina>
+    <broj_novo_vakcinisanih>1789</broj_novo_vakcinisanih>
+    <raspodela_proizvodjaca>
+        <vakcina tip="Pfizer, BioNTech">1625</vakcina>
+        <vakcina tip="Sinopharm">1100</vakcina>
+        <vakcina tip="Sputnik V">356</vakcina>
+        <vakcina tip="AstraZeneca, Oxford">144</vakcina>
+    </raspodela_proizvodjaca>
+    <datum_izdavanja>2021-09-11</datum_izdavanja>
+</izvestaj_o_imunizaciji>

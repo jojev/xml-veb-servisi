@@ -3,7 +3,7 @@
         xmlns="http://www.ftn.uns.ac.rs/interesovanje"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.ftn.uns.ac.rs/interesovanje
-    interesovanje.xsd">
+    ../schemes/interesovanje.xsd">
     <licni_podaci>
         <drzavljanstvo>Drzavljanin Republike Srbije</drzavljanstvo>
         <jmbg>1234567891234</jmbg>
