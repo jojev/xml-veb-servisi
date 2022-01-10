@@ -43,14 +43,11 @@ public class FusekiWriter {
         model.write(out, SparqlUtil.NTRIPLES);
         model.write(System.out, SparqlUtil.RDF_XML);
 
-        UpdateRequest request = UpdateFactory.create();
-        UpdateProcessor processor = UpdateExecutionFactory.createRemote(request, conn.updateEndpoint);
-        processor.execute();
         String sparqlUpdate = SparqlUtil.insertData(conn.dataEndpoint + "/" + graphUri,
                 new String(out.toByteArray()));
 
         UpdateRequest update = UpdateFactory.create(sparqlUpdate);
-        processor = UpdateExecutionFactory.createRemote(update,conn.updateEndpoint);
+        UpdateProcessor processor = UpdateExecutionFactory.createRemote(update, conn.updateEndpoint, client, context);
         processor.execute();
     }
 }
