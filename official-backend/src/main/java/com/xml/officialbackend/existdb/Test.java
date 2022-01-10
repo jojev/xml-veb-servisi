@@ -23,7 +23,7 @@ public class Test {
     private JaxBParser jaxBParser;
 
     public void test() throws Exception {
-        File file = new File("./data/digitalni_sertifikat.xml");
+        File file = new File("./data/documents/digitalni_sertifikat.xml");
         existDbManager.store("/db/digitalni_sertifikat", "2.xml", FileUtils.readFileToString(file, StandardCharsets.UTF_8));
         XMLResource resource = existDbManager.load("/db/digitalni_sertifikat", "2.xml");
 
