@@ -4,8 +4,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji
     ../schemes/potvrda_o_vakcinaciji.xsd"
-    xmlns:pred="http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/"
-    about="http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/1" typeof="pred:IdentifikatorDokumenta">
+    xmlns:pred="http://potvrda-o-vakcinaciji.com/"
+    about="http://potvrda-o-vakcinaciji/1" typeof="pred:IdentifikatorDokumenta">
     <sifra_potvrde_vakcinacije>1234567-7654321</sifra_potvrde_vakcinacije>
     <licni_podaci>
         <ime_prezime>Dragana Filipovic</ime_prezime>
