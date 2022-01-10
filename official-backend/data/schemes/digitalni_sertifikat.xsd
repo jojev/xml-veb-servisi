@@ -130,5 +130,4 @@
             <xs:length value="9"/>
         </xs:restriction>
     </xs:simpleType>
-
 </xs:schema>

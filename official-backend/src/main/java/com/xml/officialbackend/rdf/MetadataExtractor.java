@@ -57,7 +57,9 @@ public class MetadataExtractor {
 
     public void test() throws Exception {
 
-        byte[] out =  extractMetadata("data/documents/digitalni_sertifikat.xml");
+        System.out.println("[INFO] " + MetadataExtractor.class.getSimpleName());
+
+        byte[] out =  extractMetadata("data/documents/obrazac_za_sprovodjenje_imunizacije.xml");
 
     }
 
