@@ -260,4 +260,16 @@ public class Osoba {
         this.brojFiksnogTelefona = value;
     }
 
+    @Override
+    public String toString() {
+        return "Osoba{" +
+                "drzavljanstvo='" + drzavljanstvo + '\'' +
+                ", jmbg=" + jmbg +
+                ", ime='" + ime + '\'' +
+                ", prezime='" + prezime + '\'' +
+                ", adresaElektronskePoste='" + adresaElektronskePoste + '\'' +
+                ", brojMobilnogTelefona='" + brojMobilnogTelefona + '\'' +
+                ", brojFiksnogTelefona='" + brojFiksnogTelefona + '\'' +
+                '}';
+    }
 }

@@ -129,4 +129,12 @@ public class Vakcinacija {
         this.dobrovoljniDavalacKrvi = value;
     }
 
+    @Override
+    public String toString() {
+        return "Vakcinacija{" +
+                "opstinaVakcinisanja='" + opstinaVakcinisanja + '\'' +
+                ", tipVakcine=" + tipVakcine +
+                ", dobrovoljniDavalacKrvi='" + dobrovoljniDavalacKrvi + '\'' +
+                '}';
+    }
 }

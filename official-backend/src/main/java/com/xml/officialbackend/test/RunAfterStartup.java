@@ -1,4 +1,4 @@
-package main.java.com.xml.officialbackend.existdb;
+package main.java.com.xml.officialbackend.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -12,6 +12,10 @@ public class RunAfterStartup {
 
     @EventListener(ApplicationReadyEvent.class)
     public void runAfterStartup() throws Exception {
-        test.test();
+        test.testWriteToExistDb();
+        test.testReadFromExistDb();
+        test.testUpdateDocumentFromExistDb();
+        test.testWriteToRdf();
+        test.testReadFromRdf();
     }
 }

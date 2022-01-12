@@ -1,6 +1,7 @@
 package main.java.com.xml.officialbackend.rdf;
 
 import net.sf.saxon.TransformerFactoryImpl;
+import org.springframework.stereotype.Component;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -10,6 +11,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 
+@Component
 public class MetadataExtractor {
 
     private TransformerFactory transformerFactory;
@@ -49,7 +51,7 @@ public class MetadataExtractor {
 
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         transformer.transform(source, new StreamResult(result));
-        result.writeTo(out);
+        //result.writeTo(out);
 
         return result.toByteArray();
 

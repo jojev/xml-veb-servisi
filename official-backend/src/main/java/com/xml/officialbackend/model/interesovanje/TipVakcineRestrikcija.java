@@ -67,4 +67,10 @@ public enum TipVakcineRestrikcija {
         throw new IllegalArgumentException(v);
     }
 
+    @Override
+    public String toString() {
+        return "TipVakcineRestrikcija{" +
+                "value='" + value + '\'' +
+                '}';
+    }
 }

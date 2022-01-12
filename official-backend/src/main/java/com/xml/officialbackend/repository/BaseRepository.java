@@ -17,15 +17,19 @@ public class BaseRepository {
     @Autowired
     private JaxBParser jaxBParser;
 
-    public <T> void save(String collectionId,String documentId,T objectToSave) throws Exception {
+    public <T> void save(String collectionId, String documentId, T objectToSave) throws Exception {
         OutputStream os = jaxBParser.marshall(objectToSave);
         existDbManager.store(collectionId, documentId, os.toString());
     }
 
     public <T> T findById(String collectionId, String documentId, Class genericClass) throws Exception {
-        XMLResource resource = existDbManager.load(collectionId, collectionId);
+        XMLResource resource = existDbManager.load(collectionId, documentId);
         T loadedObject = jaxBParser.unmarshall(resource, genericClass);
         return loadedObject;
+    }
+
+    public <T> void save(String collectionId, String documentId, String stringToSave) throws Exception {
+        existDbManager.store(collectionId, documentId, stringToSave);
     }
 
 }

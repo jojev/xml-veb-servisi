@@ -87,4 +87,11 @@ public class TipVakcine {
         this.property = value;
     }
 
+    @Override
+    public String toString() {
+        return "TipVakcine{" +
+                "value=" + value +
+                ", property='" + property + '\'' +
+                '}';
+    }
 }

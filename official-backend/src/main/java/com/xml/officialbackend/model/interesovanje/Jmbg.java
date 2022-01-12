@@ -87,4 +87,11 @@ public class Jmbg {
         this.property = value;
     }
 
+    @Override
+    public String toString() {
+        return "Jmbg{" +
+                "value='" + value + '\'' +
+                ", property='" + property + '\'' +
+                '}';
+    }
 }

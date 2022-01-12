@@ -185,6 +185,17 @@ public class InteresovanjeZaVakcinisanje {
         this.typeof = value;
     }
 
+    @Override
+    public String toString() {
+        return "InteresovanjeZaVakcinisanje{" +
+                "licniPodaci=" + licniPodaci +
+                ", podaciOVakcinisanju=" + podaciOVakcinisanju +
+                ", datumPodnosenja=" + datumPodnosenja +
+                ", about='" + about + '\'' +
+                ", typeof='" + typeof + '\'' +
+                '}';
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.

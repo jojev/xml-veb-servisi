@@ -26,7 +26,7 @@ public class FusekiWriter {
         FusekiAuthenticationUtilities.ConnectionProperties conn = FusekiAuthenticationUtilities.loadProperties();
 
         CredentialsProvider provider = new BasicCredentialsProvider();
-        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("admin", "pw123");
+        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(conn.username, conn.password);
         provider.setCredentials(AuthScope.ANY, credentials);
 
         BasicHttpContext context = new BasicHttpContext();
