@@ -4,8 +4,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije
     ../schemes/obrazac_za_sprovodjenje_imunizacije.xsd"
-    xmlns:pred="http://obrazac-za-sprovodjenje-imunizacije.com/"
-    about="http://obrazac-za-sprovodjenje-imunizacije/identifikatorDokumenta/1"
+    xmlns:pred="http://www.ftn.uns.ac.rs/rdf/obrazac_za_sprovodjenje_imunizacije/predicate/"
+    about="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/1"
     typeof="pred:IdentifikatorDokumenta">
     <podaci_koje_je_popunio_pacijent>
         <licni_podaci>

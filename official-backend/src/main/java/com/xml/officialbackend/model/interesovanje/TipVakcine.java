@@ -89,9 +89,6 @@ public class TipVakcine {
 
     @Override
     public String toString() {
-        return "TipVakcine{" +
-                "value=" + value +
-                ", property='" + property + '\'' +
-                '}';
+        return "TipVakcine: " + value;
     }
 }

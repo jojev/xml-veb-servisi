@@ -69,8 +69,6 @@ public enum TipVakcineRestrikcija {
 
     @Override
     public String toString() {
-        return "TipVakcineRestrikcija{" +
-                "value='" + value + '\'' +
-                '}';
+        return value ;
     }
 }

@@ -262,14 +262,13 @@ public class Osoba {
 
     @Override
     public String toString() {
-        return "Osoba{" +
-                "drzavljanstvo='" + drzavljanstvo + '\'' +
-                ", jmbg=" + jmbg +
-                ", ime='" + ime + '\'' +
-                ", prezime='" + prezime + '\'' +
-                ", adresaElektronskePoste='" + adresaElektronskePoste + '\'' +
-                ", brojMobilnogTelefona='" + brojMobilnogTelefona + '\'' +
-                ", brojFiksnogTelefona='" + brojFiksnogTelefona + '\'' +
-                '}';
+        return "Lični podaci" +
+                "\n\tDržavljanstvo: " + drzavljanstvo +
+                "\n\tJmbg: " + jmbg +
+                "\n\tIme: " + ime  +
+                "\n\tPrezime: " + prezime +
+                "\n\tAdresa elektronske pošte: " + adresaElektronskePoste +
+                "\n\tBroj mobilnog telefona: " + brojMobilnogTelefona +
+                "\n\tBroj fiksnog telefona: " + brojFiksnogTelefona;
     }
 }

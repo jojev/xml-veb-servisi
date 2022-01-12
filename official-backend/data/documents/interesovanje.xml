@@ -2,6 +2,8 @@
 <interesovanje_za_vakcinisanje
         xmlns="http://www.ftn.uns.ac.rs/interesovanje"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.ftn.uns.ac.rs/interesovanje
+    ../schemes/interesovanje.xsd"
         xmlns:pred="http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/"
         about="http://www.ftn.uns.ac.rs/interesovanje/1"
         typeof="pred:IdentifikatorDokumenta">

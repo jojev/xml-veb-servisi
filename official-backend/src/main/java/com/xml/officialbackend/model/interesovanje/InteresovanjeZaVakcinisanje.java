@@ -187,13 +187,10 @@ public class InteresovanjeZaVakcinisanje {
 
     @Override
     public String toString() {
-        return "InteresovanjeZaVakcinisanje{" +
-                "licniPodaci=" + licniPodaci +
-                ", podaciOVakcinisanju=" + podaciOVakcinisanju +
-                ", datumPodnosenja=" + datumPodnosenja +
-                ", about='" + about + '\'' +
-                ", typeof='" + typeof + '\'' +
-                '}';
+        return "Interesovanje za vakcinisanje" +
+                "\n" + licniPodaci +
+                "\n" + podaciOVakcinisanju +
+                "\n" + datumPodnosenja +"\n";
     }
 
 
@@ -275,6 +272,10 @@ public class InteresovanjeZaVakcinisanje {
             this.property = value;
         }
 
+        @Override
+        public String toString() {
+            return "Datum podnošenja: " + value;
+        }
     }
 
 }

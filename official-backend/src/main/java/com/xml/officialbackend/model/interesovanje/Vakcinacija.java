@@ -131,10 +131,10 @@ public class Vakcinacija {
 
     @Override
     public String toString() {
-        return "Vakcinacija{" +
-                "opstinaVakcinisanja='" + opstinaVakcinisanja + '\'' +
-                ", tipVakcine=" + tipVakcine +
-                ", dobrovoljniDavalacKrvi='" + dobrovoljniDavalacKrvi + '\'' +
-                '}';
+        return "Podaci o vakcinaciji " +
+                "\n\tOpština vakcinisanja: " + opstinaVakcinisanja +
+                "\n\t" + tipVakcine +
+                "\n\tDobrovoljni davalac krvi: " + dobrovoljniDavalacKrvi;
+
     }
 }

@@ -2,7 +2,7 @@
 <rdf:RDF
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-    xml:base="http://obrazac-za-sprovodjenje-imunizacije.com/#">
+    xml:base="http://www.ftn.uns.ac.rs/rdf/obrazac_za_sprovodjenje_imunizacije#">
 
     <rdfs:Class rdf:ID="IdentifikatorDokumenta">
 

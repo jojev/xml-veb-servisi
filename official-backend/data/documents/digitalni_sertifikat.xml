@@ -4,8 +4,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/digitalni_sertifikat
     ../schemes/digitalni_sertifikat.xsd"
-    xmlns:pred="http://digitalni-sertifikat.com/"
-    about="http://digitalni-sertifikat/1" typeof="pred:IdentifikatorDokumenta">
+    xmlns:pred="http://www.ftn.uns.ac.rs/rdf/digitalni_sertifikat/predicate/"
+    about="http://www.ftn.uns.ac.rs/digitalni-sertifikat/1" typeof="pred:IdentifikatorDokumenta">
     <qr_kod property="pred:Linkuje">url.com</qr_kod>
     <podaci_o_sertifikatu>
         <broj_sertifikata>123456/21</broj_sertifikata>

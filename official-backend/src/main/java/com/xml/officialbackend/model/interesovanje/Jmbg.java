@@ -89,9 +89,6 @@ public class Jmbg {
 
     @Override
     public String toString() {
-        return "Jmbg{" +
-                "value='" + value + '\'' +
-                ", property='" + property + '\'' +
-                '}';
+        return value;
     }
 }

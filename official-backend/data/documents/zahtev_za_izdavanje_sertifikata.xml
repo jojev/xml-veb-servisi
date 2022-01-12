@@ -4,8 +4,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/zahtev_za_sertifikat
     ../schemes/zahtev_za_sertifikat.xsd"
-    xmlns:pred="http://zahtev-za-sertifikat.com/#"
-    about="http://zahtev-za-sertifikat/identifikatorDokumenta/1"
+    xmlns:pred="http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/"
+    about="http://www.ftn.uns.ac.rs/zahtev_za_sertifikat/1"
     typeof="pred:IdentifikatorDokumenta">
     <podnosilac_zahteva>
         <ime_prezime>Dragana Filipovic</ime_prezime>

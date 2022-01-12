@@ -4,8 +4,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji
     ../schemes/izvestaj_o_imunizaciji.xsd"
-    xmlns:pred="http://izvestaj-o-imunizaciji.com/#"
-    about="http://izvjestaj-o-imunizaciji/identifikatorDokumenta/1"
+    xmlns:pred="http://www.ftn.uns.ac.rs/rdf/izvestaj_o_imunizaciji/predicate/"
+    about="http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji/1"
     typeof="pred:IdentifikatorDokumenta">
     <period>
         <od property="pred:PeriodOdDatum">2021-08-01</od>
