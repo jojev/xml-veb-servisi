@@ -59,7 +59,10 @@ public class MetadataExtractor {
 
         System.out.println("[INFO] " + MetadataExtractor.class.getSimpleName());
 
-        byte[] out =  extractMetadata("data/documents/digitalni_sertifikat.xml");
+        //InputStream in = new FileInputStream(new File("data/contacts.xml"));
+
+        byte[] out =  extractMetadata("data/documents/interesovanje.xml");
+        System.out.println(out);
 
     }
 

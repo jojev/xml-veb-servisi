@@ -28,19 +28,20 @@ public class Test {
 
     public void test() throws Exception {
 
-        File file = new File("./data/documents/digitalni_sertifikat.xml");
-        existDbManager.store("/db/digitalni_sertifikat", "2.xml", FileUtils.readFileToString(file, StandardCharsets.UTF_8));
-        XMLResource resource = existDbManager.load("/db/digitalni_sertifikat", "2.xml");
+        File file = new File("data/documents/interesovanje.xml");
 
-        DigitalniZeleniSertifikat interesovanje = jaxBParser.unmarshall(resource, DigitalniZeleniSertifikat.class);
-        interesovanje.getLicniPodaci().setImePrezime("Imeee ii Prezimeeee");
+        existDbManager.store("/db/interesovanje", "2.xml", FileUtils.readFileToString(file, StandardCharsets.UTF_8));
+        XMLResource resource = existDbManager.load("/db/interesovanje", "2.xml");
+
+        InteresovanjeZaVakcinisanje interesovanje = jaxBParser.unmarshall(resource, InteresovanjeZaVakcinisanje.class);
 
         OutputStream os = jaxBParser.marshall(interesovanje);
-        existDbManager.store("/db/digitalni_sertifikat", "2.xml", os.toString());
 
+        existDbManager.store("/db/interesovanje", "2.xml", os.toString());
 
+        /*
         try(RDFReadResult result = FusekiReader.readRDF("/test")) {
             ResultSetFormatter.outputAsXML(result.getResult());
-        }
+        } */
     }
 }
