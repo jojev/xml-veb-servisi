@@ -41,7 +41,7 @@ public class Test {
 
         File file = new File("data/documents/interesovanje.xml");
 
-        existDbManager.store("/db/interesovanje", "2.xml", FileUtils.readFileToString(file, StandardCharsets.UTF_8));
+        existDbManager.store("/db/interesovanje", "2.xml", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));
         XMLResource resource = existDbManager.load("/db/interesovanje", "2.xml");
 
         InteresovanjeZaVakcinisanje interesovanje = jaxBParser.unmarshall(resource, InteresovanjeZaVakcinisanje.class);
@@ -58,7 +58,7 @@ public class Test {
 
     public void testWriteToExistDb() throws Exception {
         File file = new File("data/documents/interesovanje.xml");
-        baseRepository.save("/db/interesovanje", "1.xml", FileUtils.readFileToString(file, StandardCharsets.UTF_8));
+        baseRepository.save("/db/interesovanje", "1.xml", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));
     }
 
     public void testReadFromExistDb() throws Exception {
