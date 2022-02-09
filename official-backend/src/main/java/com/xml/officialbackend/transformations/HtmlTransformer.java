@@ -24,6 +24,7 @@ public class HtmlTransformer {
 
     public static final String XSL_FILE = "data/xslt/interesovanje.xsl";
 
+
     static {
 
         documentFactory = DocumentBuilderFactory.newInstance();
