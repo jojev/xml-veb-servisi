@@ -28,17 +28,17 @@ public class XSLFOTransformer {
 
     private TransformerFactory transformerFactory;
 
-    public static final String INPUT_FILE = "data/xsl-fo/bookstore.xml";
+    public static final String INPUT_FILE = "data/documents/obrazac_za_sprovodjenje_imunizacije.xml";
 
-    public static final String XSL_FILE = "data/xsl-fo/bookstore_fo.xsl";
+    public static final String XSL_FILE = "data/xsl-fo/obrazac_za_sprovodjenje_imunizacije.xsl";
 
-    public static final String OUTPUT_FILE = "gen/fo/bookstore.pdf";
+    public static final String OUTPUT_FILE = "gen/pdf/obrazac_za_sprovodjenje_imunizacije.pdf";
 
 
     public XSLFOTransformer() throws SAXException, IOException {
 
         // Initialize FOP factory object
-        fopFactory = FopFactory.newInstance(new File("src/main/fop.xconf"));
+        fopFactory = FopFactory.newInstance(new File("src/main/java/com/xml/officialbackend/fop.xconf"));
 
         // Setup the XSLT transformer factory
         transformerFactory = new TransformerFactoryImpl();

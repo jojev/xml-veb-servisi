@@ -163,7 +163,7 @@
                 <xsl:if test="b:licni_podaci/b:pol != 'Z'">
                     <input type="checkbox" name="female" disabled="disabled" style="margin-top:1em; margin-left: 0.3em;"/>
                 </xsl:if>
-                <label for="female" style="margin-top:1em; margin-left: 0.3em;">Z</label>
+                <label for="female" style="margin-top:1em; margin-left: 0.3em;">Ж</label>
                 <p style="margin-left: 0.5em;">| <b>Датум рођења</b></p>
                 <p class="underline" style="width: 25%; margin-left:1em;"><xsl:value-of select="b:licni_podaci/b:datum_rodjenja"/></p>
                 <p style="margin-left: 0.5em;">| <b>Место рођења</b></p>
