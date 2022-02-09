@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xslt/izvestaj_o_imunizaciji.xsl"?>
 <izvestaj_o_imunizaciji
     xmlns="http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,7 +16,20 @@
     <broj_zahteva_za_digiatlni_sertifikat>453</broj_zahteva_za_digiatlni_sertifikat>
     <broj_izdatih_digitalnih_sertifikata>428</broj_izdatih_digitalnih_sertifikata>
     <broj_primljenih_doza_vakcina>3225</broj_primljenih_doza_vakcina>
-    <broj_novo_vakcinisanih>1789</broj_novo_vakcinisanih>
+    <raspodela_po_dozama>
+        <doza>
+            <redni_broj>1</redni_broj>
+            <kolicina>1789</kolicina>
+        </doza>
+        <doza>
+            <redni_broj>2</redni_broj>
+            <kolicina>1276</kolicina>
+        </doza>
+        <doza>
+            <redni_broj>3</redni_broj>
+            <kolicina>160</kolicina>
+        </doza>
+    </raspodela_po_dozama>
     <raspodela_proizvodjaca>
         <vakcina tip="Pfizer, BioNTech">1625</vakcina>
         <vakcina tip="Sinopharm">1100</vakcina>
