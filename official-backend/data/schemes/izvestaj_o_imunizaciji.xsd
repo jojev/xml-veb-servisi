@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-     elementFormDefault="qualified"
-     targetNamespace="http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji"
     xmlns="http://www.ftn.uns.ac.rs/izvestaj_o_imunizaciji">
 
     <xs:element name="izvestaj_o_imunizaciji">
@@ -59,12 +58,29 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
-                <xs:element name="broj_novo_vakcinisanih">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:integer">
-                            <xs:minInclusive value="0"/>
-                        </xs:restriction>
-                    </xs:simpleType>
+                <xs:element name="raspodela_po_dozama">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element minOccurs="1" maxOccurs="unbounded" name="doza">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="redni_broj">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:positiveInteger">
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="kolicina">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:positiveInteger">
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
                 </xs:element>
                 <xs:element name="raspodela_proizvodjaca">
                     <xs:complexType>
