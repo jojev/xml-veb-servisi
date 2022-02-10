@@ -1,14 +1,13 @@
-package com.xml.userbackend.util;
+package main.java.com.xml.userbackend.util;
+
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-/**
- * Utilities to support and simplify examples.
- */
-public class AuthenticationUtilities {
-
+@Component
+public class ExistAuthenticationUtilities {
     private static String connectionUri = "xmldb:exist://%1$s:%2$s/exist/xmlrpc";
 
     /**
@@ -44,11 +43,14 @@ public class AuthenticationUtilities {
      * @return the configuration object
      */
     public static ConnectionProperties loadProperties() throws IOException {
-        String propsName = "exist.properties";
+        String propsName = "main/resources/application.properties";
 
         InputStream propsStream = openStream(propsName);
-        if (propsStream == null)
+
+        if (propsStream == null){
             throw new IOException("Could not read properties " + propsName);
+        }
+
 
         Properties props = new Properties();
         props.load(propsStream);
@@ -65,7 +67,9 @@ public class AuthenticationUtilities {
      * @throws IOException
      */
     public static InputStream openStream(String fileName) throws IOException {
-        return AuthenticationUtilities.class.getClassLoader().getResourceAsStream(fileName);
+        return ExistAuthenticationUtilities.class.getClassLoader().getResourceAsStream(fileName);
     }
+
+
 
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obrazac_za_sprovodjenje_imunizacije
+    xmlns="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije
+    ../schemes/obrazac_za_sprovodjenje_imunizacije.xsd"
+    xmlns:pred="http://www.ftn.uns.ac.rs/rdf/obrazac_za_sprovodjenje_imunizacije/predicate/"
+    about="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/1"
+    typeof="pred:IdentifikatorDokumenta"
+    referencira="http://www.ftn.uns.ac.rs/interesovanje/1">
+    <podaci_koje_je_popunio_pacijent>
+        <licni_podaci>
+                <drzavljanstvo>Republike Srbije</drzavljanstvo>
+                <jmbg property="pred:Kreirao">1234567891234</jmbg>
+            <prezime>Filipovic</prezime>
+            <ime>Dragana</ime>
+            <ime_roditelja>Slobodan</ime_roditelja>
+            <pol>Z</pol>
+            <datum_rodjenja>2021-12-24</datum_rodjenja>
+            <mesto_rodjenja>Doboj</mesto_rodjenja>
+            <adresa>
+                <ulica_broj>Boze Kuzmanovica 82</ulica_broj>
+                <naselje>Klisa</naselje>
+                <grad>Novi Sad</grad>
+            </adresa>
+            <broj_fiksnog_telefona>0212672829</broj_fiksnog_telefona>
+            <broj_mobilnog_telefona>0652527924</broj_mobilnog_telefona>
+            <imejl>dragana@gmail.com</imejl>
+            <radni_status>student</radni_status>
+            <korisnik_ustanove_socijalne_zastite>DA</korisnik_ustanove_socijalne_zastite>
+            <naziv_sedista_ustanove>Novi Sad</naziv_sedista_ustanove>
+        </licni_podaci>
+        <saglasnost>SAGLASAN SAM</saglasnost>
+        <zeljena_vakcina property="pred:ZeljenaVakcina">Pfizer, BioNTech</zeljena_vakcina>
+        <datum property="pred:KreiranDatuma">2021-06-11</datum>
+    </podaci_koje_je_popunio_pacijent>
+    <podaci_koje_je_popunio_zdravstveni_radnik>
+        <zdravstvena_ustanova>Dom zdravlja Novi Sad</zdravstvena_ustanova>
+        <vakcinacijski_punkt>Promenada</vakcinacijski_punkt>
+        <podaci_o_lekaru>Pera Peric 06532984920</podaci_o_lekaru>
+        <doze>
+            <doza>
+                <vakcina>Pfizer, BioNTech</vakcina>
+                <datum_davanja_vakcine property="pred:VakcinisanDatuma">2021-06-11</datum_davanja_vakcine>
+                <nacin_davanja_vakcine>IM</nacin_davanja_vakcine>
+                <ekstremitet>DR</ekstremitet>
+                <serija_vakcine>FC3098</serija_vakcine>
+                <proizvodjac>BioNTech</proizvodjac>
+                <nezeljena_reakcija>mucnina</nezeljena_reakcija>
+            </doza>
+        </doze>
+    </podaci_koje_je_popunio_zdravstveni_radnik>
+</obrazac_za_sprovodjenje_imunizacije>
