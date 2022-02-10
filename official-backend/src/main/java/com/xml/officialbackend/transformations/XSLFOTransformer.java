@@ -28,11 +28,11 @@ public class XSLFOTransformer {
 
     private TransformerFactory transformerFactory;
 
-    public static final String INPUT_FILE = "data/documents/zahtev_za_izdavanje_sertifikata.xml";
+    public static final String INPUT_FILE = "data/documents/interesovanje.xml";
 
-    public static final String XSL_FILE = "data/xsl-fo/zahtev_za_izdavanje_sertifikata.xsl";
+    public static final String XSL_FILE = "data/xsl-fo/interesovanje.xsl";
 
-    public static final String OUTPUT_FILE = "gen/fo/zahtev_za_izdavanje_sertifikata.pdf";
+    public static final String OUTPUT_FILE = "gen/fo/interesovanje.pdf";
 
 
     public XSLFOTransformer() throws SAXException, IOException {
