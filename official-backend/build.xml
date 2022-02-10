@@ -51,7 +51,22 @@
         <xjc schema="${data.dir}/zahtev_za_sertifikat.xsd" destdir="${gen.dir}"/>
     </target>
 
-    <target name="generate_all" depends="generate_classes_1,generate_classes_2, generate_classes_3, generate_classes_4
-                ,generate_classes_5, generate_classes_6"/>
+    <target name="generate_classes_7" depends="init">
+        <xjc schema="${data.dir}/pacijent.xsd" destdir="${gen.dir}"/>
+    </target>
+
+    <target name="generate_classes_8" depends="init">
+        <xjc schema="${data.dir}/rola.xsd" destdir="${gen.dir}"/>
+    </target>
+
+    <target name="generate_classes_9" depends="init">
+        <xjc schema="${data.dir}/stanjeVakcine.xsd" destdir="${gen.dir}"/>
+    </target>
+
+    <target name="generate_classes_10" depends="init">
+        <xjc schema="${data.dir}/termin.xsd" destdir="${gen.dir}"/>
+    </target>
+
+    <target name="generate_all" depends="generate_classes_7, generate_classes_8, generate_classes_9, generate_classes_10"/>
 
 </project>

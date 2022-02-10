@@ -6,7 +6,8 @@
     ../schemes/obrazac_za_sprovodjenje_imunizacije.xsd"
     xmlns:pred="http://www.ftn.uns.ac.rs/rdf/obrazac_za_sprovodjenje_imunizacije/predicate/"
     about="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/1"
-    typeof="pred:IdentifikatorDokumenta">
+    typeof="pred:IdentifikatorDokumenta"
+    referencira="http://www.ftn.uns.ac.rs/interesovanje/1">
     <podaci_koje_je_popunio_pacijent>
         <licni_podaci>
                 <drzavljanstvo>Republike Srbije</drzavljanstvo>

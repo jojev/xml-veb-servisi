@@ -67,6 +67,7 @@
             </xs:sequence>
             <xs:attribute name="about"/>
             <xs:attribute name="typeof"/>
+            <xs:attribute name="referencira"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="osoba">
