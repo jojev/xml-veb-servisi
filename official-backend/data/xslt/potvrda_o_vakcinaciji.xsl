@@ -141,7 +141,7 @@
                             </div>
                         </div>
                     </div>
-                    <p>Шифра потврде вакцинације:</p>
+                    <p>Шифра потврде вакцинације: <xsl:value-of select="b:sifra_potvrde_vakcinacije"/></p>
                     <p>Šifra potvrde / Confirmation code</p>
                     <br></br>
                     <h3 style="text-align: center"> ПОТВРДА О ИЗВРШЕНОЈ ВАКЦИНАЦИЈИ ПРОТИВ  COVID-19</h3>
@@ -149,8 +149,62 @@
                     <p style="text-align: center;font-size:13px">CONFIRMATION OF THE  COVID-19 VACCINATION</p>
                     <br/>
                     <br/>
+                    <p><b>Име и презиме:</b> <xsl:value-of select="b:licni_podaci/b:ime_prezime"/></p>
+                    <p style="font-size:14px;color:#808080">Ime i prezime / First and Last Name</p>
+                    <p><b>Датум рођења:</b> <xsl:value-of select="b:licni_podaci/b:datum_rodjenja"/></p>
+                    <p style="font-size:14px;color:#808080">Datum rođenja / Date Of Birth</p>
+                    <p><b>Пол: <xsl:value-of select="b:licni_podaci/b:pol"/></b></p>
+                    <p style="font-size:14px;color:#808080">Pol: <xsl:value-of select="b:licni_podaci/b:pol"/> / Gender: <xsl:value-of select="b:licni_podaci/b:pol"/></p>
+                    <p><b>ЈМБГ:</b> <xsl:value-of select="b:licni_podaci/b:jmbg"/></p>
+                    <p style="font-size:14px;color:#808080">JMBG / Personal No.</p>
+                    <p><b>Датум давања и број серије прве дозе вакцинације:</b>
+                        <xsl:value-of select="b:podaci_o_vakcinaciji/b:doze/b:doza[@redni_broj=1]/b:datum_davanja"/>
+                    <b>, серија:</b> <xsl:value-of select="b:podaci_o_vakcinaciji/b:doze/b:doza[@redni_broj=1]/b:serija"/>
+                    </p>
+                    <p style="font-size:14px;color:#808080">Datum vakcinacije / Vaccination Date</p>
+                    <p><b>Датум давања и број серије друге дозе вакцине:</b>
+                        <xsl:if test="b:podaci_o_vakcinaciji/b:doze/b:doza[@redni_broj=2]">
+                            <xsl:value-of select="b:podaci_o_vakcinaciji/b:doze/b:doza[@redni_broj=2]/b:datum_davanja"/>
+                            <b>, серија:</b>
+                            <xsl:value-of select="b:podaci_o_vakcinaciji/b:doze/b:doza[@redni_broj=2]/b:serija"/>
+                        </xsl:if>
+                    </p>
+                    <p style="font-size:14px;color:#808080">Datum druge vakcinacije / Second Vaccination Date</p>
+                    <p><b>Здравствена установа која вакцинише:</b><xsl:value-of select="b:zdravstvena_ustanova"/></p>
+                    <p style="font-size:14px;color:#808080">Zdravstvena ustanova koja vakciniše / Health care institution of vaccination</p>
+                    <p><b>Назив вакцине:</b> <xsl:value-of select="b:naziv_vakcine"/></p>
+                    <p style="font-size:14px;color:#808080">Naziv vakcine / Name of vaccine</p>
+                    <p><b>Датум издавања потврде:</b>  <xsl:value-of select="b:datum_izdavanja_potvrde"/></p>
+                    <p style="font-size:14px;color:#808080">Datum izdavanja potvrde / Confirmation Release Date</p>
                     <br/>
-
+                    <div class="row">
+                        <div class="column1">
+                        </div>
+                        <div class="column1" style="text-align: right">
+                            <p><b>Здравствена установа:  <xsl:value-of select="b:zdravstvena_ustanova"/></b></p>
+                            <p style="font-size:14px;color:#808080">Zdravstvena ustanova / Medical institution</p>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="column1">
+                            <p><b>Ова потрвда важи без потписа и печата </b></p>
+                            <p style="font-size:14px;color:#808080">Ova potvrda važi bez potpisa i pečata / This certificate is valid without signatures and seals</p>
+                        </div>
+                        <div class="column1">
+                            <div style="display:flex; justify-content: end;">
+                            <img style="width:150px;height:150px;" alt="" title="">
+                                <xsl:variable name="id"
+                                              select="b:sifra_potvrde_vakcinacije"/>
+                                <xsl:variable name="src"
+                                              select="concat('https://api.qrserver.com/v1/create-qr-code/?data=','',$id)"/>
+                                <xsl:attribute name="src">
+                                    <xsl:value-of select="$src"/>
+                                </xsl:attribute>
+                            </img>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </body>
         </html>
