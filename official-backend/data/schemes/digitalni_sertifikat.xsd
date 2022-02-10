@@ -48,14 +48,6 @@
                     </xs:simpleContent>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="sertifikat_izdaje" type="xs:string"/>
-            <xs:element name="digitalni_potpis" type="digitalni_potpis"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="digitalni_potpis">
-        <xs:sequence>
-            <xs:element name="uprava" type="xs:string"/>
-            <xs:element name="adresa" type="xs:string"/>
             <xs:element name="datum" type="xs:date"/>
         </xs:sequence>
     </xs:complexType>

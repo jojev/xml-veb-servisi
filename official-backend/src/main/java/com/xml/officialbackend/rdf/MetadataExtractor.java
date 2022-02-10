@@ -17,7 +17,6 @@ public class MetadataExtractor {
     private TransformerFactory transformerFactory;
 
     private static final String XSLT_FILE = "data/xsl/grddl.xsl";
-    private static final String RDF_FILE = "data/rdfOutput.rdf";
 
     public MetadataExtractor() {
 
@@ -32,10 +31,6 @@ public class MetadataExtractor {
      * @return
      */
     public byte[] extractMetadata(String in) throws TransformerException, IOException {
-
-        OutputStream out = new FileOutputStream(new File(RDF_FILE));
-
-
         StreamSource transformSource = new StreamSource(new File(XSLT_FILE));
 
 
@@ -51,24 +46,10 @@ public class MetadataExtractor {
 
         ByteArrayOutputStream result = new ByteArrayOutputStream();
         transformer.transform(source, new StreamResult(result));
-        //result.writeTo(out);
 
         return result.toByteArray();
 
     }
 
-    public void test() throws Exception {
 
-        System.out.println("[INFO] " + MetadataExtractor.class.getSimpleName());
-
-        //InputStream in = new FileInputStream(new File("data/contacts.xml"));
-
-        byte[] out =  extractMetadata("data/documents/interesovanje.xml");
-        System.out.println(out);
-
-    }
-
-    public static void main(String[] args) throws Exception {
-        new MetadataExtractor().test();
-    }
 }

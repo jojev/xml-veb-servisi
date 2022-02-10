@@ -1,25 +1,18 @@
 package main.java.com.xml.officialbackend.transformations;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.xml.transform.Result;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.stream.StreamSource;
-
+import net.sf.saxon.TransformerFactoryImpl;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.xml.sax.SAXException;
 
-import net.sf.saxon.TransformerFactoryImpl;
+import javax.xml.transform.Result;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
 
 
 public class XSLFOTransformer {
@@ -28,11 +21,11 @@ public class XSLFOTransformer {
 
     private TransformerFactory transformerFactory;
 
-    public static final String INPUT_FILE = "data/documents/zahtev_za_izdavanje_sertifikata.xml";
+    public static final String INPUT_FILE = "data/documents/digitalni_sertifikat.xml";
 
-    public static final String XSL_FILE = "data/xsl-fo/zahtev_za_izdavanje_sertifikata.xsl";
+    public static final String XSL_FILE = "data/xsl-fo/digitalni_sertifikat.xsl";
 
-    public static final String OUTPUT_FILE = "gen/fo/zahtev_za_izdavanje_sertifikata.pdf";
+    public static final String OUTPUT_FILE = "gen/fo/digitalni_sertifikat.pdf";
 
 
     public XSLFOTransformer() throws SAXException, IOException {
