@@ -21,12 +21,11 @@ public class XSLFOTransformer {
 
     private TransformerFactory transformerFactory;
 
-    public static final String INPUT_FILE = "data/documents/obrazac_za_sprovodjenje_imunizacije.xml";
+    public static final String INPUT_FILE = "data/documents/interesovanje.xml";
 
-    public static final String XSL_FILE = "data/xsl-fo/obrazac_za_sprovodjenje_imunizacije.xsl";
+    public static final String XSL_FILE = "data/xsl-fo/interesovanje.xsl";
 
-    public static final String OUTPUT_FILE = "gen/pdf/obrazac_za_sprovodjenje_imunizacije.pdf";
-
+    public static final String OUTPUT_FILE = "gen/fo/interesovanje.pdf";
 
     public XSLFOTransformer() throws SAXException, IOException {
 
