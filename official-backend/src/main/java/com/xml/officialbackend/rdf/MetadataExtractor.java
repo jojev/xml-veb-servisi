@@ -51,5 +51,22 @@ public class MetadataExtractor {
 
     }
 
+    public byte[] extractMetadataFromXmlContent(String xmlContent) throws TransformerException, IOException {
+        StreamSource transformSource = new StreamSource(new File(XSLT_FILE));
+
+
+        Transformer transformer = transformerFactory.newTransformer(transformSource);
+
+
+        transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "2");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+        StreamSource source = new StreamSource(new ByteArrayInputStream(xmlContent.getBytes()));
+
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        transformer.transform(source, new StreamResult(result));
+
+        return result.toByteArray();
+    }
 
 }

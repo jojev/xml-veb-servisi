@@ -3,7 +3,7 @@ package main.java.com.xml.userbackend.controller;
 
 import main.java.com.xml.userbackend.config.dto.JwtAuthenticationRequest;
 import main.java.com.xml.userbackend.config.dto.UserTokenStateDTO;
-import main.java.com.xml.userbackend.model.Korisnik;
+import main.java.com.xml.userbackend.model.korisnik.Korisnik;
 import main.java.com.xml.userbackend.security.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
