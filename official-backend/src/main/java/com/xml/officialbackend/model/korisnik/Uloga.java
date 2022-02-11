@@ -13,9 +13,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for uloga complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="uloga"&gt;
  *   &lt;complexContent&gt;
@@ -28,12 +28,12 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "uloga", propOrder = {
-    "naziv"
+        "naziv"
 })
 public class Uloga {
 
@@ -45,11 +45,11 @@ public class Uloga {
 
     /**
      * Gets the value of the naziv property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getNaziv() {
         return naziv;
@@ -57,11 +57,11 @@ public class Uloga {
 
     /**
      * Sets the value of the naziv property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setNaziv(String value) {
         this.naziv = value;
@@ -69,11 +69,11 @@ public class Uloga {
 
     /**
      * Gets the value of the about property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getAbout() {
         return about;
@@ -81,11 +81,11 @@ public class Uloga {
 
     /**
      * Sets the value of the about property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setAbout(String value) {
         this.about = value;
