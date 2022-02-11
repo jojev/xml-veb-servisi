@@ -9,9 +9,15 @@
             <xs:element name="prezime" type="xs:string"/>
             <xs:element name="korisnickoIme" type="xs:string"/>
             <xs:element name="lozinka" type="xs:string"/>
-            <xs:element maxOccurs="unbounded" name="uloga" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" name="uloga" type="uloga"/>
             <xs:element name="email" type="xs:string"/>
-            <xs:element name="zdravstvenaUstanova" type="xs:string"/>
+            <xs:element name="zdravstvenaUstanova" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="about"/>
+    </xs:complexType>
+    <xs:complexType name="uloga">
+        <xs:sequence>
+            <xs:element name="naziv" type="xs:string"/>
         </xs:sequence>
         <xs:attribute name="about"/>
     </xs:complexType>

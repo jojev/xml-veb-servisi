@@ -1,4 +1,4 @@
-package main.java.com.xml.officialbackend.config;
+package main.java.com.xml.userbackend.config;
 
 
 import org.springframework.context.annotation.Bean;

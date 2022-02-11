@@ -1,8 +1,8 @@
-package main.java.com.xml.officialbackend.config;
+package main.java.com.xml.userbackend.config;
 
 import io.jsonwebtoken.Claims;
-import main.java.com.xml.officialbackend.config.dto.JwtParseResponseDTO;
-import main.java.com.xml.officialbackend.security.TokenUtils;
+import main.java.com.xml.userbackend.config.dto.JwtParseResponseDTO;
+import main.java.com.xml.userbackend.security.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
