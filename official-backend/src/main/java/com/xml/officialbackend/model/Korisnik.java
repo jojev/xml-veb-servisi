@@ -8,7 +8,7 @@
 
 package main.java.com.xml.officialbackend.model;
 
-import generated.Uloga;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public class Korisnik {
     @XmlElement(required = true)
     protected String lozinka;
     @XmlElement(required = true)
-    protected List<generated.Uloga> uloga;
+    protected List<Uloga> uloga;
     @XmlElement(required = true)
     protected String email;
     protected String zdravstvenaUstanova;
@@ -189,11 +189,11 @@ public class Korisnik {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link generated.Uloga }
+     * {@link Uloga }
      * 
      * 
      */
-    public List<generated.Uloga> getUloga() {
+    public List<Uloga> getUloga() {
         if (uloga == null) {
             uloga = new ArrayList<Uloga>();
         }

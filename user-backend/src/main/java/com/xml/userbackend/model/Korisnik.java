@@ -4,9 +4,8 @@
 // Any modifications to this file will be lost upon recompilation of the source schema. 
 // Generated on: 2022.02.11 at 01:19:22 AM CET 
 //
+package main.java.com.xml.userbackend.model;
 
-
-package generated;
 
 import java.util.ArrayList;
 import java.util.List;

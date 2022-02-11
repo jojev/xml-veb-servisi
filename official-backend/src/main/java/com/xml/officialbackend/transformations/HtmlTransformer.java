@@ -18,11 +18,12 @@ public class HtmlTransformer {
 
     private static TransformerFactory transformerFactory;
 
-    public static final String HTML_FILE = "gen/html/zahtev_za_izdavanje_sertifikata.html";
+    public static final String HTML_FILE = "gen/html/potvrda_o_vakcinaciji.html";
 
-    public static final String INPUT_FILE = "data/documents/zahtev_za_izdavanje_sertifikata.xml";
+    public static final String INPUT_FILE = "data/documents/potvrda_o_vakcinaciji.xml";
 
-    public static final String XSL_FILE = "data/xslt/zahtev_za_izdavanje_sertifikata.xsl";
+    public static final String XSL_FILE = "data/xslt/potvrda_o_vakcinaciji.xsl";
+
 
     static {
 
