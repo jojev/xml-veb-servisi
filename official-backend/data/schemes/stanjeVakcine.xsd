@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1">
+
+    <xs:element name="stanjeVakcine">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="vakcina">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Pfizer, BioNTech"/>
+                            <xs:enumeration value="Sinopharm"/>
+                            <xs:enumeration value="Sputnik V"/>
+                            <xs:enumeration value="AstraZeneca, Oxford"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="zdravstvenaUstanova" type="xs:string"/>
+                <xs:element name="kolicina">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:int">
+                            <xs:minInclusive value="0"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="about"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

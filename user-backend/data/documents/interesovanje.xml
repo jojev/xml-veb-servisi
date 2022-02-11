@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interesovanje_za_vakcinisanje
+        xmlns="http://www.ftn.uns.ac.rs/interesovanje"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.ftn.uns.ac.rs/interesovanje
+    ../schemes/interesovanje.xsd"
+        xmlns:pred="http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/"
+        about="http://www.ftn.uns.ac.rs/interesovanje/1"
+        typeof="pred:IdentifikatorDokumenta">
+    <licni_podaci>
+        <drzavljanstvo>Drzavljanin Republike Srbije</drzavljanstvo>
+        <jmbg property="pred:Kreirao">1234567891234</jmbg>
+        <ime>Jovana</ime>
+        <prezime>Jevtic</prezime>
+        <adresa_elektronske_poste>jovana@gmail.com</adresa_elektronske_poste>
+        <broj_mobilnog_telefona>061474749390</broj_mobilnog_telefona>
+        <broj_fiksnog_telefona>0214658939</broj_fiksnog_telefona>
+    </licni_podaci>
+    <podaci_o_vakcinisanju>
+        <opstina_vakcinisanja>Novi Sad</opstina_vakcinisanja>
+        <tip_vakcine property="pred:Zeljena">Pfizer-BioNTech</tip_vakcine>
+        <dobrovoljni_davalac_krvi>Da</dobrovoljni_davalac_krvi>
+    </podaci_o_vakcinisanju>
+    <datum_podnosenja property="pred:Kreiran">2021-06-11</datum_podnosenja>
+</interesovanje_za_vakcinisanje>

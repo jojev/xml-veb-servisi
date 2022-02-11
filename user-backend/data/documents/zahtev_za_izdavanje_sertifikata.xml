@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../xslt/zahtev_za_izdavanje_sertifikata.xsl"?>
+<zahtev_za_izdavanje_sertifikata
+    xmlns="http://www.ftn.uns.ac.rs/zahtev_za_sertifikat"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/zahtev_za_sertifikat
+    ../schemes/zahtev_za_sertifikat.xsd"
+    xmlns:pred="http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/"
+    about="http://www.ftn.uns.ac.rs/zahtev_za_sertifikat/1"
+    typeof="pred:IdentifikatorDokumenta">
+    <podnosilac_zahteva>
+        <ime_prezime>Dragana Filipovic</ime_prezime>
+        <datum_rodjenja>1998-12-24</datum_rodjenja>
+        <pol>Muski</pol>
+        <jmbg property="pred:PodneoJmbg">1234567891234</jmbg>
+        <broj_pasosa property="pred:PodneoBrPasosa">123456789</broj_pasosa>
+    </podnosilac_zahteva>
+    <razlog_za_podnosenje>razlog podnosenja zahteva</razlog_za_podnosenje>
+    <mesto_podnosenja_zahteva>Novi Sad</mesto_podnosenja_zahteva>
+    <datum_podnosenja_zahteva property="pred:IzdatDatuma">2021-06-12</datum_podnosenja_zahteva>
+</zahtev_za_izdavanje_sertifikata>
