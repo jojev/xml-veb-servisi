@@ -52,7 +52,7 @@
     </target>
 
     <target name="generate_classes_7" depends="init">
-        <xjc schema="${data.dir}/pacijent.xsd" destdir="${gen.dir}"/>
+        <xjc schema="${data.dir}/korisnik.xsd" destdir="${gen.dir}"/>
     </target>
 
     <target name="generate_classes_8" depends="init">

@@ -46,7 +46,7 @@ public class Test {
 
         InteresovanjeZaVakcinisanje interesovanje = jaxBParser.unmarshall(resource, InteresovanjeZaVakcinisanje.class);
 
-        OutputStream os = jaxBParser.marshall(interesovanje);
+        OutputStream os = jaxBParser.marshall(interesovanje, InteresovanjeZaVakcinisanje.class);
 
         existDbManager.store("/db/interesovanje", "2.xml", os.toString());
 
@@ -69,7 +69,7 @@ public class Test {
     public void testUpdateDocumentFromExistDb() throws Exception {
         InteresovanjeZaVakcinisanje interesovanje = baseRepository.findById("/db/interesovanje", "1.xml", InteresovanjeZaVakcinisanje.class);
         interesovanje.getLicniPodaci().setIme("Novo ime");
-        baseRepository.save("/db/interesovanje", "1.xml", interesovanje);
+        baseRepository.save("/db/interesovanje", "1.xml", interesovanje, InteresovanjeZaVakcinisanje.class);
     }
 
     public void testWriteToRdf() throws IOException, TransformerException {
