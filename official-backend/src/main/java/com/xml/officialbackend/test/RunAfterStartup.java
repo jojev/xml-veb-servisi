@@ -10,12 +10,12 @@ public class RunAfterStartup {
     @Autowired
     Test test;
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void runAfterStartup() throws Exception {
-        test.testWriteToExistDb();
-        test.testReadFromExistDb();
-        test.testUpdateDocumentFromExistDb();
-        test.testWriteToRdf();
-        test.testReadFromRdf();
-    }
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void runAfterStartup() throws Exception {
+//        test.testWriteToExistDb();
+//        test.testReadFromExistDb();
+//        test.testUpdateDocumentFromExistDb();
+//        test.testWriteToRdf();
+//        test.testReadFromRdf();
+//    }
 }
