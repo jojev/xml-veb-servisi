@@ -17,8 +17,8 @@ public class BaseRepository {
     @Autowired
     private JaxBParser jaxBParser;
 
-    public <T> void save(String collectionId, String documentId, T objectToSave) throws Exception {
-        OutputStream os = jaxBParser.marshall(objectToSave);
+    public <T> void save(String collectionId, String documentId, T objectToSave, Class genericClass) throws Exception {
+        OutputStream os = jaxBParser.marshall(objectToSave, genericClass);
         existDbManager.store(collectionId, documentId, os.toString());
     }
 

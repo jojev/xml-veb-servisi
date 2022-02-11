@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    targetNamespace="http://www.ftn.uns.ac.rs/korisnik"
+    xmlns="http://www.ftn.uns.ac.rs/korisnik">
+
+    <xs:element name="korisnik">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ime" type="xs:string"/>
+                <xs:element name="prezime" type="xs:string"/>
+                <xs:element name="korisnickoIme" type="xs:string"/>
+                <xs:element name="lozinka" type="xs:string"/>
+                <xs:element maxOccurs="unbounded" name="uloga" type="uloga"/>
+                <xs:element name="email" type="xs:string"/>
+                <xs:element minOccurs="0" name="zdravstvenaUstanova" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute name="about"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="uloga">
+        <xs:sequence>
+            <xs:element name="naziv" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="about"/>
+    </xs:complexType>
+</xs:schema>

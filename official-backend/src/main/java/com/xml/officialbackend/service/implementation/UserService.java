@@ -1,6 +1,6 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
-import main.java.com.xml.officialbackend.model.Korisnik;
+import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class UserService implements IUserService {
     public Korisnik create(Korisnik entity) throws Exception {
         String userId = UUID.randomUUID().toString();
         entity.setAbout(userId);
-        baseRepository.save("/db/korisnik", userId, entity);
+        baseRepository.save("/db/korisnik", userId, entity, Korisnik.class);
         return entity;
     }
 
