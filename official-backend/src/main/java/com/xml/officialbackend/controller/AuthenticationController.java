@@ -3,7 +3,7 @@ package main.java.com.xml.officialbackend.controller;
 
 import main.java.com.xml.officialbackend.config.dto.JwtAuthenticationRequest;
 import main.java.com.xml.officialbackend.config.dto.UserTokenStateDTO;
-import main.java.com.xml.officialbackend.model.Korisnik;
+import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
 import main.java.com.xml.officialbackend.security.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,9 +39,9 @@ public class AuthenticationController {
     private UserTokenStateDTO authenticate(JwtAuthenticationRequest authenticationRequest) {
         List<String> roles = new ArrayList<String>();
         Korisnik user = new Korisnik();
-        user.setKorisnickoIme("andrija");
-        String jwt = tokenUtils.generateToken(user.getKorisnickoIme(), "ROLE_KORISNIK", 1);
+        user.getKorisnickoIme().setValue("andrija");
+        String jwt = tokenUtils.generateToken(user.getKorisnickoIme().getValue(), "ROLE_KORISNIK", 1);
         int expiresIn = tokenUtils.getExpiredIn();
-        return new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles, user.getKorisnickoIme());
+        return new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles, user.getKorisnickoIme().getValue());
     }
 }
