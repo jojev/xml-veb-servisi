@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-     elementFormDefault="qualified"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="http://www.ftn.uns.ac.rs/zahtev_za_sertifikat"
     xmlns="http://www.ftn.uns.ac.rs/zahtev_za_sertifikat">
 
@@ -15,6 +14,7 @@
                         <xs:simpleContent>
                             <xs:extension base="xs:date">
                                 <xs:attribute name="property"/>
+                                <xs:attribute name="datatype"/>
                             </xs:extension>
                         </xs:simpleContent>
                     </xs:complexType>
@@ -22,6 +22,7 @@
             </xs:sequence>
             <xs:attribute name="about"/>
             <xs:attribute name="typeof"/>
+            <xs:anyAttribute/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="osoba">
@@ -29,8 +30,7 @@
             <xs:element name="ime_prezime" type="xs:string"/>
             <xs:element name="datum_rodjenja">
                 <xs:simpleType>
-                    <xs:restriction base="xs:date">
-                    </xs:restriction>
+                    <xs:restriction base="xs:date"> </xs:restriction>
                 </xs:simpleType>
             </xs:element>
             <xs:element name="pol" type="pol"/>
@@ -48,6 +48,7 @@
         <xs:simpleContent>
             <xs:extension base="jmbg-restriction">
                 <xs:attribute name="property" type="xs:string" use="required"/>
+                <xs:attribute name="datatype"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -62,6 +63,7 @@
         <xs:simpleContent>
             <xs:extension base="broj-pasosa-restriction">
                 <xs:attribute name="property" type="xs:string" use="required"/>
+                <xs:attribute name="datatype"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

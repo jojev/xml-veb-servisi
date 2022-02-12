@@ -2,12 +2,13 @@ package main.java.com.xml.userbackend.controller;
 
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
-import main.java.com.xml.userbackend.service.implementation.InteresovanjeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -23,13 +24,9 @@ public class InteresovanjeController {
 
 
     @PostMapping("")
-    public ResponseEntity<String> create(@RequestBody InteresovanjeZaVakcinisanje intereseovanje) throws Exception {
-//        String documentId = interesovanjeService.create(intereseovanje);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> create(@RequestBody InteresovanjeZaVakcinisanje intereseovanje) throws Exception {
+        InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje);
+        return new ResponseEntity<>(interesovanjeZaVakcinisanje, HttpStatus.OK);
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<String> get(){
-        return new ResponseEntity<>("lalalalal", HttpStatus.OK);
-    }
 }
