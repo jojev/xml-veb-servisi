@@ -8,7 +8,6 @@
 
 package main.java.com.xml.userbackend.model.korisnik;
 
-import rs.ac.uns.ftn.korisnik.Uloga;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
@@ -77,7 +76,7 @@ public class Korisnik {
     @XmlElement(required = true)
     protected String lozinka;
     @XmlElement(required = true)
-    protected List<rs.ac.uns.ftn.korisnik.Uloga> uloga;
+    protected List<Uloga> uloga;
     @XmlElement(required = true)
     protected String email;
     protected String zdravstvenaUstanova;
@@ -204,11 +203,11 @@ public class Korisnik {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link rs.ac.uns.ftn.korisnik.Uloga }
+     * {@link Uloga }
      * 
      * 
      */
-    public List<rs.ac.uns.ftn.korisnik.Uloga> getUloga() {
+    public List<Uloga> getUloga() {
         if (uloga == null) {
             uloga = new ArrayList<Uloga>();
         }
