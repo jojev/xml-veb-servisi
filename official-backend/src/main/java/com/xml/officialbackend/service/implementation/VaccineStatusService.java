@@ -1,5 +1,6 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
+import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.IVaccineStatusService;
@@ -43,10 +44,6 @@ public class VaccineStatusService implements IVaccineStatusService {
     @Override
     public StanjeVakcine update(StanjeVakcine entity, String id) throws Exception {
         StanjeVakcine stanjeVakcine = baseRepository.findById("/db/stanjeVakcine", id, StanjeVakcine.class);
-
-        if(stanjeVakcine == null) {
-            return null;
-        }
 
         baseRepository.update("/db/stanjeVakcine", id, "/stanjeVakcine/kolicina", String.valueOf(entity.getKolicina()),
                 "http://www.ftn.uns.ac.rs/stanjeVakcine");

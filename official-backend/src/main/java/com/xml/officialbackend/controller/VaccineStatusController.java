@@ -20,7 +20,6 @@ public class VaccineStatusController {
 
     @PutMapping("/{id}")
     private ResponseEntity<?> updateVaccineStatus(@RequestBody StanjeVakcine vaccineStatus, @PathVariable String id) throws Exception {
-        System.out.println(id);
         return new ResponseEntity<>(vaccineStatusService.update(vaccineStatus, id), HttpStatus.CREATED);
     }
 }
