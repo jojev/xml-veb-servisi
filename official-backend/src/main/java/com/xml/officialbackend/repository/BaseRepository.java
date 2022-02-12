@@ -5,8 +5,10 @@ import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 @Repository
@@ -32,4 +34,9 @@ public class BaseRepository {
         existDbManager.store(collectionId, documentId, stringToSave);
     }
 
+    public void update(String collectionUri, String documentId, String contextPath, String newValue, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        existDbManager.update(collectionUri, documentId, contextPath, newValue, targetNamespace);
+
+    }
 }

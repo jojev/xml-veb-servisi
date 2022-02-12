@@ -39,6 +39,7 @@ public class AuthenticationController {
     private UserTokenStateDTO authenticate(JwtAuthenticationRequest authenticationRequest) {
         List<String> roles = new ArrayList<String>();
         Korisnik user = new Korisnik();
+        user.setKorisnickoIme(new Korisnik.KorisnickoIme());
         user.getKorisnickoIme().setValue("andrija");
         String jwt = tokenUtils.generateToken(user.getKorisnickoIme().getValue(), "ROLE_KORISNIK", 1);
         int expiresIn = tokenUtils.getExpiredIn();
