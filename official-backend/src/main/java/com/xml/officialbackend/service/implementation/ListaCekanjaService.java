@@ -8,8 +8,12 @@ import main.java.com.xml.officialbackend.service.contract.IListaCekanjaService;
 import org.exist.xquery.functions.util.BaseConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -33,8 +37,8 @@ public class ListaCekanjaService implements IListaCekanjaService {
     }
 
     @Override
-    public ListaCekanja findById(Integer id) throws Exception {
-        return null;
+    public ListaCekanja findById(String id) throws Exception {
+        return baseRepository.findById("/db/cekanje", id, ListaCekanja.class);
     }
 
     @Override
@@ -48,18 +52,29 @@ public class ListaCekanjaService implements IListaCekanjaService {
     }
 
     @Override
-    public ListaCekanja update(ListaCekanja entity, Integer id) throws Exception {
-       
-    	return entity;
-    }
-
-    @Override
-    public void delete(Integer id) throws Exception {
-
-    }
-
-    @Override
-    public ListaCekanja addPatientToQueue(ListaCekanja.Stavka stavka) {
+    public ListaCekanja update(ListaCekanja entity, String id) throws Exception {
         return null;
+    }
+
+    @Override
+    public void delete(String id) throws Exception {
+
+    }
+
+    @Override
+    public ListaCekanja addPatientToQueue(ListaCekanja.Stavka stavka) throws Exception {
+        Calendar calendar = stavka.getPeriodCekanja().toGregorianCalendar();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        formatter.setTimeZone(calendar.getTimeZone());
+        String dateString = formatter.format(calendar.getTime());
+
+        String newStavka = String.format("<stavka><period_cekanja>%1$s</period_cekanja><pacijent>%2$s</pacijent><tip_vakcine>%3$s</tip_vakcine></stavka>", dateString, stavka.getPacijent(), stavka.getTipVakcine());
+        baseRepository.insertAsLastNode("/db/cekanje","ListaCekanja", "//lista_cekanja", newStavka, "http://www.ftn.uns.ac.rs/lista_cekanja");
+        return findById("ListaCekanja") ;
+    }
+
+    @Override
+    public void removePatientFromQueue(Integer stavkaIndex) throws Exception {
+        baseRepository.removeNode("/db/cekanje", "ListaCekanja", String.format("//lista_cekanja/stavka[%s]", stavkaIndex.toString()), "http://www.ftn.uns.ac.rs/lista_cekanja");
     }
 }
