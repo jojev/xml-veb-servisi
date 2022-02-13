@@ -23,3 +23,5 @@ public class AuthenticationController {
         UserTokenStateDTO userTokenStateDTO = userService.authenticate(authenticationRequest);
         return new ResponseEntity<UserTokenStateDTO>(userTokenStateDTO, HttpStatus.OK);
     }
+
+}
