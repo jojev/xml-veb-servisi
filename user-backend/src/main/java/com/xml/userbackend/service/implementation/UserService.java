@@ -124,7 +124,7 @@ public class UserService implements IUserService {
     public UserTokenStateDTO authenticate(JwtAuthenticationRequest jwtAuthenticationRequest) throws Exception {
         RDFNode userId = this.getUserWithUsername(jwtAuthenticationRequest.getUsername());
         if (userId == null) {
-            throw new MissingEntityException("Korisničko ime ne postoji.");
+            throw new BadCredentialException("Pogrešni kredencijali");
         }
         String[] parts = userId.toString().split("/");
         Korisnik korisnik = baseRepository.findById("/db/korisnik", parts[parts.length-1],Korisnik.class);

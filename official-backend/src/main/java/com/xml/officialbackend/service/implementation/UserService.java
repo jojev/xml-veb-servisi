@@ -6,6 +6,7 @@ import main.java.com.xml.officialbackend.exception.BadCredentialException;
 import main.java.com.xml.officialbackend.exception.ConflictException;
 import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
+import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
 import main.java.com.xml.officialbackend.rdf.FusekiReader;
 import main.java.com.xml.officialbackend.rdf.FusekiWriter;
@@ -14,9 +15,12 @@ import main.java.com.xml.officialbackend.rdf.RDFReadResult;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.security.TokenUtils;
 import main.java.com.xml.officialbackend.service.contract.IUserService;
+import org.springframework.http.*;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 import org.xmldb.api.modules.XMLResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,7 @@ import org.springframework.stereotype.Service;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,16 +46,23 @@ public class UserService implements IUserService {
 
     private TokenUtils tokenUtils;
 
+    private final RestTemplate restTemplate;
+
+    private HttpHeaders headers = new HttpHeaders();
+
+    private JaxBParser jaxBParser;
 
     @Autowired
     public UserService(BaseRepository baseRepository, ExistDbManager existDbManager,
                        MetadataExtractor metadataExtractor, PasswordEncoder passwordEncoder,
-                       TokenUtils tokenUtils) {
+                       TokenUtils tokenUtils, RestTemplate restTemplate,JaxBParser jaxBParser) {
         this.baseRepository = baseRepository;
         this.existDbManager = existDbManager;
         this.metadataExtractor = metadataExtractor;
         this.passwordEncoder = passwordEncoder;
         this.tokenUtils  =  tokenUtils;
+        this.restTemplate = restTemplate;
+        this.jaxBParser = jaxBParser;
     }
 
     @Override
@@ -122,20 +134,18 @@ public class UserService implements IUserService {
 
     @Override
     public UserTokenStateDTO authenticate(JwtAuthenticationRequest jwtAuthenticationRequest) throws Exception {
-        RDFNode userId = this.getUserWithUsername(jwtAuthenticationRequest.getUsername());
-        if (userId == null) {
-            throw new MissingEntityException("Korisničko ime ne postoji.");
+//        OutputStream os = jaxBParser.marshall(jwtAuthenticationRequest, JwtAuthenticationRequest.class);
+        headers.setContentType(MediaType.APPLICATION_XML);
+        HttpEntity<String> request = new HttpEntity<String>(String.format(
+                "<jwtauthenticationrequest><username>%s</username><password>%s</password></jwtauthenticationrequest>",
+                jwtAuthenticationRequest.getUsername(),jwtAuthenticationRequest.getPassword()), headers);
+        ResponseEntity<UserTokenStateDTO> response;
+        try {
+           response = restTemplate.postForEntity("http://localhost:8080/api/v1/auth/login", request, UserTokenStateDTO.class);
         }
-        String[] parts = userId.toString().split("/");
-        Korisnik korisnik = baseRepository.findById("/db/korisnik", parts[parts.length-1],Korisnik.class);
-        if(!passwordEncoder.matches(jwtAuthenticationRequest.getPassword(),korisnik.getLozinka())){
+        catch (Exception e){
             throw new BadCredentialException("Pogrešni kredencijali");
         }
-        String role = korisnik.getUloga().get(0).getNaziv();
-        List<String> roles = new ArrayList<String>();
-        roles.add(role);
-        String jwt = tokenUtils.generateToken(jwtAuthenticationRequest.getUsername(), role);
-        int expiresIn = tokenUtils.getExpiredIn();
-        return new UserTokenStateDTO(jwt, new Date().getTime() + expiresIn, roles, jwtAuthenticationRequest.getUsername());
+        return response.getBody();
     }
 }
