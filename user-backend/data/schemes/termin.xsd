@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    elementFormDefault="qualified"
-    targetNamespace="http://www.ftn.uns.ac.rs/termin"
-    xmlns="http://www.ftn.uns.ac.rs/termin">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://www.ftn.uns.ac.rs/termin" xmlns="http://www.ftn.uns.ac.rs/termin">
 
     <xs:element name="termin">
         <xs:complexType>
@@ -12,6 +10,7 @@
                 <xs:element name="pacijent" type="xs:string"/>
                 <xs:element name="zdravstvena_ustanova" type="xs:string"/>
                 <xs:element name="zdravstveni_radnik" type="xs:string"/>
+                <xs:element name="ispostovan" type="xs:boolean"/>
             </xs:sequence>
             <xs:attribute name="about"/>
         </xs:complexType>
