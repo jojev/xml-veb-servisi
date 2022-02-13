@@ -76,7 +76,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Korisnik update(Korisnik entity, Integer id) throws Exception {
+    public Korisnik update(Korisnik entity, String id) throws Exception {
         return null;
     }
 

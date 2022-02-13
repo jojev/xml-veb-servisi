@@ -20,7 +20,6 @@
                 <xs:element name="lozinka" type="xs:string"/>
                 <xs:element maxOccurs="unbounded" name="uloga" type="uloga"/>
                 <xs:element name="email" type="xs:string"/>
-                <xs:element minOccurs="0" name="zdravstvenaUstanova" type="xs:string"/>
             </xs:sequence>
             <xs:attribute name="about"/>
             <xs:attribute name="typeof"/>
