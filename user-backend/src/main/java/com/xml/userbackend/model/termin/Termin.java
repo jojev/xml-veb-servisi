@@ -26,7 +26,6 @@ import java.math.BigInteger;
  *         &lt;element name="datum_vreme" type="{http://www.w3.org/2001/XMLSchema}dateTime"/&gt;
  *         &lt;element name="trajanje" type="{http://www.w3.org/2001/XMLSchema}integer"/&gt;
  *         &lt;element name="pacijent" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="zdravstvena_ustanova" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="zdravstveni_radnik" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="ispostovan" type="{http://www.w3.org/2001/XMLSchema}boolean"/&gt;
  *       &lt;/sequence&gt;
@@ -57,8 +56,6 @@ public class Termin {
     protected BigInteger trajanje;
     @XmlElement(required = true)
     protected String pacijent;
-    @XmlElement(name = "zdravstvena_ustanova", required = true)
-    protected String zdravstvenaUstanova;
     @XmlElement(name = "zdravstveni_radnik", required = true)
     protected String zdravstveniRadnik;
     protected boolean ispostovan;
@@ -136,30 +133,6 @@ public class Termin {
      */
     public void setPacijent(String value) {
         this.pacijent = value;
-    }
-
-    /**
-     * Gets the value of the zdravstvenaUstanova property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getZdravstvenaUstanova() {
-        return zdravstvenaUstanova;
-    }
-
-    /**
-     * Sets the value of the zdravstvenaUstanova property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setZdravstvenaUstanova(String value) {
-        this.zdravstvenaUstanova = value;
     }
 
     /**

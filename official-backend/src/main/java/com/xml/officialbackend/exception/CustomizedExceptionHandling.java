@@ -24,4 +24,11 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
         response.setMessage(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(MissingEntityException.class)
+    public ResponseEntity<ExceptionResponse> handleExceptions(MissingEntityException exception, WebRequest webRequest) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setMessage(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 }

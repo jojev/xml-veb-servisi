@@ -6,6 +6,7 @@ import javax.xml.bind.*;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji;
@@ -53,7 +54,12 @@ public class JaxBParser {
         unmarshaller.setSchema(schema);
         unmarshaller.setEventHandler(new ShemaValidationHandler());
 
-        return (T) unmarshaller.unmarshal(new StringReader(resource.getContent().toString()));
+        try {
+            return (T) unmarshaller.unmarshal(new StringReader(resource.getContent().toString()));
+        }
+        catch (Exception e) {
+            throw new MissingEntityException("The entity with given id does not exist in the system.");
+        }
     }
 
     public <T> OutputStream marshall(T objectToMarshall, Class genericClass) throws JAXBException, SAXException {
