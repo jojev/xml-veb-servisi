@@ -202,6 +202,8 @@ public class Korisnik {
      * {@link Uloga }
      *
      *
+     * 
+     * 
      */
     public List<Uloga> getUloga() {
         if (uloga == null) {
