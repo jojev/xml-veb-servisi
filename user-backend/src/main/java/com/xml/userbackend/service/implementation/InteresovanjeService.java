@@ -3,18 +3,23 @@ package main.java.com.xml.userbackend.service.implementation;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
+import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
 import main.java.com.xml.userbackend.rdf.MetadataExtractor;
+import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.repository.BaseRepository;
 import main.java.com.xml.userbackend.service.EmailService;
 import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
 import main.java.com.xml.userbackend.transformations.XSLFOTransformer;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xmldb.api.modules.XMLResource;
 
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.UUID;
@@ -59,6 +64,26 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
     @Override
+    public RDFNode getInteresovanje(String jmbg) throws IOException {
+        String sparqlCondition = "?person <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreirao> \"" + jmbg + "\" .";
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            System.out.println(columnNames.get(0));
+            System.out.println(columnNames.size());
+            if(result.getResult().hasNext()) {
+                System.out.println("Usao");
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                RDFNode rdfNode = row.get(columnName);
+                System.out.println(rdfNode);
+                return rdfNode;
+            }
+            return null;
+        }
+    }
+
+    @Override
     public InteresovanjeZaVakcinisanje create(InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje) throws Exception {
         String documentId = UUID.randomUUID().toString();
 
@@ -73,8 +98,8 @@ public class InteresovanjeService implements IInteresovanjeService {
         interesovanjeZaVakcinisanje.getOtherAttributes().put(QName.valueOf("xmlns:pred"), "http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/");
         interesovanjeZaVakcinisanje.getOtherAttributes().put(QName.valueOf("xmlns:xs"), "http://www.w3.org/2001/XMLSchema#");
 
-        baseRepository.save("db/interesovanje", documentId ,interesovanjeZaVakcinisanje,InteresovanjeService.class);
-        OutputStream outputStream = jaxBParser.marshall(interesovanjeZaVakcinisanje,InteresovanjeService.class);
+        baseRepository.save("db/interesovanje", documentId ,interesovanjeZaVakcinisanje,InteresovanjeZaVakcinisanje.class);
+        OutputStream outputStream = jaxBParser.marshall(interesovanjeZaVakcinisanje,InteresovanjeZaVakcinisanje.class);
         String path = "gen/pdf/"+documentId+".pdf";
         xslfoTransformer.generatePDF(outputStream.toString(),"data/xsl_fo/interesovanje.xsl", path);
         this.emailService.sendMail(interesovanjeZaVakcinisanje.getLicniPodaci().getAdresaElektronskePoste(), path);
@@ -86,6 +111,8 @@ public class InteresovanjeService implements IInteresovanjeService {
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "interesovanje");
         return interesovanjeZaVakcinisanje;
     }
+
+
 
     @Override
     public InteresovanjeZaVakcinisanje update(InteresovanjeZaVakcinisanje entity, Integer id) throws Exception {
