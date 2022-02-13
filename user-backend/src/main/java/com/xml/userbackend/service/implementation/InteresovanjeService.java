@@ -73,8 +73,8 @@ public class InteresovanjeService implements IInteresovanjeService {
         interesovanjeZaVakcinisanje.getOtherAttributes().put(QName.valueOf("xmlns:pred"), "http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/");
         interesovanjeZaVakcinisanje.getOtherAttributes().put(QName.valueOf("xmlns:xs"), "http://www.w3.org/2001/XMLSchema#");
 
-        baseRepository.save("db/interesovanje", documentId ,interesovanjeZaVakcinisanje,InteresovanjeService.class);
-        OutputStream outputStream = jaxBParser.marshall(interesovanjeZaVakcinisanje,InteresovanjeService.class);
+        baseRepository.save("db/interesovanje", documentId ,interesovanjeZaVakcinisanje,InteresovanjeZaVakcinisanje.class);
+        OutputStream outputStream = jaxBParser.marshall(interesovanjeZaVakcinisanje,InteresovanjeZaVakcinisanje.class);
         String path = "gen/pdf/"+documentId+".pdf";
         xslfoTransformer.generatePDF(outputStream.toString(),"data/xsl_fo/interesovanje.xsl", path);
         this.emailService.sendMail(interesovanjeZaVakcinisanje.getLicniPodaci().getAdresaElektronskePoste(), path);
