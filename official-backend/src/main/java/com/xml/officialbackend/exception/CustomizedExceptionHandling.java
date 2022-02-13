@@ -32,6 +32,7 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
+
     @ExceptionHandler(MissingEntityException.class)
     public ResponseEntity<ExceptionResponse> handleExceptions(MissingEntityException exception, WebRequest webRequest) {
         ExceptionResponse response = new ExceptionResponse();
