@@ -39,4 +39,15 @@ public class BaseRepository {
         existDbManager.update(collectionUri, documentId, contextPath, newValue, targetNamespace);
 
     }
+
+    public void insertAsLastNode(String collectionUri, String documentId, String contextPath, String node, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        existDbManager.insertAsLastNode(collectionUri, documentId, contextPath, node, targetNamespace);
+    }
+
+    public void removeNode(String collectionUri, String documentId, String contextPath, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        existDbManager.removeNode(collectionUri, documentId, contextPath, targetNamespace);
+
+    }
 }

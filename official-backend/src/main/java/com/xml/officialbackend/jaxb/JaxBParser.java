@@ -11,6 +11,7 @@ import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZel
 import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji;
 import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
+import main.java.com.xml.officialbackend.model.lista_cekanja.ListaCekanja;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
@@ -39,6 +40,7 @@ public class JaxBParser {
         shemaLocationRegistry.put(Korisnik.class, "./data/schemes/korisnik.xsd");
         shemaLocationRegistry.put(StanjeVakcine.class, "./data/schemes/stanjeVakcine.xsd");
         shemaLocationRegistry.put(Termin.class, "./data/schemes/termin.xsd");
+        shemaLocationRegistry.put(ListaCekanja.class, "./data/schemes/lista_cekanja.xsd");
     }
 
     public <T> T unmarshall(XMLResource resource, Class genericClass) throws JAXBException, XMLDBException, SAXException {

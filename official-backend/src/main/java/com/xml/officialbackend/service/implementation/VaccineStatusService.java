@@ -27,7 +27,7 @@ public class VaccineStatusService implements IVaccineStatusService {
     }
 
     @Override
-    public StanjeVakcine findById(Integer id) throws Exception {
+    public StanjeVakcine findById(String id) throws Exception {
         return null;
     }
 
@@ -53,7 +53,7 @@ public class VaccineStatusService implements IVaccineStatusService {
     }
 
     @Override
-    public void delete(Integer id) throws Exception {
+    public void delete(String id) throws Exception {
 
     }
 
