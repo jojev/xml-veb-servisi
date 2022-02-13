@@ -37,24 +37,24 @@ public class Test {
     @Autowired
     private MetadataExtractor metadataExtractor;
 
-    public void test() throws Exception {
-
-        File file = new File("data/documents/interesovanje.xml");
-
-        existDbManager.store("/db/interesovanje", "2.xml", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));
-        XMLResource resource = existDbManager.load("/db/interesovanje", "2.xml");
-
-        InteresovanjeZaVakcinisanje interesovanje = jaxBParser.unmarshall(resource, InteresovanjeZaVakcinisanje.class);
-
-        OutputStream os = jaxBParser.marshall(interesovanje, InteresovanjeZaVakcinisanje.class);
-
-        existDbManager.store("/db/interesovanje", "2.xml", os.toString());
-
-        /*
-        try(RDFReadResult result = FusekiReader.readRDF("/test")) {
-            ResultSetFormatter.outputAsXML(result.getResult());
-        } */
-    }
+//    public void test() throws Exception {
+//
+//        File file = new File("data/documents/interesovanje.xml");
+//
+//        existDbManager.store("/db/interesovanje", "2.xml", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));
+//        XMLResource resource = existDbManager.load("/db/interesovanje", "2.xml");
+//
+//        InteresovanjeZaVakcinisanje interesovanje = jaxBParser.unmarshall(resource, InteresovanjeZaVakcinisanje.class);
+//
+//        OutputStream os = jaxBParser.marshall(interesovanje, InteresovanjeZaVakcinisanje.class);
+//
+//        existDbManager.store("/db/interesovanje", "2.xml", os.toString());
+//
+//        /*
+//        try(RDFReadResult result = FusekiReader.readRDF("/test")) {
+//            ResultSetFormatter.outputAsXML(result.getResult());
+//        } */
+//    }
 
     public void testWriteToExistDb() throws Exception {
         File file = new File("data/documents/interesovanje.xml");
@@ -80,6 +80,9 @@ public class Test {
     public void testReadFromRdf() throws IOException {
         try(RDFReadResult result = FusekiReader.readRDF("/test")) {
             ResultSetFormatter.outputAsXML(result.getResult());
+            for (String var: result.getResult().getResultVars()) {
+                System.out.println(var);
+            }
         }
     }
 }

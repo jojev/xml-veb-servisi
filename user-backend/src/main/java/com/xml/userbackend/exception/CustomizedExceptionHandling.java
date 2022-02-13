@@ -1,4 +1,4 @@
-package main.java.com.xml.officialbackend.exception;
+package main.java.com.xml.userbackend.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

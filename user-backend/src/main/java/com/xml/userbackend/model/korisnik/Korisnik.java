@@ -146,6 +146,9 @@ public class Korisnik {
      *     
      */
     public KorisnickoIme getKorisnickoIme() {
+        if (korisnickoIme == null) {
+            return new KorisnickoIme();
+        }
         return korisnickoIme;
     }
 
