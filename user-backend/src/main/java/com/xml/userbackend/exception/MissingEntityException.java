@@ -1,7 +1,6 @@
-package main.java.com.xml.officialbackend.exception;
+package main.java.com.xml.userbackend.exception;
 
-
-public class MissingEntityException extends RuntimeException {
+public class MissingEntityException extends  RuntimeException{
     private String message;
 
     public MissingEntityException() {

@@ -1,7 +1,19 @@
 package main.java.com.xml.userbackend.config.dto;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.List;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", propOrder = {
+        "accessToken",
+        "expiresIn",
+        "name",
+        "roles"
+})
+@XmlRootElement(name = "usertokenstate")
 public class UserTokenStateDTO {
     private String accessToken;
     private List<String> roles;

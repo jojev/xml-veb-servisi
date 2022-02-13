@@ -33,10 +33,9 @@ public class TokenUtils {
 
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    public String generateToken(String username, String role, Integer id) {
+    public String generateToken(String username, String role) {
         return Jwts.builder()
                 .claim("role", role)
-                .claim("id", id)
                 .claim("username", username)
                 .setIssuer(APP_NAME)
                 .setSubject(username)

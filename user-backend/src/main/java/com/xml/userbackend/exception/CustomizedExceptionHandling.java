@@ -1,4 +1,4 @@
-package main.java.com.xml.officialbackend.exception;
+package main.java.com.xml.userbackend.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,6 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
         response.setMessage(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
-
 
     @ExceptionHandler(MissingEntityException.class)
     public ResponseEntity<ExceptionResponse> handleExceptions(MissingEntityException exception, WebRequest webRequest) {

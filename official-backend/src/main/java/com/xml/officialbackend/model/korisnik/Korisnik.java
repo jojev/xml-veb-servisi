@@ -8,6 +8,7 @@
 
 package main.java.com.xml.officialbackend.model.korisnik;
 
+
 import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
@@ -18,9 +19,9 @@ import java.util.Map;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
@@ -49,8 +50,6 @@ import java.util.Map;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -88,10 +87,7 @@ public class Korisnik {
     /**
      * Gets the value of the ime property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
+
      */
     public String getIme() {
         return ime;
@@ -100,10 +96,7 @@ public class Korisnik {
     /**
      * Sets the value of the ime property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
+
      */
     public void setIme(String value) {
         this.ime = value;
@@ -112,10 +105,7 @@ public class Korisnik {
     /**
      * Gets the value of the prezime property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
+
      */
     public String getPrezime() {
         return prezime;
@@ -124,10 +114,7 @@ public class Korisnik {
     /**
      * Sets the value of the prezime property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
+
      */
     public void setPrezime(String value) {
         this.prezime = value;
@@ -136,22 +123,21 @@ public class Korisnik {
     /**
      * Gets the value of the korisnickoIme property.
      *
-     * @return
-     *     possible object is
-     *     {@link Korisnik.KorisnickoIme }
-     *
+
+     * @return possible object is
+     * {@link KorisnickoIme }
      */
-    public Korisnik.KorisnickoIme getKorisnickoIme() {
+    public KorisnickoIme getKorisnickoIme() {
+        if (korisnickoIme == null) {
+            return new KorisnickoIme();
+        }
         return korisnickoIme;
     }
 
     /**
      * Sets the value of the korisnickoIme property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link Korisnik.KorisnickoIme }
-     *
+
      */
     public void setKorisnickoIme(Korisnik.KorisnickoIme value) {
         this.korisnickoIme = value;
@@ -160,10 +146,7 @@ public class Korisnik {
     /**
      * Gets the value of the lozinka property.
      *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
+
      */
     public String getLozinka() {
         return lozinka;
@@ -172,10 +155,7 @@ public class Korisnik {
     /**
      * Sets the value of the lozinka property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
+
      */
     public void setLozinka(String value) {
         this.lozinka = value;
@@ -200,8 +180,7 @@ public class Korisnik {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Uloga }
-     *
-     *
+
      */
     public List<Uloga> getUloga() {
         if (uloga == null) {
@@ -212,11 +191,9 @@ public class Korisnik {
 
     /**
      * Gets the value of the email property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getEmail() {
         return email;
@@ -224,23 +201,20 @@ public class Korisnik {
 
     /**
      * Sets the value of the email property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEmail(String value) {
         this.email = value;
     }
 
     /**
+
      * Gets the value of the about property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getAbout() {
         return about;
@@ -248,11 +222,9 @@ public class Korisnik {
 
     /**
      * Sets the value of the about property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAbout(String value) {
         this.about = value;
@@ -260,11 +232,9 @@ public class Korisnik {
 
     /**
      * Gets the value of the typeof property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getTypeof() {
         return typeof;
@@ -272,11 +242,9 @@ public class Korisnik {
 
     /**
      * Sets the value of the typeof property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTypeof(String value) {
         this.typeof = value;
@@ -284,17 +252,15 @@ public class Korisnik {
 
     /**
      * Gets a map that contains attributes that aren't bound to any typed property on this class.
-     * 
+     *
      * <p>
-     * the map is keyed by the name of the attribute and 
+     * the map is keyed by the name of the attribute and
      * the value is the string value of the attribute.
-     * 
+     * <p>
      * the map returned by this method is live, and you can add new attribute
      * by updating the map directly. Because of this design, there's no setter.
-     * 
-     * 
-     * @return
-     *     always non-null
+     *
+     * @return always non-null
      */
     public Map<QName, String> getOtherAttributes() {
         return otherAttributes;
@@ -303,9 +269,9 @@ public class Korisnik {
 
     /**
      * <p>Java class for anonymous complex type.
-     * 
+     *
      * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;simpleContent&gt;
@@ -316,12 +282,10 @@ public class Korisnik {
      *   &lt;/simpleContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "value"
+            "value"
     })
     public static class KorisnickoIme {
 
@@ -336,11 +300,9 @@ public class Korisnik {
 
         /**
          * Gets the value of the value property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getValue() {
             return value;
@@ -348,11 +310,9 @@ public class Korisnik {
 
         /**
          * Sets the value of the value property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setValue(String value) {
             this.value = value;
@@ -360,11 +320,9 @@ public class Korisnik {
 
         /**
          * Gets the value of the property property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getProperty() {
             return property;
@@ -372,11 +330,9 @@ public class Korisnik {
 
         /**
          * Sets the value of the property property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setProperty(String value) {
             this.property = value;
@@ -384,11 +340,9 @@ public class Korisnik {
 
         /**
          * Gets the value of the datatype property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *
+         * @return possible object is
+         * {@link String }
          */
         public String getDatatype() {
             return datatype;
@@ -396,11 +350,9 @@ public class Korisnik {
 
         /**
          * Sets the value of the datatype property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *
+         * @param value allowed object is
+         *              {@link String }
          */
         public void setDatatype(String value) {
             this.datatype = value;

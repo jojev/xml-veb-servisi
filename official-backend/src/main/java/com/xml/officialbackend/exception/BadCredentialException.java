@@ -1,14 +1,13 @@
 package main.java.com.xml.officialbackend.exception;
 
-
-public class MissingEntityException extends RuntimeException {
+public class BadCredentialException extends RuntimeException {
     private String message;
 
-    public MissingEntityException() {
+    public BadCredentialException() {
 
     }
 
-    public MissingEntityException(String message) {
+    public BadCredentialException(String message) {
         this.message = message;
     }
 

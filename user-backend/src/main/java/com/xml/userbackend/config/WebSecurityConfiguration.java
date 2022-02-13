@@ -1,10 +1,13 @@
 package main.java.com.xml.userbackend.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -15,6 +18,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public WebSecurityConfiguration(AuthenticationFilter authenticationFilter) {
         this.authenticationFilter = authenticationFilter;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Override
@@ -28,6 +36,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/v1/interesovanje").permitAll()
                 .antMatchers("/api/v1/auth/login").permitAll()
+                .antMatchers("/api/v1/user").permitAll()
                 .anyRequest().authenticated();
     }
 

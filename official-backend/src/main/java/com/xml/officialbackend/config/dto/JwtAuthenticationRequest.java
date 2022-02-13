@@ -1,7 +1,19 @@
 package main.java.com.xml.officialbackend.config.dto;
 
+
+import javax.xml.bind.annotation.*;
+
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", propOrder = {
+        "username",
+        "password",
+})
+@XmlRootElement(name = "jwtauthenticationrequest")
 public class JwtAuthenticationRequest {
+    @XmlElement(required = true)
     private String username;
+    @XmlElement(required = true)
     private String password;
 
     public JwtAuthenticationRequest() {
