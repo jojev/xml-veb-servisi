@@ -26,7 +26,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/api/v1/interesovanje").permitAll()
                 .antMatchers("/api/v1/auth/login").permitAll()
                 .anyRequest().authenticated();
     }

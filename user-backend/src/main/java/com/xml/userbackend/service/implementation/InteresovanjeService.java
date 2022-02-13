@@ -54,7 +54,7 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
     @Override
-    public InteresovanjeZaVakcinisanje findById(Integer id) throws Exception {
+    public InteresovanjeZaVakcinisanje findById(String id) throws Exception {
         return null;
     }
 
@@ -88,12 +88,12 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
     @Override
-    public InteresovanjeZaVakcinisanje update(InteresovanjeZaVakcinisanje entity, Integer id) throws Exception {
+    public InteresovanjeZaVakcinisanje update(InteresovanjeZaVakcinisanje entity, String id) throws Exception {
         return null;
     }
 
     @Override
-    public void delete(Integer id) throws Exception {
+    public void delete(String id) throws Exception {
 
     }
 }
