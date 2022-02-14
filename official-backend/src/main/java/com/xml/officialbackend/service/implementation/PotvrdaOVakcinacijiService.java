@@ -33,7 +33,7 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     }
 
     @Override
-    public PotvrdaOVakcinaciji findById(Integer id) throws Exception {
+    public PotvrdaOVakcinaciji findById(String id) throws Exception {
         return null;
     }
 
@@ -65,7 +65,7 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     }
 
     @Override
-    public void delete(Integer id) throws Exception {
+    public void delete(String id) throws Exception {
 
     }
 }
