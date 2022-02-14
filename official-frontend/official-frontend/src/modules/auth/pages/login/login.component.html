@@ -1,0 +1,22 @@
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <h2>Prijava</h2>
+            <mat-form-field>
+                <input matInput placeholder="Korisničko ime" formControlName="username" name="username" required>
+                <mat-error *ngIf="errorHandling('username', 'required')" id="val-username-error" class="invalid-feedback animated fadeInUp"
+                    style="display: block;">
+                    Unesite korisničko ime
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="password" placeholder="Lozinka" formControlName="password" name="password" required>
+                <mat-error *ngIf="errorHandling('password', 'required')" id="val-username-error" class="invalid-feedback animated fadeInUp"
+                    style="display: block;">
+                    Unesite lozinku
+                </mat-error>
+            </mat-form-field>
+            <button mat-raised-button color="primary" [disabled]="!form.valid">Prijavite se</button>
+        </form>
+    </mat-card-content>
+</mat-card>

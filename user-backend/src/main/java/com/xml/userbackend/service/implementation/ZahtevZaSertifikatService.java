@@ -74,8 +74,8 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         zahtevZaIzdavanjeSertifikata.getOtherAttributes().put(QName.valueOf("xmlns:pred"), "http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/");
         zahtevZaIzdavanjeSertifikata.getOtherAttributes().put(QName.valueOf("xmlns:xs"), "http://www.w3.org/2001/XMLSchema#");
 
-        baseRepository.save("db/zahtev_za_sertifikat", documentId ,zahtevZaIzdavanjeSertifikata);
-        OutputStream outputStream = jaxBParser.marshall(zahtevZaIzdavanjeSertifikata);
+        baseRepository.save("db/zahtev_za_sertifikat", documentId, zahtevZaIzdavanjeSertifikata, ZahtevZaIzdavanjeSertifikata.class);
+        OutputStream outputStream = jaxBParser.marshall(zahtevZaIzdavanjeSertifikata, ZahtevZaIzdavanjeSertifikata.class);
 
 
         XMLResource resource = existDbManager.load("/db/zahtev_za_sertifikat", documentId);
