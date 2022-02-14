@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije"
-    xmlns="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije">
+           targetNamespace="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije"
+           xmlns="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije">
 
     <xs:element name="obrazac_za_sprovodjenje_imunizacije">
         <xs:complexType>
@@ -23,6 +23,7 @@
                                     <xs:simpleContent>
                                         <xs:extension base="xs:string">
                                             <xs:attribute name="property"/>
+                                            <xs:attribute name="datatype"/>
                                         </xs:extension>
                                     </xs:simpleContent>
                                 </xs:complexType>
@@ -32,6 +33,7 @@
                                     <xs:simpleContent>
                                         <xs:extension base="xs:date">
                                             <xs:attribute name="property"/>
+                                            <xs:attribute name="datatype"/>
                                         </xs:extension>
                                     </xs:simpleContent>
                                 </xs:complexType>
@@ -53,7 +55,7 @@
                                 </xs:complexType>
                             </xs:element>
                             <xs:element minOccurs="0" name="privremene_kontraindikacije"
-                                type="xs:string"/>
+                                        type="xs:string"/>
                             <xs:element minOccurs="0" name="odluka_komisije">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
@@ -68,6 +70,7 @@
             <xs:attribute name="about"/>
             <xs:attribute name="typeof"/>
             <xs:attribute name="referencira"/>
+            <xs:anyAttribute/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="osoba">
@@ -155,6 +158,7 @@
                     <xs:simpleContent>
                         <xs:extension base="xs:date">
                             <xs:attribute name="property"/>
+                            <xs:attribute name="datatype"/>
                         </xs:extension>
                     </xs:simpleContent>
                 </xs:complexType>
@@ -177,6 +181,7 @@
         <xs:simpleContent>
             <xs:extension base="jmbg-restriction">
                 <xs:attribute name="property" type="xs:string" use="required"/>
+                <xs:attribute name="datatype"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
