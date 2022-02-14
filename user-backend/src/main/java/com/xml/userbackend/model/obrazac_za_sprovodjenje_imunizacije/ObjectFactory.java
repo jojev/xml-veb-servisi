@@ -85,7 +85,14 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link Jmbg }
      *
+     *
      */
+
+
+    public PodaciKojeJePopunioZdravstveniRadnik podaciKojeJePopunioZdravstveniRadnik(){
+            return new PodaciKojeJePopunioZdravstveniRadnik();
+    }
+
     public Jmbg createJmbg() {
         return new Jmbg();
     }

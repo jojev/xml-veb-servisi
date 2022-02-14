@@ -128,7 +128,7 @@ public class ObrazacZaSprovodjenjeImunizacije {
 
     @XmlElement(name = "podaci_koje_je_popunio_pacijent", required = true)
     protected ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioPacijent podaciKojeJePopunioPacijent;
-    @XmlElement(name = "podaci_koje_je_popunio_zdravstveni_radnik", required = true)
+    @XmlElement(name = "podaci_koje_je_popunio_zdravstveni_radnik")
     protected ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioZdravstveniRadnik podaciKojeJePopunioZdravstveniRadnik;
     @XmlAttribute(name = "about")
     @XmlSchemaType(name = "anySimpleType")

@@ -39,4 +39,10 @@ public class BaseRepository {
         existDbManager.update(collectionUri, documentId, contextPath, newValue, targetNamespace);
 
     }
+
+    public void append(String collectionUri, String documentId, String contextPath, String newValue, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        existDbManager.appendContent(collectionUri, documentId, contextPath, newValue, targetNamespace);
+
+    }
 }
