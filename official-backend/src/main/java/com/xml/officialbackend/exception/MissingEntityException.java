@@ -1,5 +1,6 @@
 package main.java.com.xml.officialbackend.exception;
 
+
 public class MissingEntityException extends RuntimeException {
     private String message;
 

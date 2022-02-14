@@ -141,7 +141,12 @@ public class Korisnik {
      *     {@link Korisnik.KorisnickoIme }
      *
      */
-    public Korisnik.KorisnickoIme getKorisnickoIme() {
+
+    public KorisnickoIme getKorisnickoIme() {
+        if (korisnickoIme == null) {
+            return new KorisnickoIme();
+        }
+
         return korisnickoIme;
     }
 

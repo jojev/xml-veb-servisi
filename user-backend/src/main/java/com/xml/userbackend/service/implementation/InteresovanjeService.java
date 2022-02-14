@@ -54,7 +54,7 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
     @Override
-    public InteresovanjeZaVakcinisanje findById(Integer id) throws Exception {
+    public InteresovanjeZaVakcinisanje findById(String id) throws Exception {
         return null;
     }
 
@@ -73,8 +73,8 @@ public class InteresovanjeService implements IInteresovanjeService {
         interesovanjeZaVakcinisanje.getOtherAttributes().put(QName.valueOf("xmlns:pred"), "http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/");
         interesovanjeZaVakcinisanje.getOtherAttributes().put(QName.valueOf("xmlns:xs"), "http://www.w3.org/2001/XMLSchema#");
 
-        baseRepository.save("db/interesovanje", documentId ,interesovanjeZaVakcinisanje);
-        OutputStream outputStream = jaxBParser.marshall(interesovanjeZaVakcinisanje);
+        baseRepository.save("db/interesovanje", documentId ,interesovanjeZaVakcinisanje,InteresovanjeZaVakcinisanje.class);
+        OutputStream outputStream = jaxBParser.marshall(interesovanjeZaVakcinisanje,InteresovanjeZaVakcinisanje.class);
         String path = "gen/pdf/"+documentId+".pdf";
         xslfoTransformer.generatePDF(outputStream.toString(),"data/xsl_fo/interesovanje.xsl", path);
         this.emailService.sendMail(interesovanjeZaVakcinisanje.getLicniPodaci().getAdresaElektronskePoste(), path);
@@ -88,12 +88,12 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
     @Override
-    public InteresovanjeZaVakcinisanje update(InteresovanjeZaVakcinisanje entity, Integer id) throws Exception {
+    public InteresovanjeZaVakcinisanje update(InteresovanjeZaVakcinisanje entity, String id) throws Exception {
         return null;
     }
 
     @Override
-    public void delete(Integer id) throws Exception {
+    public void delete(String id) throws Exception {
 
     }
 }
