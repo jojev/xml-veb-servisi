@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://www.ftn.uns.ac.rs/poslednji_termin"
+    xmlns="http://www.ftn.uns.ac.rs/poslednji_termin">
+    
+    <xs:element name="poslednji_termin">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="datum" type="xs:date"/>
+                <xs:element name="broj_termina" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
