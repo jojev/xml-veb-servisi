@@ -11,6 +11,7 @@
                         <xs:simpleContent>
                             <xs:extension base="xs:string">
                                 <xs:attribute name="property"/>
+                                <xs:attribute name="datatype"/>
                             </xs:extension>
                         </xs:simpleContent>
                     </xs:complexType>
@@ -29,6 +30,7 @@
             <xs:attribute name="about"/>
             <xs:attribute name="typeof"/>
             <xs:attribute name="referencira"/>
+            <xs:anyAttribute/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="podaci_o_sertifikatu">
@@ -45,6 +47,7 @@
                     <xs:simpleContent>
                         <xs:extension base="xs:dateTime">
                             <xs:attribute name="property"/>
+                            <xs:attribute name="datatype"/>
                         </xs:extension>
                     </xs:simpleContent>
                 </xs:complexType>
@@ -103,6 +106,7 @@
         <xs:simpleContent>
             <xs:extension base="jmbg-restriction">
                 <xs:attribute name="property" type="xs:string" use="required"/>
+                <xs:attribute name="datatype"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -115,6 +119,7 @@
         <xs:simpleContent>
             <xs:extension base="broj-pasosa-restriction">
                 <xs:attribute name="property" type="xs:string" use="required"/>
+                <xs:attribute name="datatype"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

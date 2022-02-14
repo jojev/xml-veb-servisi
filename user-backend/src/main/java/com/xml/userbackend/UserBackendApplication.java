@@ -7,7 +7,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.core.userdetails.User;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 @SpringBootApplication
@@ -15,7 +18,12 @@ import java.util.Properties;
 public class UserBackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UserBackendApplication.class, args);
+		SpringApplication app = new SpringApplication(UserBackendApplication.class);
+		Map<String,Object> settings =  new HashMap<>();
+		settings.put("server.port","8080");
+		settings.put("logging.level.org.springframework.web","DEBUG");
+		app.setDefaultProperties(settings);
+		app.run(args);
 	}
 
 	@Bean

@@ -1,20 +1,28 @@
 package main.java.com.xml.userbackend.service.implementation;
 
+import main.java.com.xml.userbackend.dto.SearchDTO;
+import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
+import main.java.com.xml.userbackend.model.korisnik.Korisnik;
+import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
 import main.java.com.xml.userbackend.rdf.MetadataExtractor;
+import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.repository.BaseRepository;
 import main.java.com.xml.userbackend.service.EmailService;
 import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
 import main.java.com.xml.userbackend.transformations.XSLFOTransformer;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xmldb.api.modules.XMLResource;
 
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.UUID;
@@ -88,6 +96,33 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
     @Override
+    public RDFNode searchRDF(String jmbg) throws IOException {
+        String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreirao> \"" + jmbg + "\" ;";
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            if(result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                return row.get(columnName);
+            }
+
+            return null;
+        }
+    }
+
+    @Override
+    public InteresovanjeZaVakcinisanje searchByJMBG(String jmbg) throws Exception {
+        RDFNode documentId = searchRDF(jmbg);
+        String[] parts = documentId.toString().split("/");
+        InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = baseRepository.findById("/db/interesovanje", parts[parts.length-1],InteresovanjeZaVakcinisanje.class);
+        if(interesovanjeZaVakcinisanje == null){
+            throw new MissingEntityException("Ne postoji dokument sa prosledjenim identifikatorom.");
+        }
+        return interesovanjeZaVakcinisanje;
+    }
+
+    @Override
     public InteresovanjeZaVakcinisanje update(InteresovanjeZaVakcinisanje entity, String id) throws Exception {
         return null;
     }
@@ -96,4 +131,6 @@ public class InteresovanjeService implements IInteresovanjeService {
     public void delete(String id) throws Exception {
 
     }
+
+
 }
