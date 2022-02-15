@@ -54,9 +54,10 @@ public class SaglasnostService implements ISaglasnostService {
     }
 
     @Override
-    public ObrazacZaSprovodjenjeImunizacije findById(Integer id) throws Exception {
+    public ObrazacZaSprovodjenjeImunizacije findById(String id) throws Exception {
         return null;
     }
+
 
     @Override
     public ObrazacZaSprovodjenjeImunizacije create(ObrazacZaSprovodjenjeImunizacije entity) throws Exception {
@@ -79,6 +80,16 @@ public class SaglasnostService implements ISaglasnostService {
         byte[] out =  metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "saglasnosti");
         return entity;
+    }
+
+    @Override
+    public ObrazacZaSprovodjenjeImunizacije update(ObrazacZaSprovodjenjeImunizacije entity, String id) throws Exception {
+        return null;
+    }
+
+    @Override
+    public void delete(String id) throws Exception {
+
     }
 
     @Override
@@ -131,13 +142,4 @@ public class SaglasnostService implements ISaglasnostService {
         }
     }
 
-    @Override
-    public ObrazacZaSprovodjenjeImunizacije update(ObrazacZaSprovodjenjeImunizacije entity, Integer id) throws Exception {
-        return null;
-    }
-
-    @Override
-    public void delete(Integer id) throws Exception {
-
-    }
 }

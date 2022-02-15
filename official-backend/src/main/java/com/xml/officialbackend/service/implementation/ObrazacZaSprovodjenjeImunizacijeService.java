@@ -54,10 +54,10 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
     }
 
     @Override
-    public ObrazacZaSprovodjenjeImunizacije findById(Integer id) throws Exception {
+    public ObrazacZaSprovodjenjeImunizacije findById(String id) throws Exception {
         return null;
     }
-
+    
 
     @Override
     public ObrazacZaSprovodjenjeImunizacije create(ObrazacZaSprovodjenjeImunizacije entity) throws Exception {
@@ -70,9 +70,10 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
     }
 
     @Override
-    public void delete(Integer id) throws Exception {
+    public void delete(String id) throws Exception {
 
     }
+
 
 
     public RDFNode searchRDF(String jmbg) throws IOException {
