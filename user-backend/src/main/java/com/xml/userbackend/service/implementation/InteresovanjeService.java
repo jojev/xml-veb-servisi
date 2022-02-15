@@ -5,8 +5,10 @@ import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
+import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
 import main.java.com.xml.userbackend.rdf.MetadataExtractor;
+import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.repository.BaseRepository;
 import main.java.com.xml.userbackend.service.EmailService;
 import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
@@ -66,6 +68,26 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
     @Override
+    public RDFNode getInteresovanje(String jmbg) throws IOException {
+        String sparqlCondition = "?person <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreirao> \"" + jmbg + "\" .";
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            System.out.println(columnNames.get(0));
+            System.out.println(columnNames.size());
+            if(result.getResult().hasNext()) {
+                System.out.println("Usao");
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                RDFNode rdfNode = row.get(columnName);
+                System.out.println(rdfNode);
+                return rdfNode;
+            }
+            return null;
+        }
+    }
+
+    @Override
     public InteresovanjeZaVakcinisanje create(InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje) throws Exception {
         String documentId = UUID.randomUUID().toString();
 
@@ -93,6 +115,8 @@ public class InteresovanjeService implements IInteresovanjeService {
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "interesovanje");
         return interesovanjeZaVakcinisanje;
     }
+
+
 
     @Override
     public InteresovanjeZaVakcinisanje update(InteresovanjeZaVakcinisanje entity, String id) throws Exception {
