@@ -1,5 +1,7 @@
 package main.java.com.xml.userbackend.service.implementation;
 
+import main.java.com.xml.userbackend.rdf.FusekiReader;
+import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
@@ -9,13 +11,18 @@ import main.java.com.xml.userbackend.repository.BaseRepository;
 import main.java.com.xml.userbackend.service.EmailService;
 import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
 import main.java.com.xml.userbackend.transformations.XSLFOTransformer;
+
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xmldb.api.modules.XMLResource;
 
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,5 +102,23 @@ public class InteresovanjeService implements IInteresovanjeService {
     @Override
     public void delete(String id) throws Exception {
 
+    }
+    
+    @Override
+    public int getNumberOfInterestedPatients(LocalDate startDate, LocalDate endDate) throws IOException {
+    	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreiran> ?date. "
+				+ "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>)." ;
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/interesovanje", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            if(result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                RDFNode rdfNode = row.get(columnName);
+                return rdfNode.asLiteral().getInt();
+            }
+        }
+        
+        return 0;
     }
 }

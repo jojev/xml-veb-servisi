@@ -57,28 +57,29 @@ public class Test {
 //    }
 
     public void testWriteToExistDb() throws Exception {
-        File file = new File("data/documents/interesovanje.xml");
-        baseRepository.save("/db/interesovanje", "1.xml", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));
+        File file = new File("data/documents/potvrda_o_vakcinaciji.xml");
+        baseRepository.save("/db/potvrda_o_vakcinaciji", "1.xml", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));
     }
 
     public void testReadFromExistDb() throws Exception {
-        InteresovanjeZaVakcinisanje interesovanje = baseRepository.findById("/db/interesovanje", "1.xml", InteresovanjeZaVakcinisanje.class);
+        InteresovanjeZaVakcinisanje interesovanje = baseRepository.findById("/db/potvrda_o_vakcinaciji", "1.xml", InteresovanjeZaVakcinisanje.class);
         System.out.println(interesovanje);
     }
 
     public void testUpdateDocumentFromExistDb() throws Exception {
-        InteresovanjeZaVakcinisanje interesovanje = baseRepository.findById("/db/interesovanje", "1.xml", InteresovanjeZaVakcinisanje.class);
+        InteresovanjeZaVakcinisanje interesovanje = baseRepository.findById("/db/potvrda_o_vakcinaciji", "1.xml", InteresovanjeZaVakcinisanje.class);
         interesovanje.getLicniPodaci().setIme("Novo ime");
         baseRepository.save("/db/interesovanje", "1.xml", interesovanje, InteresovanjeZaVakcinisanje.class);
     }
 
     public void testWriteToRdf() throws IOException, TransformerException {
-        byte[] out =  metadataExtractor.extractMetadata("data/documents/interesovanje.xml");
-        FusekiWriter.saveRDF(new ByteArrayInputStream(out), "test");
+        byte[] out =  metadataExtractor.extractMetadata("data/documents/potvrda_o_vakcinaciji.xml");
+       // System.out.println(out);
+        FusekiWriter.saveRDF(new ByteArrayInputStream(out), "potvrdaOVakcinaciji");
     }
 
     public void testReadFromRdf() throws IOException {
-        try(RDFReadResult result = FusekiReader.readRDF("/test")) {
+        try(RDFReadResult result = FusekiReader.readRDF("/potvrdaOVakcinaciji")) {
             ResultSetFormatter.outputAsXML(result.getResult());
             for (String var: result.getResult().getResultVars()) {
                 System.out.println(var);

@@ -37,6 +37,54 @@ public class ExistDbManager {
         }
     }
 
+    public List<Resource> executeXquery(String collectionUri, String targetNamespace, String query) throws ClassNotFoundException, InstantiationException, IllegalAccessException, XMLDBException, IOException {
+    	openConnection();
+        Collection collection = null;
+        List<Resource> resources = new ArrayList<Resource>();
+
+        try {
+            collection = DatabaseManager.getCollection(ExistAuthenticationUtilities.loadProperties().uri + collectionUri,
+                    ExistAuthenticationUtilities.loadProperties().user,
+                    ExistAuthenticationUtilities.loadProperties().password);
+            collection.setProperty(OutputKeys.INDENT, "yes");
+            
+            // get an instance of xquery service
+            XQueryService xqueryService = (XQueryService) collection.getService("XQueryService", "1.0");
+            xqueryService.setProperty("indent", "yes");
+            
+            // make the service aware of namespaces
+            xqueryService.setNamespace("b", targetNamespace);
+            
+            CompiledExpression compiledXquery = xqueryService.compile(query);
+            ResourceSet result = xqueryService.execute(compiledXquery);
+
+            ResourceIterator i = result.getIterator();
+            Resource res = null;
+
+            while(i.hasMoreResources()) {
+                
+            	try {
+            		res = i.nextResource();
+                    resources.add(res);
+                    System.out.println(res.getContent());
+                    
+                } finally {
+                    
+                	// don't forget to cleanup resources
+                    try { 
+                    	((EXistResource)res).freeResources(); 
+                    } catch (XMLDBException xe) {
+                    	xe.printStackTrace();
+                    }
+                }
+            }            
+        } catch (Exception e) {
+            closeConnection(collection, null);
+        }
+
+        return resources;	
+    }
+    
     public XMLResource load(String collectionUri, String documentId) throws Exception  {
         openConnection();
         Collection collection = null;
