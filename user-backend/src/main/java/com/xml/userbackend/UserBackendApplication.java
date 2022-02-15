@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.core.userdetails.User;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -19,10 +20,8 @@ public class UserBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(UserBackendApplication.class);
-		Map<String,Object> settings =  new HashMap<>();
-		settings.put("server.port","8080");
-		settings.put("logging.level.org.springframework.web","DEBUG");
-		app.setDefaultProperties(settings);
+		app.setDefaultProperties(Collections
+				.<String, Object>singletonMap("server.port", "8080"));
 		app.run(args);
 	}
 

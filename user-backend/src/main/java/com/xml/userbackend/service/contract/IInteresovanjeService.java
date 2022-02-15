@@ -5,12 +5,13 @@ import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinis
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisanje> {
 
     InteresovanjeZaVakcinisanje create(InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje) throws Exception;
 
-    RDFNode searchRDF(String search) throws IOException;
+    ArrayList<RDFNode> searchRDF(String search) throws IOException;
 
-    InteresovanjeZaVakcinisanje searchByJMBG(String search) throws Exception;
+    ArrayList<InteresovanjeZaVakcinisanje> searchByJMBG(String search) throws Exception;
 }

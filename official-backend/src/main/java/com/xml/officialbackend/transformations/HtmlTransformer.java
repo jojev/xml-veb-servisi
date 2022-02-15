@@ -1,6 +1,7 @@
 package main.java.com.xml.officialbackend.transformations;
 
 import com.itextpdf.text.DocumentException;
+import org.springframework.stereotype.Component;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -8,23 +9,22 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
+@Component
 public class HtmlTransformer {
     private static DocumentBuilderFactory documentFactory;
 
     private static TransformerFactory transformerFactory;
 
-    public static final String HTML_FILE = "gen/html/potvrda_o_vakcinaciji.html";
+    //public static final String HTML_FILE = "gen/html/potvrda_o_vakcinaciji.html";
 
     public static final String INPUT_FILE = "data/documents/potvrda_o_vakcinaciji.xml";
 
     public static final String XSL_FILE = "data/xslt/potvrda_o_vakcinaciji.xsl";
 
 
+    public HtmlTransformer(){}
     static {
 
         documentFactory = DocumentBuilderFactory.newInstance();
@@ -36,13 +36,13 @@ public class HtmlTransformer {
 
     }
 
-    public org.w3c.dom.Document buildDocument(String filePath) {
+    public org.w3c.dom.Document buildDocument(InputStream filePath) {
 
         org.w3c.dom.Document document = null;
         try {
 
             DocumentBuilder builder = documentFactory.newDocumentBuilder();
-            document = builder.parse(new File(filePath));
+            document = builder.parse(filePath);
 
             if (document != null)
                 System.out.println("[INFO] File parsed with no errors.");
@@ -57,7 +57,7 @@ public class HtmlTransformer {
         return document;
     }
 
-    public void generateHTML(String xmlPath, String xslPath) throws FileNotFoundException {
+    public void generateHTML(String xmlContent, String xslPath, String htmlFile) throws FileNotFoundException {
 
         try {
 
@@ -71,8 +71,14 @@ public class HtmlTransformer {
             transformer.setOutputProperty(OutputKeys.METHOD, "xhtml");
 
             // Transform DOM to HTML
-            DOMSource source = new DOMSource(buildDocument(xmlPath));
-            StreamResult result = new StreamResult(new FileOutputStream(HTML_FILE));
+
+            InputStream targetStream = new ByteArrayInputStream(xmlContent.getBytes());
+
+            //StreamSource source = new StreamSource(targetStream);
+
+
+            DOMSource source = new DOMSource(buildDocument(targetStream));
+            StreamResult result = new StreamResult(new FileOutputStream(htmlFile));
             transformer.transform(source, result);
 
         } catch (TransformerConfigurationException e) {
@@ -84,9 +90,9 @@ public class HtmlTransformer {
         }
     }
 
-    public static void main(String[] args) throws IOException, DocumentException {
-        HtmlTransformer htmlTransformer = new HtmlTransformer();
-
-        htmlTransformer.generateHTML(INPUT_FILE, XSL_FILE);
-    }
+//    public static void main(String[] args) throws IOException, DocumentException {
+//        HtmlTransformer htmlTransformer = new HtmlTransformer();
+//
+//        htmlTransformer.generateHTML(INPUT_FILE, XSL_FILE);
+//    }
 }

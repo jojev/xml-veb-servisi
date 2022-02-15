@@ -8,6 +8,7 @@
 
 package main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije;
 
+
 import javax.xml.bind.annotation.XmlRegistry;
 
 
@@ -130,6 +131,9 @@ public class ObjectFactory {
      */
     public ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioPacijent.Datum createObrazacZaSprovodjenjeImunizacijePodaciKojeJePopunioPacijentDatum() {
         return new ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioPacijent.Datum();
+    }
+    public ObrazacList createList() {
+        return new ObrazacList();
     }
 
 }

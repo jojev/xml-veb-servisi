@@ -57,43 +57,5 @@ public class EmailService {
         }
     }
 
-    public void sendResponse(String toEmail, String path, String reason) {
-        try {
-            MimeMessage msg = javaMailSender.createMimeMessage();
-            msg.setSubject("Odgovor na zahtev za digitalni zeleni sertifikat");
-            MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-            helper.setTo(toEmail);
-            helper.setFrom("euprava");
-            helper.setSubject("Odgovor na zahtev za digitalni zeleni sertifikat");
-            if (!path.equals(" ")) {
-
-                Multipart emailContent = new MimeMultipart();
-                MimeBodyPart textBodyPart = new MimeBodyPart();
-                textBodyPart.setText("U prilogu se nalazi Vaš digitalni zeleni sertfikat!");
-
-                MimeBodyPart jpgBodyPart = new MimeBodyPart();
-                jpgBodyPart.attachFile(path);
-
-                emailContent.addBodyPart(textBodyPart);
-                emailContent.addBodyPart(jpgBodyPart);
-
-                msg.setContent(emailContent);
-
-            }else{
-                Multipart emailContent = new MimeMultipart();
-                MimeBodyPart textBodyPart = new MimeBodyPart();
-                textBodyPart.setText(reason);
-                emailContent.addBodyPart(textBodyPart);
-
-
-                msg.setContent(emailContent);
-            }
-
-            javaMailSender.send(msg);
-
-        } catch (MessagingException | IOException ex) {
-            System.out.println("Greška prilikom slanja!");
-        }
-    }
 
 }

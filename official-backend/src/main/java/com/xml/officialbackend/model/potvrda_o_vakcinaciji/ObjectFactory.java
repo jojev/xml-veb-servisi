@@ -8,6 +8,7 @@
 
 package main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji;
 
+
 import javax.xml.bind.annotation.XmlRegistry;
 
 
@@ -100,4 +101,7 @@ public class ObjectFactory {
         return new Vakcinacija.Doze();
     }
 
+    public PotvrdaOVakcinacijiList createList() {
+        return new PotvrdaOVakcinacijiList();
+    }
 }

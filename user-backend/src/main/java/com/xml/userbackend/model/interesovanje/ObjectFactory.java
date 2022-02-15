@@ -84,4 +84,7 @@ public class ObjectFactory {
         return new TipVakcine();
     }
 
+    public InteresovanjeList createList() {
+        return new InteresovanjeList();
+    }
 }

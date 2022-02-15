@@ -24,6 +24,7 @@ import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,7 +42,6 @@ public class InteresovanjeService implements IInteresovanjeService {
     private ExistDbManager existDbManager;
 
     private MetadataExtractor metadataExtractor;
-
 
 
     @Autowired
@@ -81,45 +81,47 @@ public class InteresovanjeService implements IInteresovanjeService {
         interesovanjeZaVakcinisanje.getOtherAttributes().put(QName.valueOf("xmlns:pred"), "http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/");
         interesovanjeZaVakcinisanje.getOtherAttributes().put(QName.valueOf("xmlns:xs"), "http://www.w3.org/2001/XMLSchema#");
 
-        baseRepository.save("db/interesovanje", documentId ,interesovanjeZaVakcinisanje,InteresovanjeZaVakcinisanje.class);
-        OutputStream outputStream = jaxBParser.marshall(interesovanjeZaVakcinisanje,InteresovanjeZaVakcinisanje.class);
-        String path = "gen/pdf/"+documentId+".pdf";
-        xslfoTransformer.generatePDF(outputStream.toString(),"data/xsl_fo/interesovanje.xsl", path);
+        baseRepository.save("db/interesovanje", documentId, interesovanjeZaVakcinisanje, InteresovanjeZaVakcinisanje.class);
+        OutputStream outputStream = jaxBParser.marshall(interesovanjeZaVakcinisanje, InteresovanjeZaVakcinisanje.class);
+        String path = "gen/pdf/" + documentId + ".pdf";
+        xslfoTransformer.generatePDF(outputStream.toString(), "data/xsl_fo/interesovanje.xsl", path);
         this.emailService.sendMail(interesovanjeZaVakcinisanje.getLicniPodaci().getAdresaElektronskePoste(), path);
 
 
         XMLResource resource = existDbManager.load("/db/interesovanje", documentId);
 
-        byte[] out =  metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
+        byte[] out = metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "interesovanje");
         return interesovanjeZaVakcinisanje;
     }
 
     @Override
-    public RDFNode searchRDF(String jmbg) throws IOException {
+    public ArrayList<RDFNode> searchRDF(String jmbg) throws IOException {
         String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreirao> \"" + jmbg + "\" ;";
 
-        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition);) {
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
-            if(result.getResult().hasNext()) {
+            while (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
-                return row.get(columnName);
+                nodes.add(row.get(columnName));
             }
 
-            return null;
         }
+        return nodes;
     }
 
     @Override
-    public InteresovanjeZaVakcinisanje searchByJMBG(String jmbg) throws Exception {
-        RDFNode documentId = searchRDF(jmbg);
-        String[] parts = documentId.toString().split("/");
-        InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = baseRepository.findById("/db/interesovanje", parts[parts.length-1],InteresovanjeZaVakcinisanje.class);
-        if(interesovanjeZaVakcinisanje == null){
-            throw new MissingEntityException("Ne postoji dokument sa prosledjenim identifikatorom.");
+    public ArrayList<InteresovanjeZaVakcinisanje> searchByJMBG(String jmbg) throws Exception {
+        ArrayList<RDFNode> nodes = searchRDF(jmbg);
+        ArrayList<InteresovanjeZaVakcinisanje> interesovanja = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = baseRepository.findById("/db/interesovanje", parts[parts.length - 1], InteresovanjeZaVakcinisanje.class);
+            interesovanja.add(interesovanjeZaVakcinisanje);
         }
-        return interesovanjeZaVakcinisanje;
+        return interesovanja;
     }
 
     @Override

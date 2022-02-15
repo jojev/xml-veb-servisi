@@ -135,6 +135,9 @@ public class PodaciOVakcinaciji {
             }
             return this.doza;
         }
+        public void setDoza(ArrayList<Doza> doza) {
+            this.doza = doza;
+        }
 
     }
 

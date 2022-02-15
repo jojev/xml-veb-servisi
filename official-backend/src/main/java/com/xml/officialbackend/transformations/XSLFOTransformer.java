@@ -5,6 +5,7 @@ import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
+import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 
 import javax.xml.transform.Result;
@@ -14,18 +15,18 @@ import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 
-
+@Component
 public class XSLFOTransformer {
 
     private FopFactory fopFactory;
 
     private TransformerFactory transformerFactory;
 
-    public static final String INPUT_FILE = "data/documents/interesovanje.xml";
-
-    public static final String XSL_FILE = "data/xsl-fo/interesovanje.xsl";
-
-    public static final String OUTPUT_FILE = "gen/fo/interesovanje.pdf";
+//    public static final String INPUT_FILE = "data/documents/interesovanje.xml";
+//
+//    public static final String XSL_FILE = "data/xsl-fo/interesovanje.xsl";
+//
+//    public static final String OUTPUT_FILE = "gen/fo/interesovanje.pdf";
 
 
     public XSLFOTransformer() throws SAXException, IOException {
@@ -37,7 +38,7 @@ public class XSLFOTransformer {
         transformerFactory = new TransformerFactoryImpl();
     }
 
-    private void generatePDF() throws Exception {
+    public void generatePDF(String xmlContent, String XSL_FILE, String OUTPUT_FILE) throws Exception {
 
         System.out.println("[INFO] " + XSLFOTransformer.class.getSimpleName());
 
@@ -48,7 +49,10 @@ public class XSLFOTransformer {
         StreamSource transformSource = new StreamSource(xslFile);
 
         // Initialize the transformation subject
-        StreamSource source = new StreamSource(new File(INPUT_FILE));
+
+        InputStream targetStream = new ByteArrayInputStream(xmlContent.getBytes());
+
+        StreamSource source = new StreamSource(targetStream);
 
         // Initialize user agent needed for the transformation
         FOUserAgent userAgent = fopFactory.newFOUserAgent();
@@ -85,8 +89,8 @@ public class XSLFOTransformer {
 
     }
 
-    public static void main(String[] args) throws Exception {
-        new XSLFOTransformer().generatePDF();
-    }
+//    public static void main(String[] args) throws Exception {
+//        new XSLFOTransformer().generatePDF();
+//    }
 
 }

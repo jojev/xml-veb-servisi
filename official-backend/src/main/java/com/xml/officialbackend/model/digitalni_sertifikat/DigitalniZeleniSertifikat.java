@@ -313,6 +313,21 @@ public class DigitalniZeleniSertifikat {
         return otherAttributes;
     }
 
+    @Override
+    public String toString() {
+        return "DigitalniZeleniSertifikat{" +
+                "qrKod=" + qrKod.toString() +
+                ", podaciOSertifikatu=" + podaciOSertifikatu.toString() +
+                ", licniPodaci=" + licniPodaci +
+                ", podaciOVakcinaciji=" + podaciOVakcinaciji.toString() +
+                ", testovi=" + testovi.toString() +
+                ", about='" + about + '\'' +
+                ", typeof='" + typeof + '\'' +
+                ", referencira='" + referencira + '\'' +
+                ", otherAttributes=" + otherAttributes +
+                '}';
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.
@@ -407,6 +422,15 @@ public class DigitalniZeleniSertifikat {
             return datatype;
         }
 
+        @Override
+        public String toString() {
+            return "QrKod{" +
+                    "value='" + value + '\'' +
+                    ", property='" + property + '\'' +
+                    ", datatype='" + datatype + '\'' +
+                    '}';
+        }
+
         /**
          * Sets the value of the datatype property.
          * 
@@ -448,7 +472,7 @@ public class DigitalniZeleniSertifikat {
     public static class Testovi {
 
         @XmlElement(required = true)
-        protected List<Test> test;
+        protected List<Test> test = new ArrayList<Test>();
 
         /**
          * Gets the value of the test property.
@@ -477,6 +501,9 @@ public class DigitalniZeleniSertifikat {
                 test = new ArrayList<Test>();
             }
             return this.test;
+        }
+        public void setTest(ArrayList<Test> test) {
+            this.test = test;
         }
 
     }

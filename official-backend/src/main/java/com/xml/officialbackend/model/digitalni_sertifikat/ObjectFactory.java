@@ -132,4 +132,8 @@ public class ObjectFactory {
         return new PodaciOSertifikatu.DatumVremeIzdavanja();
     }
 
+    public DigitalniSertifikatList createList() {
+        return new DigitalniSertifikatList();
+    }
+
 }
