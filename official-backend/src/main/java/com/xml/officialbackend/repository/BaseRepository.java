@@ -45,6 +45,23 @@ public class BaseRepository {
 
     }
 
+    public void append(String collectionUri, String documentId, String contextPath, String newValue, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        existDbManager.appendContent(collectionUri, documentId, contextPath, newValue, targetNamespace);
+
+    }
+
+    public void insertAfter(String collectionUri, String documentId, String contextPath, String newValue, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        existDbManager.insertAfter(collectionUri, documentId, contextPath, newValue, targetNamespace);
+
+    }
+
+    public void removeElement(String collectionUri, String documentId, String contextPath, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        existDbManager.remove(collectionUri, documentId, contextPath, targetNamespace);
+
+
     public void insertAsLastNode(String collectionUri, String documentId, String contextPath, String node, String targetNamespace)
             throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         existDbManager.insertAsLastNode(collectionUri, documentId, contextPath, node, targetNamespace);
@@ -63,5 +80,6 @@ public class BaseRepository {
             allDocuments.add(jaxBParser.<T>unmarshall((XMLResource) resource, genericClass));
         }
         return allDocuments;
+
     }
 }

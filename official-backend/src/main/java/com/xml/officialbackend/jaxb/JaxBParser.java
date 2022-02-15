@@ -77,4 +77,13 @@ public class JaxBParser {
         marshaller.marshal(objectToMarshall, os);
         return os;
     }
+
+    public <T> OutputStream marshallWithoutSchema(T objectToMarshall) throws JAXBException, SAXException {
+        JAXBContext context = JAXBContext.newInstance(objectToMarshall.getClass());
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        OutputStream os = new ByteArrayOutputStream();
+        marshaller.marshal(objectToMarshall, os);
+        return os;
+    }
 }

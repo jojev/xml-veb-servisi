@@ -60,6 +60,8 @@ public class JaxBParser {
         return (T) unmarshaller.unmarshal(new StringReader(resource.getContent().toString()));
     }
 
+
+
     public <T> OutputStream marshall(T objectToMarshall, Class genericClass) throws JAXBException, SAXException {
         JAXBContext context = JAXBContext.newInstance(objectToMarshall.getClass());
         Marshaller marshaller = context.createMarshaller();
@@ -70,6 +72,15 @@ public class JaxBParser {
         Schema schema = schemaFactory.newSchema(schemaFile);
         marshaller.setSchema(schema);
 
+        OutputStream os = new ByteArrayOutputStream();
+        marshaller.marshal(objectToMarshall, os);
+        return os;
+    }
+
+    public <T> OutputStream marshallWithoutSchema(T objectToMarshall) throws JAXBException, SAXException {
+        JAXBContext context = JAXBContext.newInstance(objectToMarshall.getClass());
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         OutputStream os = new ByteArrayOutputStream();
         marshaller.marshal(objectToMarshall, os);
         return os;
