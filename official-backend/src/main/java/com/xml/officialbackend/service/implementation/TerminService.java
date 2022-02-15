@@ -17,6 +17,7 @@ import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -141,6 +142,34 @@ public class TerminService implements ITerminService {
             Duration d = DatatypeFactory.newInstance().newDuration(86400000);
             date.add(d);
             
+        }
+    }
+
+    @Override
+    public void addTerminOrAddToListaCekanja(String vaccineType, Integer numberOfVaccine, String usernameOfPatient, XMLGregorianCalendar dateOfLastVaccine) throws Exception {
+        ListaCekanja.Stavka stavka = new ListaCekanja.Stavka();
+        stavka.setPacijent(usernameOfPatient);
+        stavka.setTipVakcine(vaccineType);
+
+        GregorianCalendar calendar = dateOfLastVaccine.toGregorianCalendar();
+        if(numberOfVaccine == 2) {
+            if(vaccineType.equalsIgnoreCase("AstraZeneca" )) {
+                calendar.add(Calendar.MONTH, 2);
+            }
+            else {
+                calendar.add(Calendar.DAY_OF_YEAR, 21);
+            }
+        }
+        else {
+            calendar.add(Calendar.MONTH, 6);
+        }
+
+        XMLGregorianCalendar xmlGregorianCalendar =
+                DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
+        stavka.setPeriodCekanja(xmlGregorianCalendar);
+        Termin termin = findAvailableAppointment(vaccineType, stavka);
+        if(termin == null) {
+            listaCekanjaService.addPatientToQueue(stavka);
         }
     }
 
