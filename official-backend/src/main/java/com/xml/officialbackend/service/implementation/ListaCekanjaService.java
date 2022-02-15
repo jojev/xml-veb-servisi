@@ -2,16 +2,12 @@ package main.java.com.xml.officialbackend.service.implementation;
 
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.model.lista_cekanja.ListaCekanja;
-import main.java.com.xml.officialbackend.rdf.MetadataExtractor;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.IListaCekanjaService;
-import org.exist.xquery.functions.util.BaseConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -22,13 +18,11 @@ public class ListaCekanjaService implements IListaCekanjaService {
 
     private ExistDbManager existDbManager;
 
-    private MetadataExtractor metadataExtractor;
 
     @Autowired
-    public ListaCekanjaService(BaseRepository baseRepository, ExistDbManager existDbManager, MetadataExtractor metadataExtractor) {
+    public ListaCekanjaService(BaseRepository baseRepository, ExistDbManager existDbManager) {
         this.baseRepository = baseRepository;
         this.existDbManager = existDbManager;
-        this.metadataExtractor = metadataExtractor;
     }
 
     @Override

@@ -35,14 +35,15 @@ public class VaccineStatusService implements IVaccineStatusService {
 
     @Override
     public StanjeVakcine findById(String id) throws Exception {
-        return null;
+        return baseRepository.findById("/db/stanjeVakcine", id, StanjeVakcine.class);
     }
 
     @Override
     public StanjeVakcine create(StanjeVakcine entity) throws Exception {
-        String vaccineStatusId = UUID.randomUUID().toString();
-        entity.setAbout("http://www.ftn.uns.ac.rs/rdf/stanjeVakcine/" + vaccineStatusId);
 
+        String vaccineStatusId = entity.getVakcina();
+        entity.setAbout("http://www.ftn.uns.ac.rs/rdf/korisnici/" + vaccineStatusId);
+   
         baseRepository.save("/db/stanjeVakcine", vaccineStatusId, entity, StanjeVakcine.class);
 
         return entity;
