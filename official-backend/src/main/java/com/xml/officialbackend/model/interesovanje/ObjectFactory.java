@@ -8,6 +8,7 @@
 
 package main.java.com.xml.officialbackend.model.interesovanje;
 
+
 import javax.xml.bind.annotation.XmlRegistry;
 
 
@@ -84,4 +85,7 @@ public class ObjectFactory {
         return new TipVakcine();
     }
 
+    public InteresovanjeList createList() {
+        return new InteresovanjeList();
+    }
 }
