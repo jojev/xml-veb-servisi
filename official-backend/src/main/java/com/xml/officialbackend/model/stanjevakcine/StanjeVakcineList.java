@@ -1,6 +1,4 @@
-package main.java.com.xml.officialbackend.model.dto;
-
-import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
+package main.java.com.xml.officialbackend.model.stanjevakcine;
 
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;

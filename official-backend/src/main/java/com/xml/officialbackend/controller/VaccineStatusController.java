@@ -1,7 +1,7 @@
 package main.java.com.xml.officialbackend.controller;
 
-import main.java.com.xml.officialbackend.model.dto.StanjeVakcineList;
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
+import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcineList;
 import main.java.com.xml.officialbackend.service.implementation.VaccineStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

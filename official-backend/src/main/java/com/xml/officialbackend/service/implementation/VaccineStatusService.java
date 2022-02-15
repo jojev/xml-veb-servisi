@@ -41,7 +41,7 @@ public class VaccineStatusService implements IVaccineStatusService {
     @Override
     public StanjeVakcine create(StanjeVakcine entity) throws Exception {
         String vaccineStatusId = UUID.randomUUID().toString();
-        entity.setAbout("http://www.ftn.uns.ac.rs/rdf/korisnici/" + vaccineStatusId);
+        entity.setAbout("http://www.ftn.uns.ac.rs/rdf/stanjeVakcine/" + vaccineStatusId);
 
         baseRepository.save("/db/stanjeVakcine", vaccineStatusId, entity, StanjeVakcine.class);
 
