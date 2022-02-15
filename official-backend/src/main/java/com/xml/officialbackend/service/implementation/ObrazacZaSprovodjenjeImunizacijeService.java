@@ -51,7 +51,6 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
 
     private HttpHeaders headers = new HttpHeaders();
 
-    private EmailService emailService;
 
 
     @Autowired
@@ -137,19 +136,5 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
         return  response.getBody();
     }
 
-
-
-
-    @Override
-    public ObrazacZaSprovodjenjeImunizacije findByJMBG(String jmbg) throws Exception {
-        RDFNode documentId = searchRDF(jmbg);
-        String[] parts = documentId.toString().split("/");
-        ObrazacZaSprovodjenjeImunizacije obrazac = baseRepository.findById("/db/obrazac_za_sprovodjenje_imunizacije",
-                parts[parts.length - 1]+".xml", ObrazacZaSprovodjenjeImunizacije.class);
-        if (obrazac == null) {
-            throw new MissingEntityException("Ne postoji dokument sa prosledjenim identifikatorom.");
-        }
-        return obrazac;
-    }
 }
 

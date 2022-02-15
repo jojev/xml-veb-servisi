@@ -10,8 +10,6 @@ public interface IObrazacZaSprovodjenjeImunizacijeService extends IService<Obraz
 
     ObrazacZaSprovodjenjeImunizacije update(String jmbg,
                                             PodaciKojeJePopunioZdravstveniRadnik podaci) throws Exception;
-
-    ObrazacZaSprovodjenjeImunizacije findByJMBG(String jmbg) throws Exception;
   
     ArrayList<ObrazacZaSprovodjenjeImunizacije> findByJMBG(String jmbg) throws Exception;
 }
