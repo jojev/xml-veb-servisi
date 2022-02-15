@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.XMLDBException;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,20 +26,24 @@ public class VaccineStatusService implements IVaccineStatusService {
     }
 
     @Override
-    public List<StanjeVakcine> findAll() {
-        return null;
+    public List<StanjeVakcine> findAll() throws JAXBException, XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SAXException {
+        List<StanjeVakcine> allDocuments = baseRepository.loadAllDocumentsFromCollection("/db/stanjeVakcine", "http://www.ftn.uns.ac.rs/stanjeVakcine",
+                "for $n in fn:collection('/db/stanjeVakcine')" +
+                        "return $n", StanjeVakcine.class);
+        return allDocuments;
     }
 
     @Override
-    public StanjeVakcine findById(Integer id) throws Exception {
-        return null;
+    public StanjeVakcine findById(String id) throws Exception {
+        return baseRepository.findById("/db/stanjeVakcine", id, StanjeVakcine.class);
     }
 
     @Override
     public StanjeVakcine create(StanjeVakcine entity) throws Exception {
-        String vaccineStatusId = UUID.randomUUID().toString();
-        entity.setAbout("http://www.ftn.uns.ac.rs/rdf/korisnici/" + vaccineStatusId);
 
+        String vaccineStatusId = entity.getVakcina();
+        entity.setAbout("http://www.ftn.uns.ac.rs/rdf/korisnici/" + vaccineStatusId);
+   
         baseRepository.save("/db/stanjeVakcine", vaccineStatusId, entity, StanjeVakcine.class);
 
         return entity;
@@ -53,7 +61,7 @@ public class VaccineStatusService implements IVaccineStatusService {
     }
 
     @Override
-    public void delete(Integer id) throws Exception {
+    public void delete(String id) throws Exception {
 
     }
 

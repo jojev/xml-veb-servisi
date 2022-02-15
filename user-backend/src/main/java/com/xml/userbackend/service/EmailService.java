@@ -38,7 +38,9 @@ public class EmailService {
 
             Multipart emailContent = new MimeMultipart();
             MimeBodyPart textBodyPart = new MimeBodyPart();
-            textBodyPart.setText("U prilogu se nalazi Vaše interesovanje.");
+            textBodyPart.setText("Uspešno iskazano interesovanje!" +
+                    "Dobićete prvi slobodan termin čim bude dostupan." +
+                    "U prilogu se nalazi Vaše interesovanje.");
 
             MimeBodyPart jpgBodyPart = new MimeBodyPart();
             jpgBodyPart.attachFile(path);

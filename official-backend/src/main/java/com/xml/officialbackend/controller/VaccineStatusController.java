@@ -1,14 +1,17 @@
 package main.java.com.xml.officialbackend.controller;
 
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
+import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcineList;
 import main.java.com.xml.officialbackend.service.implementation.VaccineStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping(value="/api/v1/vaccineStatus", produces={"application/xml"})
+@RequestMapping(value="/api/v1/vaccine-status", produces={"application/xml"})
 public class VaccineStatusController {
     @Autowired
     private VaccineStatusService vaccineStatusService;
@@ -20,6 +23,13 @@ public class VaccineStatusController {
 
     @PutMapping("/{id}")
     private ResponseEntity<?> updateVaccineStatus(@RequestBody StanjeVakcine vaccineStatus, @PathVariable String id) throws Exception {
-        return new ResponseEntity<>(vaccineStatusService.update(vaccineStatus, id), HttpStatus.CREATED);
+        return new ResponseEntity<>(vaccineStatusService.update(vaccineStatus, id), HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    private ResponseEntity<StanjeVakcineList> getAllVaccineStatus() throws Exception {
+        List<StanjeVakcine> stanjeVakcineList = vaccineStatusService.findAll();
+        StanjeVakcineList list = new StanjeVakcineList(stanjeVakcineList);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

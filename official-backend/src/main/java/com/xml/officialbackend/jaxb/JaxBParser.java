@@ -11,7 +11,9 @@ import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZel
 import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji;
 import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
+import main.java.com.xml.officialbackend.model.lista_cekanja.ListaCekanja;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
+import main.java.com.xml.officialbackend.model.poslednji_termin.PoslednjiTermin;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
 import main.java.com.xml.officialbackend.model.termin.Termin;
@@ -39,19 +41,20 @@ public class JaxBParser {
         shemaLocationRegistry.put(Korisnik.class, "./data/schemes/korisnik.xsd");
         shemaLocationRegistry.put(StanjeVakcine.class, "./data/schemes/stanjeVakcine.xsd");
         shemaLocationRegistry.put(Termin.class, "./data/schemes/termin.xsd");
+        shemaLocationRegistry.put(ListaCekanja.class, "./data/schemes/lista_cekanja.xsd");
+        shemaLocationRegistry.put(PoslednjiTermin.class, "./data/schemes/poslednji_termin.xsd");
+
     }
 
     public <T> T unmarshall(XMLResource resource, Class genericClass) throws JAXBException, XMLDBException, SAXException {
         JAXBContext context = JAXBContext.newInstance(genericClass);
         Unmarshaller unmarshaller = context.createUnmarshaller();
-
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         File schemaFile = new File(shemaLocationRegistry.get(genericClass));
         Schema schema = schemaFactory.newSchema(schemaFile);
 
         unmarshaller.setSchema(schema);
         unmarshaller.setEventHandler(new ShemaValidationHandler());
-
         try {
             return (T) unmarshaller.unmarshal(new StringReader(resource.getContent().toString()));
         }
@@ -61,7 +64,7 @@ public class JaxBParser {
     }
 
     public <T> OutputStream marshall(T objectToMarshall, Class genericClass) throws JAXBException, SAXException {
-        JAXBContext context = JAXBContext.newInstance(objectToMarshall.getClass());
+        JAXBContext context = JAXBContext.newInstance(objectToMarshall.getClass().getPackage().getName());
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 

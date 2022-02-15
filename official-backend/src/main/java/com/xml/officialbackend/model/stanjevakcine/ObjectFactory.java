@@ -44,4 +44,7 @@ public class ObjectFactory {
         return new StanjeVakcine();
     }
 
+    public StanjeVakcineList createStanjeVAkcineList() {
+        return new StanjeVakcineList();
+    }
 }
