@@ -49,14 +49,12 @@ public class JaxBParser {
     public <T> T unmarshall(XMLResource resource, Class genericClass) throws JAXBException, XMLDBException, SAXException {
         JAXBContext context = JAXBContext.newInstance(genericClass);
         Unmarshaller unmarshaller = context.createUnmarshaller();
-
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         File schemaFile = new File(shemaLocationRegistry.get(genericClass));
         Schema schema = schemaFactory.newSchema(schemaFile);
 
         unmarshaller.setSchema(schema);
         unmarshaller.setEventHandler(new ShemaValidationHandler());
-
         try {
             return (T) unmarshaller.unmarshal(new StringReader(resource.getContent().toString()));
         }
