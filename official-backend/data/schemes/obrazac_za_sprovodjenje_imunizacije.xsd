@@ -41,7 +41,7 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="podaci_koje_je_popunio_zdravstveni_radnik">
+                <xs:element minOccurs="0" name="podaci_koje_je_popunio_zdravstveni_radnik">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="zdravstvena_ustanova" type="xs:string"/>

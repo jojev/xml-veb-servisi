@@ -1,17 +1,21 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
-import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
+import main.java.com.xml.officialbackend.model.lista_cekanja.ListaCekanja;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.rdf.FusekiReader;
 import main.java.com.xml.officialbackend.rdf.FusekiWriter;
 import main.java.com.xml.officialbackend.rdf.MetadataExtractor;
 import main.java.com.xml.officialbackend.rdf.RDFReadResult;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
+import main.java.com.xml.officialbackend.service.contract.IListaCekanjaService;
 import main.java.com.xml.officialbackend.service.contract.IPotvrdaOVakcinacijiService;
+
 
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
+import main.java.com.xml.officialbackend.service.contract.ITerminService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xmldb.api.modules.XMLResource;
@@ -33,6 +37,12 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
 
     @Autowired
     private MetadataExtractor metadataExtractor;
+
+    @Autowired
+    private ITerminService terminService;
+
+    @Autowired
+    private IListaCekanjaService listaCekanjaService;
 
     @Override
     public List<PotvrdaOVakcinaciji> findAll() {
@@ -62,6 +72,11 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
         XMLResource resource = existDbManager.load("/db/potvrda_o_vakcinaciji", potvrdaOVakcinicijiId);
         byte[] out =  metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "potvrda_o_vakcinaciji");
+
+        int numberOfVaccine = entity.getPodaciOVakcinaciji().getDoze().getDoza().size();
+
+        terminService.addTerminOrAddToListaCekanja(entity.getPodaciOVakcinaciji().getNazivVakcine().trim(), numberOfVaccine + 1,
+                entity.getLicniPodaci().getJmbg().getValue(), entity.getPodaciOVakcinaciji().getDoze().getDoza().get(numberOfVaccine - 1).getDatumDavanja());
 
         return entity;
     }

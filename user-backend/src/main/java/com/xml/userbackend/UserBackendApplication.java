@@ -10,6 +10,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 
 import java.util.Collections;
+import java.util.Map;
+
 import java.util.Properties;
 
 @SpringBootApplication
@@ -17,10 +19,10 @@ import java.util.Properties;
 public class UserBackendApplication{
 
 	public static void main(String[] args) {
-	
+
 		SpringApplication app = new SpringApplication(UserBackendApplication.class);
 		app.setDefaultProperties(Collections
-				.<String, Object>singletonMap("server.port", "8080"));
+				.<String, Object>singletonMap("logging.level.org.springframework.web", "DEBUG"));
 		app.run(args);
 	}
 
