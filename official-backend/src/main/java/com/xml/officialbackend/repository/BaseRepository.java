@@ -45,4 +45,16 @@ public class BaseRepository {
         existDbManager.appendContent(collectionUri, documentId, contextPath, newValue, targetNamespace);
 
     }
+
+    public void insertAfter(String collectionUri, String documentId, String contextPath, String newValue, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        existDbManager.insertAfter(collectionUri, documentId, contextPath, newValue, targetNamespace);
+
+    }
+
+    public void removeElement(String collectionUri, String documentId, String contextPath, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        existDbManager.remove(collectionUri, documentId, contextPath, targetNamespace);
+
+    }
 }

@@ -153,19 +153,29 @@ public class ExistDbManager {
                     ExistAuthenticationUtilities.loadProperties().user,
                     ExistAuthenticationUtilities.loadProperties().password);
             collection.setProperty(OutputKeys.INDENT, "yes");
-            System.out.println("ANDRIJA");
             XUpdateQueryService xupdateService = (XUpdateQueryService) collection.getService("XUpdateQueryService", "1.0");
             xupdateService.setProperty("indent", "yes");
-            System.out.println("VOJNOVIC");
-            System.out.println(String.format(XUpdateTemplate.getInsertAfterExpresson(targetNamespace), contextPath, newValue));
             xupdateService.updateResource(documentId, String.format(XUpdateTemplate.getInsertAfterExpresson(targetNamespace), contextPath, newValue));
-            System.out.println("KONJINA");
         } catch (Exception e) {
-            System.out.println(e.getCause());
             closeConnection(collection, resource);
         }
     }
 
 
-
+    public void remove(String collectionUri, String documentId, String contextPath, String targetNamespace) throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        openConnection();
+        Collection collection = null;
+        XMLResource resource =  null;
+        try {
+            collection = DatabaseManager.getCollection(ExistAuthenticationUtilities.loadProperties().uri + collectionUri,
+                    ExistAuthenticationUtilities.loadProperties().user,
+                    ExistAuthenticationUtilities.loadProperties().password);
+            collection.setProperty(OutputKeys.INDENT, "yes");
+            XUpdateQueryService xupdateService = (XUpdateQueryService) collection.getService("XUpdateQueryService", "1.0");
+            xupdateService.setProperty("indent", "yes");
+            xupdateService.updateResource(documentId, String.format(XUpdateTemplate.getRemoveExspression(targetNamespace), contextPath));
+        } catch (Exception e) {
+            closeConnection(collection, resource);
+        }
+    }
 }

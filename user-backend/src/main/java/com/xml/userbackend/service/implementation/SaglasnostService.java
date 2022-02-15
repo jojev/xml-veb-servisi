@@ -5,6 +5,7 @@ import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.korisnik.Korisnik;
+import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.Doza;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
 import main.java.com.xml.userbackend.rdf.FusekiReader;
@@ -90,6 +91,14 @@ public class SaglasnostService implements ISaglasnostService {
         String[] parts = saglasnostID.toString().split("/");
         ObrazacZaSprovodjenjeImunizacije obrazacZaSprovodjenjeImunizacije =
                 baseRepository.findById("/db/saglasnost", parts[parts.length-1],ObrazacZaSprovodjenjeImunizacije.class);
+        if(obrazacZaSprovodjenjeImunizacije.getPodaciKojeJePopunioZdravstveniRadnik()!=null){
+            Doza secondDoza = podaci.getDoze().getDoza().get(0);
+            podaci.getDoze().getDoza().set(0,obrazacZaSprovodjenjeImunizacije.getPodaciKojeJePopunioZdravstveniRadnik().getDoze().getDoza().get(0));
+            podaci.getDoze().getDoza().add(secondDoza);
+            baseRepository.removeElement("/db/saglasnost", parts[parts.length-1],
+                    "/obrazac_za_sprovodjenje_imunizacije/podaci_koje_je_popunio_zdravstveni_radnik",
+                    "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije");
+        }
         String content = jaxBParser.marshallWithoutSchema(podaci).toString();
         System.out.println(content);
         content =  content.replace(" xmlns=\"http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije\"", "");
@@ -99,7 +108,10 @@ public class SaglasnostService implements ISaglasnostService {
                 "/obrazac_za_sprovodjenje_imunizacije/podaci_koje_je_popunio_pacijent", content,
                 "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije");
 
-        return new ObrazacZaSprovodjenjeImunizacije();
+        obrazacZaSprovodjenjeImunizacije =
+                baseRepository.findById("/db/saglasnost", parts[parts.length-1],ObrazacZaSprovodjenjeImunizacije.class);
+
+        return obrazacZaSprovodjenjeImunizacije;
     }
 
 
@@ -115,14 +127,12 @@ public class SaglasnostService implements ISaglasnostService {
                     return rdfNode;
                 }
             }
-
             return null;
         }
     }
 
     @Override
     public ObrazacZaSprovodjenjeImunizacije update(ObrazacZaSprovodjenjeImunizacije entity, Integer id) throws Exception {
-
         return null;
     }
 

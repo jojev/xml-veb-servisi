@@ -46,4 +46,10 @@ public class BaseRepository {
 
     }
 
+    public void removeElement(String collectionUri, String documentId, String contextPath, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        existDbManager.remove(collectionUri, documentId, contextPath, targetNamespace);
+
+    }
+
 }

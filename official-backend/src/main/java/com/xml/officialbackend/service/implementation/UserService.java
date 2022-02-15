@@ -134,18 +134,12 @@ public class UserService implements IUserService {
 
     @Override
     public UserTokenStateDTO authenticate(JwtAuthenticationRequest jwtAuthenticationRequest) throws Exception {
-//        OutputStream os = jaxBParser.marshall(jwtAuthenticationRequest, JwtAuthenticationRequest.class);
         headers.setContentType(MediaType.APPLICATION_XML);
         HttpEntity<String> request = new HttpEntity<String>(String.format(
                 "<jwtauthenticationrequest><username>%s</username><password>%s</password></jwtauthenticationrequest>",
                 jwtAuthenticationRequest.getUsername(),jwtAuthenticationRequest.getPassword()), headers);
         ResponseEntity<UserTokenStateDTO> response;
-        try {
            response = restTemplate.postForEntity("http://localhost:8080/api/v1/auth/login", request, UserTokenStateDTO.class);
-        }
-        catch (Exception e){
-            throw new BadCredentialException("Pogrešni kredencijali");
-        }
         return response.getBody();
     }
 }
