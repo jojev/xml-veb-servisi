@@ -109,6 +109,7 @@ public class IzvestajService implements IIzvestajService{
 		IzvestajOImunizaciji izvestaj = new IzvestajOImunizaciji();
 		izvestaj.setBrojInteresovanjaOImunizaciji(BigInteger.valueOf(interesovanjeCnt));
 		izvestaj.setBrojZahtevaZaDigiatlniSertifikat(BigInteger.valueOf(zahtevCnt));
+		izvestaj.setBrojIzdatihDigitalnihSertifikata(BigInteger.valueOf(0));
 		izvestaj.setBrojPrimljenihDozaVakcina(BigInteger.valueOf(totalVaccines));
 		Od odPeriod = new Od();
 		odPeriod.setValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(startDate.toString()));
@@ -133,6 +134,7 @@ public class IzvestajService implements IIzvestajService{
 		raspodelaProizvodjaca.getVakcina().addAll(vakcine);
 		izvestaj.setRaspodelaProizvodjaca(raspodelaProizvodjaca);
 		
+		create(izvestaj);
 		return izvestaj;
 	}
 	
