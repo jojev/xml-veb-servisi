@@ -1,25 +1,42 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
+import main.java.com.xml.officialbackend.model.lista_cekanja.ListaCekanja;
+import main.java.com.xml.officialbackend.model.poslednji_termin.PoslednjiTermin;
+import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
 import main.java.com.xml.officialbackend.model.termin.Termin;
-import main.java.com.xml.officialbackend.rdf.MetadataExtractor;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.ITerminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.Duration;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.math.BigInteger;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class TerminService implements ITerminService {
     private BaseRepository baseRepository;
 
-    private MetadataExtractor metadataExtractor;
+    private ListaCekanjaService listaCekanjaService;
+
+    private VaccineStatusService vaccineStatusService;
+
+    private PoslednjiTerminService poslednjiTerminService;
 
     @Autowired
-    public TerminService(BaseRepository baseRepository, MetadataExtractor metadataExtractor) {
+    public TerminService(BaseRepository baseRepository, ListaCekanjaService listaCekanjaService,
+                         VaccineStatusService vaccineStatusService, PoslednjiTerminService poslednjiTerminService) {
         this.baseRepository = baseRepository;
-        this.metadataExtractor = metadataExtractor;
+        this.listaCekanjaService = listaCekanjaService;
+        this.vaccineStatusService = vaccineStatusService;
+        this.poslednjiTerminService = poslednjiTerminService;
     }
 
     @Override
@@ -29,7 +46,7 @@ public class TerminService implements ITerminService {
 
     @Override
     public Termin findById(String id) throws Exception {
-        return baseRepository.findById("/db/termini",id, Termin.class);
+        return baseRepository.findById("/db/termini", id, Termin.class);
     }
 
     @Override
@@ -49,5 +66,148 @@ public class TerminService implements ITerminService {
     @Override
     public void delete(String id) throws Exception {
 
+    }
+
+    @Override
+    public void assignToPatient() throws Exception {
+        ListaCekanja lista = listaCekanjaService.findById("ListaCekanja");
+        List<String> vaccineTypes = new ArrayList<>();
+        vaccineTypes.add("Pfizer-BioNTech");
+        vaccineTypes.add("Moderna");
+        vaccineTypes.add("Sputnik V");
+        vaccineTypes.add("Sinopharm");
+        vaccineTypes.add("AstraZeneca");
+
+        for(int i = 0; i < lista.getStavka().size(); i++) {
+            ListaCekanja.Stavka stavka = lista.getStavka().get(i);
+
+            if(stavka.getTipVakcine().equalsIgnoreCase("Bilo koja") ||
+                    stavka.getTipVakcine().equalsIgnoreCase("Било која")) {
+                for(String vaccineType: vaccineTypes) {
+                    Termin termin = findAvailableAppointment(vaccineType, stavka);
+                    if (termin != null) {
+                        listaCekanjaService.removePatientFromQueue(i+1);
+                    }
+                }
+            }
+            else {
+                Termin termin = findAvailableAppointment(stavka.getTipVakcine(), stavka);
+                if (termin != null) {
+                    listaCekanjaService.removePatientFromQueue(i+1);
+                }
+            }
+        }
+    }
+
+    @Override
+    public Termin findAvailableAppointment(String vaccineType, ListaCekanja.Stavka stavka) throws Exception {
+        XMLGregorianCalendar date = stavka.getPeriodCekanja();
+        
+        StanjeVakcine stanje = vaccineStatusService.findById(vaccineType);
+        if(stanje == null || stanje.getKolicina() < 1) {
+        	return null;
+        }
+        
+        while(true) {
+        	String findDate = date.getYear() + "-" + date.getMonth() + "-" + date.getDay();
+            PoslednjiTermin termin =  poslednjiTerminService.findById(findDate);
+            
+            if(termin != null) {
+                if(termin.getBrojTermina() < 128 ) {
+                    Termin newTermin = new Termin();
+                    newTermin.setTrajanje(BigInteger.valueOf(15));
+                    newTermin.setPacijent(stavka.getPacijent());
+                    newTermin.setIspostovan(false);
+                    newTermin.setDatumVreme(makeAppointment(termin.getBrojTermina(), date));
+
+                    Termin savedTermin = this.create(newTermin);
+                    this.updateVaccineStatusAndLastAppointment(savedTermin, termin, stanje, date);
+                    
+                    return savedTermin;
+                }
+            }
+            else {
+                Termin newTermin = new Termin();
+                newTermin.setTrajanje(BigInteger.valueOf(15));
+                newTermin.setPacijent(stavka.getPacijent());
+                newTermin.setIspostovan(false);
+                newTermin.setDatumVreme(makeAppointment(0, date));
+
+                Termin savedTermin = this.create(newTermin);
+                this.updateVaccineStatusAndLastAppointment(savedTermin, null, stanje, date);
+                
+                return savedTermin;
+            }
+
+            Duration d = DatatypeFactory.newInstance().newDuration(86400000);
+            date.add(d);
+            
+        }
+    }
+
+    @Override
+    public void addTerminOrAddToListaCekanja(String vaccineType, Integer numberOfVaccine, String usernameOfPatient, XMLGregorianCalendar dateOfLastVaccine) throws Exception {
+        ListaCekanja.Stavka stavka = new ListaCekanja.Stavka();
+        stavka.setPacijent(usernameOfPatient);
+        stavka.setTipVakcine(vaccineType);
+
+        GregorianCalendar calendar = dateOfLastVaccine.toGregorianCalendar();
+        if(numberOfVaccine == 2) {
+            if(vaccineType.equalsIgnoreCase("AstraZeneca" )) {
+                calendar.add(Calendar.MONTH, 2);
+            }
+            else {
+                calendar.add(Calendar.DAY_OF_YEAR, 21);
+            }
+        }
+        else {
+            calendar.add(Calendar.MONTH, 6);
+        }
+
+        XMLGregorianCalendar xmlGregorianCalendar =
+                DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
+        stavka.setPeriodCekanja(xmlGregorianCalendar);
+        Termin termin = findAvailableAppointment(vaccineType, stavka);
+        if(termin == null) {
+            listaCekanjaService.addPatientToQueue(stavka);
+        }
+    }
+
+    private XMLGregorianCalendar makeAppointment(int appointmentsCnt, XMLGregorianCalendar appointmentDate) throws ParseException, DatatypeConfigurationException {
+        //Racunala sam da imamo 4 radnika * 15 jer nam toliko termin traje dijelimo sa 60 da dobijemo sate, ali kako od 9 radi dodala sam jos 9 sati na to
+        int hours = ((appointmentsCnt / 4) * 15 / 60) + 9;
+        int minutes = ((appointmentsCnt / 4) * 15) % 60;
+        
+        String dateTime = appointmentDate.getYear() + "-" + appointmentDate.getMonth() + "-" + appointmentDate.getDay()
+                + " " + hours + ":" + minutes + ":00";
+        
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date date = format.parse(dateTime);
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(date);
+
+        XMLGregorianCalendar xmlGregCal =  DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+
+        return xmlGregCal;
+    }
+    
+    private void updateVaccineStatusAndLastAppointment(Termin appointment, PoslednjiTermin lastAppointment, StanjeVakcine vaccineStatus, XMLGregorianCalendar date) throws Exception {
+    	vaccineStatus.setKolicina(vaccineStatus.getKolicina() - 1);
+       	vaccineStatusService.update(vaccineStatus, vaccineStatus.getVakcina());
+    	
+    	if(lastAppointment == null) {
+    		PoslednjiTermin newLastAppointment = new PoslednjiTermin();
+    		newLastAppointment.setBrojTermina(1);
+    		newLastAppointment.setDatum(date);
+    		
+    		poslednjiTerminService.create(newLastAppointment);
+    	}
+    	else {
+    		String findDate = date.getYear() + "-" + date.getMonth() + "-" + date.getDay();
+    		lastAppointment.setBrojTermina(lastAppointment.getBrojTermina() + 1);
+    		
+    		poslednjiTerminService.update(lastAppointment, findDate);
+    	}
     }
 }

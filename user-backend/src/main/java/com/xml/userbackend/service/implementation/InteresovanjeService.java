@@ -67,6 +67,26 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
     @Override
+    public RDFNode getInteresovanje(String jmbg) throws IOException {
+        String sparqlCondition = "?person <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreirao> \"" + jmbg + "\" .";
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            System.out.println(columnNames.get(0));
+            System.out.println(columnNames.size());
+            if(result.getResult().hasNext()) {
+                System.out.println("Usao");
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                RDFNode rdfNode = row.get(columnName);
+                System.out.println(rdfNode);
+                return rdfNode;
+            }
+            return null;
+        }
+    }
+
+    @Override
     public InteresovanjeZaVakcinisanje create(InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje) throws Exception {
         String documentId = UUID.randomUUID().toString();
 
@@ -94,6 +114,8 @@ public class InteresovanjeService implements IInteresovanjeService {
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "interesovanje");
         return interesovanjeZaVakcinisanje;
     }
+
+
 
     @Override
     public ArrayList<RDFNode> searchRDF(String jmbg) throws IOException {

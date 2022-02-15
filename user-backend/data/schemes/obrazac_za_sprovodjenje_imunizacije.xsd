@@ -23,6 +23,7 @@
                                     <xs:simpleContent>
                                         <xs:extension base="xs:string">
                                             <xs:attribute name="property"/>
+                                            <xs:attribute name="datatype"/>
                                         </xs:extension>
                                     </xs:simpleContent>
                                 </xs:complexType>
@@ -32,6 +33,7 @@
                                     <xs:simpleContent>
                                         <xs:extension base="xs:date">
                                             <xs:attribute name="property"/>
+                                            <xs:attribute name="datatype"/>
                                         </xs:extension>
                                     </xs:simpleContent>
                                 </xs:complexType>
@@ -39,7 +41,7 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="podaci_koje_je_popunio_zdravstveni_radnik">
+                <xs:element minOccurs="0" name="podaci_koje_je_popunio_zdravstveni_radnik">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="zdravstvena_ustanova" type="xs:string"/>
@@ -68,6 +70,7 @@
             <xs:attribute name="about"/>
             <xs:attribute name="typeof"/>
             <xs:attribute name="referencira"/>
+            <xs:anyAttribute/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="osoba">
@@ -155,6 +158,7 @@
                     <xs:simpleContent>
                         <xs:extension base="xs:date">
                             <xs:attribute name="property"/>
+                            <xs:attribute name="datatype"/>
                         </xs:extension>
                     </xs:simpleContent>
                 </xs:complexType>
@@ -177,6 +181,7 @@
         <xs:simpleContent>
             <xs:extension base="jmbg-restriction">
                 <xs:attribute name="property" type="xs:string" use="required"/>
+                <xs:attribute name="datatype"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

@@ -1,5 +1,6 @@
 package main.java.com.xml.userbackend.existdb;
 
+import main.java.com.xml.userbackend.existdb.template.XUpdateTemplate;
 import main.java.com.xml.userbackend.util.ExistAuthenticationUtilities;
 import org.springframework.stereotype.Service;
 import org.xmldb.api.DatabaseManager;
@@ -9,6 +10,7 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.CollectionManagementService;
 import org.xmldb.api.modules.XMLResource;
 import org.exist.xmldb.EXistResource;
+import org.xmldb.api.modules.XUpdateQueryService;
 
 import javax.xml.transform.OutputKeys;
 import java.io.IOException;
@@ -120,5 +122,60 @@ public class ExistDbManager {
     }
 
 
+    public void update(String collectionUri, String documentId, String contextPath, String newValue, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        openConnection();
+        Collection collection = null;
+        XMLResource resource =  null;
+        try {
+            collection = DatabaseManager.getCollection(ExistAuthenticationUtilities.loadProperties().uri + collectionUri,
+                    ExistAuthenticationUtilities.loadProperties().user,
+                    ExistAuthenticationUtilities.loadProperties().password);
+            collection.setProperty(OutputKeys.INDENT, "yes");
 
+            XUpdateQueryService xupdateService = (XUpdateQueryService) collection.getService("XUpdateQueryService", "1.0");
+            xupdateService.setProperty("indent", "yes");
+
+            xupdateService.updateResource(documentId, String.format(XUpdateTemplate.getUpdateExpression(targetNamespace), contextPath, newValue));
+
+        } catch (Exception e) {
+            closeConnection(collection, resource);
+        }
+    }
+
+    public void insertAfter(String collectionUri, String documentId, String contextPath, String newValue, String targetNamespace)
+            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        openConnection();
+        Collection collection = null;
+        XMLResource resource =  null;
+        try {
+            collection = DatabaseManager.getCollection(ExistAuthenticationUtilities.loadProperties().uri + collectionUri,
+                    ExistAuthenticationUtilities.loadProperties().user,
+                    ExistAuthenticationUtilities.loadProperties().password);
+            collection.setProperty(OutputKeys.INDENT, "yes");
+            XUpdateQueryService xupdateService = (XUpdateQueryService) collection.getService("XUpdateQueryService", "1.0");
+            xupdateService.setProperty("indent", "yes");
+            xupdateService.updateResource(documentId, String.format(XUpdateTemplate.getInsertAfterExpresson(targetNamespace), contextPath, newValue));
+        } catch (Exception e) {
+            closeConnection(collection, resource);
+        }
+    }
+
+
+    public void remove(String collectionUri, String documentId, String contextPath, String targetNamespace) throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        openConnection();
+        Collection collection = null;
+        XMLResource resource =  null;
+        try {
+            collection = DatabaseManager.getCollection(ExistAuthenticationUtilities.loadProperties().uri + collectionUri,
+                    ExistAuthenticationUtilities.loadProperties().user,
+                    ExistAuthenticationUtilities.loadProperties().password);
+            collection.setProperty(OutputKeys.INDENT, "yes");
+            XUpdateQueryService xupdateService = (XUpdateQueryService) collection.getService("XUpdateQueryService", "1.0");
+            xupdateService.setProperty("indent", "yes");
+            xupdateService.updateResource(documentId, String.format(XUpdateTemplate.getRemoveExspression(targetNamespace), contextPath));
+        } catch (Exception e) {
+            closeConnection(collection, resource);
+        }
+    }
 }
