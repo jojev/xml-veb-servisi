@@ -12,6 +12,16 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: "vaccine-status",
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("./../vaccine-status/vaccine-status.module").then((m) => m.VaccineStatusModule),
+      },
+    ],
+  },
 ];
 
 @NgModule({

@@ -1,0 +1,16 @@
+<mat-dialog-content [formGroup]="form">
+
+    <mat-form-field>
+        <input matInput placeholder="Nova količina" formControlName="kolicina">
+        <mat-error *ngIf="errorHandling('kolicina', 'required')" id="val-username-error"
+            class="invalid-feedback animated fadeInUp" style="display: block;">
+                Količina je obavezno polje
+        </mat-error>
+    </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button" (click)="closeDialog()">Odustani</button>
+    <button class="mat-raised-button mat-primary" (click)="save()" [disabled]="!form.valid">Izmeni</button>
+</mat-dialog-actions>

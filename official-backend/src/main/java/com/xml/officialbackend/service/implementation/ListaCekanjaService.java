@@ -61,10 +61,8 @@ public class ListaCekanjaService implements IListaCekanjaService {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         formatter.setTimeZone(calendar.getTimeZone());
         String dateString = formatter.format(calendar.getTime());
-        System.out.println("CCAFDSFSd");
         String newStavka = String.format("<stavka><period_cekanja>%1$s</period_cekanja><pacijent>%2$s</pacijent><tip_vakcine>%3$s</tip_vakcine></stavka>", dateString, stavka.getPacijent(), stavka.getTipVakcine());
         baseRepository.insertAsLastNode("/db/cekanje","ListaCekanja", "//lista_cekanja", newStavka, "http://www.ftn.uns.ac.rs/lista_cekanja");
-        System.out.println("fasfds");
         return findById("ListaCekanja") ;
     }
 
