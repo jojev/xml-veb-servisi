@@ -14,6 +14,7 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
     @ExceptionHandler(JAXBException.class)
     public ResponseEntity<ExceptionResponse> handleExceptions(JAXBException exception, WebRequest webRequest) {
         ExceptionResponse response = new ExceptionResponse();
+        System.out.println(exception.getMessage());
         response.setMessage("Xml koji ste poslali se ne poklapa sa šemom.");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
