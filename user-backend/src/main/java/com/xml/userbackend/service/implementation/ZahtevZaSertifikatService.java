@@ -4,6 +4,7 @@ package main.java.com.xml.userbackend.service.implementation;
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.userbackend.dto.SearchDTO;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
+import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
@@ -42,12 +43,15 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
 
     private MetadataExtractor metadataExtractor;
 
+    private JaxBParser jaxBParser;
+
     @Autowired
     public ZahtevZaSertifikatService(BaseRepository baseRepository, ExistDbManager existDbManager,
-                                     MetadataExtractor metadataExtractor) {
+                                     MetadataExtractor metadataExtractor,JaxBParser jaxBParser) {
         this.baseRepository = baseRepository;
         this.existDbManager = existDbManager;
         this.metadataExtractor = metadataExtractor;
+        this.jaxBParser = jaxBParser;
 
     }
 

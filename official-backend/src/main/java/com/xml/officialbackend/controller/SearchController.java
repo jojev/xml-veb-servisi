@@ -10,6 +10,7 @@ import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizaci
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinacijiList;
 import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevList;
+import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.officialbackend.service.contract.IDigitalniSertifikatService;
 import main.java.com.xml.officialbackend.service.contract.IObrazacZaSprovodjenjeImunizacijeService;
 import main.java.com.xml.officialbackend.service.contract.IPotvrdaOVakcinacijiService;
