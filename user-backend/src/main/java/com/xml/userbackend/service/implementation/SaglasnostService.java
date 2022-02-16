@@ -172,26 +172,10 @@ public class SaglasnostService implements ISaglasnostService {
             return null;
         }
     }
-
-    public ArrayList<RDFNode> searchRDF(String jmbg) throws IOException {
-        String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/saglasnosti/predicate/Kreirao> \"" + jmbg + "\" ;";
-        ArrayList<RDFNode> nodes = new ArrayList<>();
-        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition)) {
-            List<String> columnNames = result.getResult().getResultVars();
-            if (result.getResult().hasNext()) {
-                QuerySolution row = result.getResult().nextSolution();
-                String columnName = columnNames.get(0);
-                nodes.add(row.get(columnName));
-            }
-
-        }
-        return nodes;
-    }
-
-
+    
     @Override
     public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(String jmbg) throws Exception {
-        ArrayList<RDFNode> nodes = searchRDF(jmbg);
+        ArrayList<RDFNode> nodes = (ArrayList<RDFNode>) getAllSaglanostFromJMBG(jmbg);
         ArrayList<ObrazacZaSprovodjenjeImunizacije> list = new ArrayList<>();
         for (RDFNode node : nodes) {
             String[] parts = node.toString().split("/");
