@@ -8,7 +8,10 @@ import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizaci
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import org.apache.jena.rdf.model.RDFNode;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.XMLDBException;
 
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -29,4 +32,6 @@ public interface IDigitalniSertifikatService extends IService<DigitalniZeleniSer
     ArrayList<RDFNode> searchRDF(SearchDTO searchDTO) throws IOException;
 
     ArrayList<DigitalniZeleniSertifikat> searchByJMBG(SearchDTO searchDTO) throws Exception;
+
+    ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws IOException, JAXBException, XMLDBException, SAXException;
 }

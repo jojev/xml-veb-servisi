@@ -1,6 +1,8 @@
 package main.java.com.xml.userbackend.controller;
 
 import main.java.com.xml.userbackend.dto.SearchDTO;
+import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeList;
+import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevList;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.service.contract.IZahtevZaSertifikatService;
@@ -39,6 +41,13 @@ public class ZahtevZaSertifikatController {
     public ResponseEntity<?> getZahtev(@PathVariable String documentId) throws Exception {
         ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.findById(documentId);
         return new ResponseEntity<>(zahtevZaIzdavanjeSertifikata, HttpStatus.OK);
+    }
+
+    @PostMapping("/search_by_text")
+    public ResponseEntity<?> searchByText(@RequestBody SearchDTO searchDTO) throws Exception {
+        ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchByText(searchDTO.getSearch());
+        ZahtevList list = new ZahtevList(zahtevi);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 }
