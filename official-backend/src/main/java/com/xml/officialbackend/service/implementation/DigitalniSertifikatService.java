@@ -1,5 +1,6 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
+import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
@@ -187,6 +188,28 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     public ArrayList<DigitalniZeleniSertifikat> searchByJMBG(SearchDTO searchDTO) throws Exception {
         ArrayList<DigitalniZeleniSertifikat> list = new ArrayList<>();
         ArrayList<RDFNode> nodes = searchRDF(searchDTO);
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            DigitalniZeleniSertifikat digitalniZeleniSertifikat = baseRepository.findById("/db/digitalni_sertifikat", parts[parts.length - 1], DigitalniZeleniSertifikat.class);
+            list.add(digitalniZeleniSertifikat);
+        }
+        return list;
+    }
+
+    @Override
+    public ArrayList<DigitalniZeleniSertifikat> searchMetadata(MetadataSearchDTO searchDTO) throws Exception {
+        String value = searchDTO.getSearch();
+        String sparqlCondition = "?document ?d \"" + value + "\" .";
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/digitalni_sertifikat", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+        }
+        ArrayList<DigitalniZeleniSertifikat> list = new ArrayList<>();
         for (RDFNode node : nodes) {
             String[] parts = node.toString().split("/");
             DigitalniZeleniSertifikat digitalniZeleniSertifikat = baseRepository.findById("/db/digitalni_sertifikat", parts[parts.length - 1], DigitalniZeleniSertifikat.class);

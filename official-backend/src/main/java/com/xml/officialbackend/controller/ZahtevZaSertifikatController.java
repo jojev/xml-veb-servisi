@@ -23,7 +23,6 @@ public class ZahtevZaSertifikatController {
     }
 
     @PostMapping(value = "/odgovor")
-    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> response(@RequestBody RazlogDTO razlogDTO, @RequestHeader("Authorization") String accessToken) throws Exception {
 
         HttpHeaders headers = new HttpHeaders();
