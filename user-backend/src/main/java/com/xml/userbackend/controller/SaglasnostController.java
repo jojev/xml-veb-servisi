@@ -6,14 +6,14 @@ import main.java.com.xml.userbackend.dto.SearchDTO;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacList;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
-import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevList;
-import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.service.contract.ISaglasnostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.IOException;
 import java.util.ArrayList;
 
 @RestController
@@ -48,5 +48,10 @@ public class SaglasnostController {
         ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazac = saglasnostService.searchMetadata(metadataSearchDTO);
         ObrazacList list = new ObrazacList(obrazac);
         return new ResponseEntity<>(list, HttpStatus.OK);
+
+    }
+    @GetMapping("/by-dopunjen-datuma/{date}")
+    public ResponseEntity<?> getByDopunjenDatuma(@PathVariable XMLGregorianCalendar calendar) throws IOException {
+        return new ResponseEntity<>(saglasnostService.getByDopunjenDatuma(calendar), HttpStatus.OK);
     }
 }

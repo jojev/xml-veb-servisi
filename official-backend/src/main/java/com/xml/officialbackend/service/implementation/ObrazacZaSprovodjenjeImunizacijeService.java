@@ -1,23 +1,29 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
-import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
+import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.exception.MissingEntityException;
+import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacList;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
-import main.java.com.xml.officialbackend.rdf.FusekiReader;
-import main.java.com.xml.officialbackend.rdf.RDFReadResult;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.IObrazacZaSprovodjenjeImunizacijeService;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.XMLDBException;
+import org.xmldb.api.modules.XMLResource;
 
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +32,8 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
     private BaseRepository baseRepository;
 
     private JaxBParser jaxBParser;
+
+    private ExistDbManager existDbManager;
 
     private final RestTemplate restTemplate;
 
@@ -65,6 +73,7 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
     }
 
     @Override
+
     public ArrayList<ObrazacZaSprovodjenjeImunizacije> findByJMBG(String jmbg) {
         headers.setContentType(MediaType.APPLICATION_XML);
         HttpEntity<String> request = new HttpEntity<>(String.format(
@@ -77,7 +86,28 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
             throw new MissingEntityException("Ne postoje saglasnosti sa unetim jmbg.");
         }
         return (ArrayList<ObrazacZaSprovodjenjeImunizacije>) response.getBody().getItems();
+
     }
+    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByText(SearchDTO searchDTO) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {
+        String xqueryPath = "data/xquery/pretraga_po_tekstu_obrazac.xqy";
+        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+
+        String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
+        List<Resource> resources =
+                existDbManager.executeXquery("/db/obrazac_za_sprovodjenje_imunizacije", "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije", formattedXQueryExpresion);
+        ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazacZaSprovodjenjeImunizacijes = new ArrayList<ObrazacZaSprovodjenjeImunizacije>();
+        for (Resource resource : resources) {
+            XMLResource xmlResource = (XMLResource) resource;
+            obrazacZaSprovodjenjeImunizacijes.add((ObrazacZaSprovodjenjeImunizacije) jaxBParser.unmarshall(xmlResource, ObrazacZaSprovodjenjeImunizacije.class));
+        }
+        return obrazacZaSprovodjenjeImunizacijes;
+    }
+
+    public static String readFile(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
+    }
+
 
     @Override
     public ObrazacZaSprovodjenjeImunizacije update(String jmbg,

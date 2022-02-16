@@ -1,4 +1,5 @@
 package main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije;
+import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
