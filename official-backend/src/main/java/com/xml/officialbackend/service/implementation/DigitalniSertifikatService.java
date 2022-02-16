@@ -196,11 +196,11 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     }
 
     @Override
-    public ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws IOException, JAXBException, XMLDBException, SAXException {
+    public ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws IOException, JAXBException, XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         String xqueryPath = "data/xquery/pretraga_po_tekstu_zahtev.xqy";
         String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
 
-        String formattedXQueryExpresion = String.format(xqueryExpression, search);
+        String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
         System.out.println(formattedXQueryExpresion);
         List<Resource> resources =
                 existDbManager.executeXquery("/db/zahtev_za_sertifikat", "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat",formattedXQueryExpresion);

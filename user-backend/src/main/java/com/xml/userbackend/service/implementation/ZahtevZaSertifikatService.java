@@ -1,10 +1,9 @@
 package main.java.com.xml.userbackend.service.implementation;
 
+
 import main.java.com.xml.userbackend.dto.SearchDTO;
-import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
-import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
@@ -14,6 +13,7 @@ import main.java.com.xml.userbackend.repository.BaseRepository;
 import main.java.com.xml.userbackend.service.EmailService;
 import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
 import main.java.com.xml.userbackend.service.contract.IZahtevZaSertifikatService;
+
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +105,24 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "zahtev_za_sertifikat");
         return zahtevZaIzdavanjeSertifikata;
     }
+    
+    @Override
+    public int getNumberOfRequestForDigitalSertificate(String startDate, String endDate) throws IOException {
+    	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/IzdatDatuma> ?date. "
+				+ "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>)." ;
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/zahtev_za_sertifikat", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            
+            if(result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                RDFNode rdfNode = row.get(columnName);
+                return rdfNode.asLiteral().getInt();
+            }
+        }
+		return 0;
+    }
 
     @Override
     public ArrayList<RDFNode> searchRDF(SearchDTO searchDTO) throws IOException {
@@ -134,6 +152,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         }
         return list;
     }
+
 
     @Override
     public ArrayList<ZahtevZaIzdavanjeSertifikata> searchByText(String search) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {

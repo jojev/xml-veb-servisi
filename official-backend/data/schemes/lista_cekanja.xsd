@@ -12,6 +12,7 @@
                             <xs:element name="period_cekanja" type="xs:date"/>
                             <xs:element name="pacijent" type="xs:string"/>
                             <xs:element name="tip_vakcine" type="xs:string"/>
+                            <xs:element name="doza" type="xs:int"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>

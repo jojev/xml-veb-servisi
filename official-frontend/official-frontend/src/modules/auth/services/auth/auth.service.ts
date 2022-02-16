@@ -1,9 +1,7 @@
 declare var require: any
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Token } from '../../model/Token';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import * as x2js from 'xml2js';
 
 var o2x = require('object-to-xml');

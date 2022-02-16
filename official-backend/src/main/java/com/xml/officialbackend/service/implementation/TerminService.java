@@ -1,11 +1,38 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.UUID;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.Duration;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.XMLDBException;
+
+import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.model.lista_cekanja.ListaCekanja;
 import main.java.com.xml.officialbackend.model.poslednji_termin.PoslednjiTermin;
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
 import main.java.com.xml.officialbackend.model.termin.Termin;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.ITerminService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +44,8 @@ import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
+
 
 @Service
 public class TerminService implements ITerminService {
@@ -29,14 +56,18 @@ public class TerminService implements ITerminService {
     private VaccineStatusService vaccineStatusService;
 
     private PoslednjiTerminService poslednjiTerminService;
+    
+    private ExistDbManager existDbManager;
 
     @Autowired
     public TerminService(BaseRepository baseRepository, ListaCekanjaService listaCekanjaService,
-                         VaccineStatusService vaccineStatusService, PoslednjiTerminService poslednjiTerminService) {
+                         VaccineStatusService vaccineStatusService, PoslednjiTerminService poslednjiTerminService,
+                         ExistDbManager existDbManager) {
         this.baseRepository = baseRepository;
         this.listaCekanjaService = listaCekanjaService;
         this.vaccineStatusService = vaccineStatusService;
         this.poslednjiTerminService = poslednjiTerminService;
+        this.existDbManager = existDbManager;
     }
 
     @Override
@@ -87,6 +118,7 @@ public class TerminService implements ITerminService {
                     Termin termin = findAvailableAppointment(vaccineType, stavka);
                     if (termin != null) {
                         listaCekanjaService.removePatientFromQueue(i+1);
+                        break;
                     }
                 }
             }
@@ -103,6 +135,16 @@ public class TerminService implements ITerminService {
     public Termin findAvailableAppointment(String vaccineType, ListaCekanja.Stavka stavka) throws Exception {
         XMLGregorianCalendar date = stavka.getPeriodCekanja();
         
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+
+        XMLGregorianCalendar now =  DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+        int result = date.toGregorianCalendar().compareTo(now.toGregorianCalendar());
+        
+        if(result > 0) {
+        	date = now;
+        }
+        
         StanjeVakcine stanje = vaccineStatusService.findById(vaccineType);
         if(stanje == null || stanje.getKolicina() < 1) {
         	return null;
@@ -118,6 +160,8 @@ public class TerminService implements ITerminService {
                     newTermin.setTrajanje(BigInteger.valueOf(15));
                     newTermin.setPacijent(stavka.getPacijent());
                     newTermin.setIspostovan(false);
+                    newTermin.setDoza(stavka.getDoza());
+                    newTermin.setTipVakcine(stavka.getTipVakcine());
                     newTermin.setDatumVreme(makeAppointment(termin.getBrojTermina(), date));
 
                     Termin savedTermin = this.create(newTermin);
@@ -131,6 +175,8 @@ public class TerminService implements ITerminService {
                 newTermin.setTrajanje(BigInteger.valueOf(15));
                 newTermin.setPacijent(stavka.getPacijent());
                 newTermin.setIspostovan(false);
+                newTermin.setDoza(stavka.getDoza());
+                newTermin.setTipVakcine(stavka.getTipVakcine());
                 newTermin.setDatumVreme(makeAppointment(0, date));
 
                 Termin savedTermin = this.create(newTermin);
@@ -210,4 +256,37 @@ public class TerminService implements ITerminService {
     		poslednjiTerminService.update(lastAppointment, findDate);
     	}
     }
+    
+    public List<Resource> findVaccineByDosage(String startDay, String endDay) throws Exception {
+    	String xqueryPath = "data/xquery/raspodela_po_dozama.xqy";
+    	String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+    	
+    	XMLGregorianCalendar startDate =
+    			  DatatypeFactory.newInstance().newXMLGregorianCalendar(startDay.toString());
+    	XMLGregorianCalendar endDate =
+  			  DatatypeFactory.newInstance().newXMLGregorianCalendar(endDay);
+
+    	String formattedXQueryExpresion = String.format(xqueryExpression, startDate, endDate);
+        System.out.println(formattedXQueryExpresion);
+    	return existDbManager.executeXquery("/db/termini", "", formattedXQueryExpresion);
+    }
+    
+    public List<Resource> findVaccineByManufacturer(String startDay, String endDay) throws Exception {
+    	String xqueryPath = "data/xquery/raspodela_po_proizvodjacu.xqy";
+    	String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+    	
+    	XMLGregorianCalendar startDate = 
+    			  DatatypeFactory.newInstance().newXMLGregorianCalendar(startDay.toString());
+    	XMLGregorianCalendar endDate = 
+  			  DatatypeFactory.newInstance().newXMLGregorianCalendar(endDay);
+
+    	String formattedXQueryExpresion = String.format(xqueryExpression, startDate, endDate);
+    	
+    	return existDbManager.executeXquery("/db/termini", "", formattedXQueryExpresion);
+    }
+    
+    public static String readFile(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
+	}
 }

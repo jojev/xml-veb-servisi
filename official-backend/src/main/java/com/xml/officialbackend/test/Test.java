@@ -68,7 +68,7 @@ public class Test {
     }
 
     public void testUpdateDocumentFromExistDb() throws Exception {
-        InteresovanjeZaVakcinisanje interesovanje = baseRepository.findById("/db/interesovanje", "1.xml", InteresovanjeZaVakcinisanje.class);
+        InteresovanjeZaVakcinisanje interesovanje = baseRepository.findById("/db/potvrda_o_vakcinaciji", "1.xml", InteresovanjeZaVakcinisanje.class);
         interesovanje.getLicniPodaci().setIme("Novo ime");
         baseRepository.save("/db/interesovanje", "1.xml", interesovanje, InteresovanjeZaVakcinisanje.class);
     }
