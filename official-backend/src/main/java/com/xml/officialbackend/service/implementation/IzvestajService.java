@@ -2,10 +2,10 @@ package main.java.com.xml.officialbackend.service.implementation;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.namespace.QName;
@@ -101,7 +101,7 @@ public class IzvestajService implements IIzvestajService{
 	}
 	
 	@Override
-	public IzvestajOImunizaciji createReport(LocalDate startDate, LocalDate endDate, int interesovanjeCnt, int zahtevCnt) throws Exception {
+	public IzvestajOImunizaciji createReport(String startDate, String endDate, int interesovanjeCnt, int zahtevCnt) throws Exception {
 		List<Resource> vaccinesByDosage = terminService.findVaccineByDosage(startDate, endDate);
 		List<Resource> vaccinesByManufacturer = terminService.findVaccineByManufacturer(startDate, endDate);
 		int totalVaccines = findTotalVaccines(vaccinesByDosage);
@@ -121,7 +121,11 @@ public class IzvestajService implements IIzvestajService{
 		izvestaj.setPeriod(period);
 		
 		DatumIzdavanja datum = new DatumIzdavanja();
-		datum.setValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDate.now().toString()));
+
+		Date date = Calendar.getInstance().getTime();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String strDate = dateFormat.format(date);
+		datum.setValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(strDate));
 		izvestaj.setDatumIzdavanja(datum);
 		
 		List<Doza> doze = findDosages(vaccinesByDosage);

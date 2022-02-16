@@ -34,7 +34,7 @@ public class RunAfterStartup {
     @EventListener(ApplicationReadyEvent.class)
     public void runAfterStartup() throws Exception {
 
-    	ts.findVaccineByManufacturer(LocalDate.now().minusDays(5), LocalDate.now());
+    	//ts.findVaccineByManufacturer(LocalDate.now().minusDays(5), LocalDate.now());
         
     }
 }

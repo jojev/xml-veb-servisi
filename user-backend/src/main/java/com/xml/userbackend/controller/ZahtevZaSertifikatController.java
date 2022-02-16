@@ -2,7 +2,10 @@ package main.java.com.xml.userbackend.controller;
 
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.java.com.xml.userbackend.dto.SearchDTO;
+import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeList;
+import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevList;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.service.contract.IZahtevZaSertifikatService;
@@ -44,8 +49,8 @@ public class ZahtevZaSertifikatController {
     }
     
     @GetMapping("/count")
-    public ResponseEntity<CountResponse> findNumberOfZahteva(@RequestParam String startDate, @RequestParam String endDate) throws IOException {
-		return new ResponseEntity<>(new CountResponse(zahtevZaSertifikatService.getNumberOfRequestForDigitalSertificate(LocalDate.parse(startDate), LocalDate.parse(endDate))), HttpStatus.OK);
+    public ResponseEntity<CountResponse> findNumberOfZahteva(@RequestParam String startDate, @RequestParam String endDate) throws IOException, ParseException {
+		return new ResponseEntity<>(new CountResponse(zahtevZaSertifikatService.getNumberOfRequestForDigitalSertificate(startDate, endDate)), HttpStatus.OK);
     }
 
     @PostMapping("/search_by_jmbg")
@@ -60,6 +65,13 @@ public class ZahtevZaSertifikatController {
     public ResponseEntity<?> getZahtev(@PathVariable String documentId) throws Exception {
         ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.findById(documentId);
         return new ResponseEntity<>(zahtevZaIzdavanjeSertifikata, HttpStatus.OK);
+    }
+
+    @PostMapping("/search_by_text")
+    public ResponseEntity<?> searchByText(@RequestBody SearchDTO searchDTO) throws Exception {
+        ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchByText(searchDTO.getSearch());
+        ZahtevList list = new ZahtevList(zahtevi);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 }

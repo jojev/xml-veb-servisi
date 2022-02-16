@@ -1,7 +1,9 @@
 package main.java.com.xml.userbackend.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,14 +51,21 @@ public class InteresovanjeController {
     
     @GetMapping("/count")
     public ResponseEntity<CountResponse> findNumberOfZahteva(String accessToken, @RequestParam String startDate, 
-			@RequestParam String endDate) throws IOException {
-		return new ResponseEntity<>(new CountResponse(interesovanjeService.getNumberOfInterestedPatients(LocalDate.parse(startDate), LocalDate.parse(endDate))), HttpStatus.OK);
+			@RequestParam String endDate) throws IOException, ParseException {
+		return new ResponseEntity<>(new CountResponse(interesovanjeService.getNumberOfInterestedPatients(startDate, endDate)), HttpStatus.OK);
     }
 
     @PostMapping("/search_by_jmbg")
     //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<InteresovanjeZaVakcinisanje> interesovanjeZaVakcinisanje = interesovanjeService.searchByJMBG(searchDTO.getSearch());
+        InteresovanjeList interesovanjeList = new InteresovanjeList(interesovanjeZaVakcinisanje);
+        return new ResponseEntity<>(interesovanjeList, HttpStatus.OK);
+    }
+
+    @PostMapping("/search_by_text")
+    public ResponseEntity<?> searchByText(@RequestBody SearchDTO searchDTO) throws Exception {
+        ArrayList<InteresovanjeZaVakcinisanje> interesovanjeZaVakcinisanje = interesovanjeService.searchByText(searchDTO.getSearch());
         InteresovanjeList interesovanjeList = new InteresovanjeList(interesovanjeZaVakcinisanje);
         return new ResponseEntity<>(interesovanjeList, HttpStatus.OK);
     }

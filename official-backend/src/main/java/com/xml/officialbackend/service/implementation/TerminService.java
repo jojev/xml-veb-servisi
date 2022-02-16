@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -45,7 +44,6 @@ import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 
@@ -259,28 +257,28 @@ public class TerminService implements ITerminService {
     	}
     }
     
-    public List<Resource> findVaccineByDosage(LocalDate startDay, LocalDate endDay) throws Exception {
+    public List<Resource> findVaccineByDosage(String startDay, String endDay) throws Exception {
     	String xqueryPath = "data/xquery/raspodela_po_dozama.xqy";
     	String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
     	
-    	XMLGregorianCalendar startDate = 
+    	XMLGregorianCalendar startDate =
     			  DatatypeFactory.newInstance().newXMLGregorianCalendar(startDay.toString());
-    	XMLGregorianCalendar endDate = 
-  			  DatatypeFactory.newInstance().newXMLGregorianCalendar(endDay.plusMonths(6).toString());
+    	XMLGregorianCalendar endDate =
+  			  DatatypeFactory.newInstance().newXMLGregorianCalendar(endDay);
 
     	String formattedXQueryExpresion = String.format(xqueryExpression, startDate, endDate);
-    	
+        System.out.println(formattedXQueryExpresion);
     	return existDbManager.executeXquery("/db/termini", "", formattedXQueryExpresion);
     }
     
-    public List<Resource> findVaccineByManufacturer(LocalDate startDay, LocalDate endDay) throws Exception {
+    public List<Resource> findVaccineByManufacturer(String startDay, String endDay) throws Exception {
     	String xqueryPath = "data/xquery/raspodela_po_proizvodjacu.xqy";
     	String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
     	
     	XMLGregorianCalendar startDate = 
     			  DatatypeFactory.newInstance().newXMLGregorianCalendar(startDay.toString());
     	XMLGregorianCalendar endDate = 
-  			  DatatypeFactory.newInstance().newXMLGregorianCalendar(endDay.plusMonths(6).toString());
+  			  DatatypeFactory.newInstance().newXMLGregorianCalendar(endDay);
 
     	String formattedXQueryExpresion = String.format(xqueryExpression, startDate, endDate);
     	

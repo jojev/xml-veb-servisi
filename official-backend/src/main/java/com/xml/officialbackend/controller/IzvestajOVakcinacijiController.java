@@ -1,6 +1,6 @@
 package main.java.com.xml.officialbackend.controller;
 
-import java.time.LocalDate;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -46,7 +46,7 @@ public class IzvestajOVakcinacijiController {
         ResponseEntity<CountResponse> zahtevCnt = restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/count?startDate=" + startDate + "&endDate=" + endDate, 
         		HttpMethod.GET, httpEntity, CountResponse.class);
       
-        IzvestajOImunizaciji izvestaj = izvestajService.createReport(LocalDate.parse(startDate), LocalDate.parse(endDate), interesovanjeCnt.getBody().getValue(), zahtevCnt.getBody().getValue());
+        IzvestajOImunizaciji izvestaj = izvestajService.createReport(startDate, endDate, interesovanjeCnt.getBody().getValue(), zahtevCnt.getBody().getValue());
         return new ResponseEntity<>(izvestaj, HttpStatus.OK);
     }
 }
