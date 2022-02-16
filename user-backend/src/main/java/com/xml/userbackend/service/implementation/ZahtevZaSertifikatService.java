@@ -1,17 +1,15 @@
 package main.java.com.xml.userbackend.service.implementation;
 
 
+import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.userbackend.dto.SearchDTO;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
-import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
 import main.java.com.xml.userbackend.rdf.MetadataExtractor;
 import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.repository.BaseRepository;
-import main.java.com.xml.userbackend.service.EmailService;
-import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
 import main.java.com.xml.userbackend.service.contract.IZahtevZaSertifikatService;
 
 import org.apache.jena.query.QuerySolution;
@@ -39,27 +37,17 @@ import java.util.UUID;
 public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     private BaseRepository baseRepository;
 
-    private JaxBParser jaxBParser;
 
     private ExistDbManager existDbManager;
 
     private MetadataExtractor metadataExtractor;
 
-    private EmailService emailService;
-
-    private IInteresovanjeService interesovanjeService;
-
-
     @Autowired
-    public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser,
-                                     ExistDbManager existDbManager, MetadataExtractor metadataExtractor,
-                                     EmailService emailService, IInteresovanjeService interesovanjeService) {
+    public ZahtevZaSertifikatService(BaseRepository baseRepository, ExistDbManager existDbManager,
+                                     MetadataExtractor metadataExtractor) {
         this.baseRepository = baseRepository;
-        this.jaxBParser = jaxBParser;
         this.existDbManager = existDbManager;
         this.metadataExtractor = metadataExtractor;
-        this.emailService = emailService;
-        this.interesovanjeService = interesovanjeService;
 
     }
 
@@ -79,7 +67,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     }
 
     @Override
-    public void delete(String id) throws Exception {
+    public void delete(String id) {
 
     }
 
@@ -130,7 +118,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/PodneoJmbg> \"" + jmbg + "\" ;";
 
         ArrayList<RDFNode> nodes = new ArrayList<>();
-        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/zahtev_za_sertifikat", sparqlCondition);) {
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/zahtev_za_sertifikat", sparqlCondition)) {
             List<String> columnNames = result.getResult().getResultVars();
             while (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
@@ -147,8 +135,31 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         ArrayList<RDFNode> nodes = searchRDF(searchDTO);
         ArrayList<ZahtevZaIzdavanjeSertifikata> list = new ArrayList<>();
         for (RDFNode node : nodes) {
-            String[] parts = nodes.toString().split("/");
-            ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = baseRepository.findById("/db/zahtev_za_sertifikat", parts[parts.length - 1], ZahtevZaIzdavanjeSertifikata.class);
+            String[] parts = node.toString().split("/");
+            ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = findById(parts[parts.length - 1]);
+            list.add(zahtevZaIzdavanjeSertifikata);
+        }
+        return list;
+    }
+
+    @Override
+    public ArrayList<ZahtevZaIzdavanjeSertifikata> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception {
+        String value = metadataSearchDTO.getSearch();
+        String sparqlCondition = "?document ?d \"" + value + "\" .";
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/zahtev_za_sertifikat", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+        }
+        ArrayList<ZahtevZaIzdavanjeSertifikata> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = findById(parts[parts.length - 1]);
+            list.add(zahtevZaIzdavanjeSertifikata);
         }
         return list;
     }

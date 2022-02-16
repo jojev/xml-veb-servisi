@@ -1,5 +1,6 @@
 package main.java.com.xml.userbackend.controller;
 
+import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import main.java.com.xml.userbackend.dto.SearchDTO;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeList;
@@ -67,11 +69,20 @@ public class ZahtevZaSertifikatController {
         return new ResponseEntity<>(zahtevZaIzdavanjeSertifikata, HttpStatus.OK);
     }
 
+    @PostMapping("/search_by_metadata")
+    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
+    public ResponseEntity<?> searchByMetadata(@RequestBody MetadataSearchDTO metadataSearchDTO) throws Exception {
+        ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchMetadata(metadataSearchDTO);
+        ZahtevList list = new ZahtevList(zahtevi);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     @PostMapping("/search_by_text")
     public ResponseEntity<?> searchByText(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchByText(searchDTO.getSearch());
         ZahtevList list = new ZahtevList(zahtevi);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
 
 }
