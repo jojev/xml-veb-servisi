@@ -210,6 +210,7 @@ public class ObrazacZaSprovodjenjeImunizacije {
      *
      */
     public ObrazacZaSprovodjenjeImunizacije.InteresovanjeRef getInteresovanjeRef() {
+
         return interesovanjeRef;
     }
 
@@ -217,6 +218,7 @@ public class ObrazacZaSprovodjenjeImunizacije {
      * Sets the value of the interesovanjeRef property.
      *
      * @param value
+     *     allowed object is
      *     allowed object is
      *     {@link ObrazacZaSprovodjenjeImunizacije.InteresovanjeRef }
      *
@@ -839,7 +841,6 @@ public class ObrazacZaSprovodjenjeImunizacije {
         "doze",
         "privremeneKontraindikacije",
         "odlukaKomisije",
-        "dopunjenDatume"
     })
     public static class PodaciKojeJePopunioZdravstveniRadnik {
 
@@ -855,8 +856,7 @@ public class ObrazacZaSprovodjenjeImunizacije {
         protected String privremeneKontraindikacije;
         @XmlElement(name = "odluka_komisije")
         protected String odlukaKomisije;
-        @XmlElement(name = "dopunjen_datume", required = true)
-        protected ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioZdravstveniRadnik.DopunjenDatume dopunjenDatume;
+
 
         /**
          * Gets the value of the zdravstvenaUstanova property.
@@ -1002,29 +1002,6 @@ public class ObrazacZaSprovodjenjeImunizacije {
             this.odlukaKomisije = value;
         }
 
-        /**
-         * Gets the value of the dopunjenDatume property.
-         *
-         * @return
-         *     possible object is
-         *     {@link ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioZdravstveniRadnik.DopunjenDatume }
-         *
-         */
-        public ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioZdravstveniRadnik.DopunjenDatume getDopunjenDatume() {
-            return dopunjenDatume;
-        }
-
-        /**
-         * Sets the value of the dopunjenDatume property.
-         *
-         * @param value
-         *     allowed object is
-         *     {@link ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioZdravstveniRadnik.DopunjenDatume }
-         *
-         */
-        public void setDopunjenDatume(ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioZdravstveniRadnik.DopunjenDatume value) {
-            this.dopunjenDatume = value;
-        }
 
 
         /**

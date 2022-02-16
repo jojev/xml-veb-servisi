@@ -63,16 +63,6 @@
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>
-                            <xs:element name="dopunjen_datume">
-                                <xs:complexType>
-                                    <xs:simpleContent>
-                                        <xs:extension base="xs:date">
-                                            <xs:attribute name="property"/>
-                                            <xs:attribute name="datatype"/>
-                                        </xs:extension>
-                                    </xs:simpleContent>
-                                </xs:complexType>
-                            </xs:element>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
