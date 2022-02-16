@@ -13,6 +13,5 @@ public interface IObrazacZaSprovodjenjeImunizacijeService extends IService<Obraz
   
     ArrayList<ObrazacZaSprovodjenjeImunizacije> findByJMBG(String jmbg) throws Exception;
 
-    ArrayList<ObrazacZaSprovodjenjeImunizacije> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
 }
 

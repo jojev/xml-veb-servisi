@@ -136,5 +136,7 @@ public class ObjectFactory {
     public ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioPacijent.Datum createObrazacZaSprovodjenjeImunizacijePodaciKojeJePopunioPacijentDatum() {
         return new ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioPacijent.Datum();
     }
-
+    public ObrazacList createList() {
+        return new ObrazacList();
+    }
 }
