@@ -140,8 +140,12 @@ public class ObjectFactory {
         return new ObrazacZaSprovodjenjeImunizacije.PodaciKojeJePopunioPacijent.Datum();
     }
 
+    public ObrazacList createList() {
+        return new ObrazacList();
+    }
     public PodaciKojeJePopunioZdravstveniRadnik createPodaciKojeJePopuniZdravstveniRadnik(){
         return new PodaciKojeJePopunioZdravstveniRadnik();
     }
-
 }
+
+

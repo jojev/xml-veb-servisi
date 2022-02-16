@@ -71,10 +71,11 @@ public class SearchController {
     }
 
     @PostMapping(value = "/obrazac/search_jmbg")
-    public ResponseEntity<?> searchObrazacByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
-        ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazac = obrazacZaSprovodjenjeImunizacijeService.findByJMBG(searchDTO.getSearch());
-        ObrazacList list = new ObrazacList(obrazac);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+    public ResponseEntity<?> searchObrazacByJMBG(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) throws Exception {
+        HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
+        ResponseEntity<ObrazacList> response = restTemplate.exchange("http://localhost:8080/api/v1/saglasnost/search_by_jmbg", HttpMethod.POST,
+                httpEntity, ObrazacList.class);
+        return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/metadata")
@@ -88,9 +89,10 @@ public class SearchController {
             PotvrdaOVakcinacijiList list = new PotvrdaOVakcinacijiList(potvrde);
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else if (metadataSearchDTO.getCollection().equals("obrazac_za_imunizaciju")) {
-            ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazac = obrazacZaSprovodjenjeImunizacijeService.searchMetadata(metadataSearchDTO);
-            ObrazacList list = new ObrazacList(obrazac);
-            return new ResponseEntity<>(list, HttpStatus.OK);
+            HttpEntity<String> httpEntity = searchService.setMetadataEntity(metadataSearchDTO, accessToken);
+            ResponseEntity<ObrazacList> response = restTemplate.exchange("http://localhost:8080/api/v1/saglasnost/search_by_metadata", HttpMethod.POST,
+                    httpEntity, ObrazacList.class);
+            return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
         } else if (metadataSearchDTO.getCollection().equals("zahtev_za_sertifikat")) {
             HttpEntity<String> httpEntity = searchService.setMetadataEntity(metadataSearchDTO, accessToken);
             ResponseEntity<ZahtevList> response = restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/search_by_metadata", HttpMethod.POST,

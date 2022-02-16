@@ -1,6 +1,7 @@
 package main.java.com.xml.userbackend.service.implementation;
 
 
+import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
@@ -57,7 +58,7 @@ public class SaglasnostService implements ISaglasnostService {
 
     @Override
     public ObrazacZaSprovodjenjeImunizacije findById(String id) throws Exception {
-        return null;
+        return baseRepository.findById("/db/saglasnost", id, ObrazacZaSprovodjenjeImunizacije.class);
     }
 
 
@@ -171,6 +172,44 @@ public class SaglasnostService implements ISaglasnostService {
             return null;
         }
     }
+
+    @Override
+    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(String jmbg) throws Exception {
+        ArrayList<RDFNode> nodes = (ArrayList<RDFNode>) getAllSaglanostFromJMBG(jmbg);
+        ArrayList<ObrazacZaSprovodjenjeImunizacije> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            ObrazacZaSprovodjenjeImunizacije obrazac = findById(parts[parts.length - 1]);
+            list.add(obrazac);
+        }
+
+        return list;
+    }
+
+
+
+    @Override
+    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception {
+        String value = metadataSearchDTO.getSearch();
+        String sparqlCondition = "?document ?d \"" + value + "\"";
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+        }
+        ArrayList<ObrazacZaSprovodjenjeImunizacije> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            ObrazacZaSprovodjenjeImunizacije obrazacZaSprovodjenjeImunizacije = findById(parts[parts.length - 1]);
+            list.add(obrazacZaSprovodjenjeImunizacije);
+        }
+        return list;
+    }
+
 
 
     public List<RDFNode> getAllSaglanostFromJMBG(String jmbg) throws IOException {
