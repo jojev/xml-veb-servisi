@@ -59,7 +59,7 @@ public class Test {
 
     public void testWriteToExistDb() throws Exception {
         File file = new File("data/documents/obrazac_za_sprovodjenje_imunizacije.xml");
-        baseRepository.save("/db/obrazac_za_sprovodjenje_imunizacije", "1.xml", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));
+        baseRepository.save("/db/obrazac_za_sprovodjenje_imunizacije", "1", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));
     }
 
     public void testReadFromExistDb() throws Exception {
@@ -74,8 +74,8 @@ public class Test {
     }
 
     public void testWriteToRdf() throws IOException, TransformerException {
-        byte[] out =  metadataExtractor.extractMetadata("data/documents/potvrda_o_vakcinaciji.xml");
-        FusekiWriter.saveRDF(new ByteArrayInputStream(out), "potvrda_o_vakcinaciji");
+        byte[] out =  metadataExtractor.extractMetadata("data/documents/obrazac_za_sprovodjenje_imunizacije.xml");
+        FusekiWriter.saveRDF(new ByteArrayInputStream(out), "obrazac_za_sprovodjenje_imunizacije");
     }
 
     public void testReadFromRdf() throws IOException {

@@ -1,5 +1,6 @@
 package main.java.com.xml.userbackend.service.contract;
 
+import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.userbackend.dto.SearchDTO;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import org.apache.jena.rdf.model.RDFNode;
@@ -14,5 +15,7 @@ public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSe
     ArrayList<RDFNode> searchRDF(SearchDTO searchDTO) throws IOException;
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchByJMBG(SearchDTO searchDTO) throws Exception;
+
+    ArrayList<ZahtevZaIzdavanjeSertifikata> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
 
 }

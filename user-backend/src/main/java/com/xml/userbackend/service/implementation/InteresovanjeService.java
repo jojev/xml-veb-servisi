@@ -1,11 +1,9 @@
 package main.java.com.xml.userbackend.service.implementation;
 
-import main.java.com.xml.userbackend.dto.SearchDTO;
-import main.java.com.xml.userbackend.exception.MissingEntityException;
+import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
-import main.java.com.xml.userbackend.model.korisnik.Korisnik;
 import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
 import main.java.com.xml.userbackend.rdf.MetadataExtractor;
@@ -63,18 +61,18 @@ public class InteresovanjeService implements IInteresovanjeService {
 
     @Override
     public InteresovanjeZaVakcinisanje findById(String id) throws Exception {
-        return null;
+        return baseRepository.findById("/db/interesovanje", id, InteresovanjeZaVakcinisanje.class);
     }
 
     @Override
     public RDFNode getInteresovanje(String jmbg) throws IOException {
         String sparqlCondition = "?person <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreirao> \"" + jmbg + "\" .";
 
-        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition);) {
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition)) {
             List<String> columnNames = result.getResult().getResultVars();
             System.out.println(columnNames.get(0));
             System.out.println(columnNames.size());
-            if(result.getResult().hasNext()) {
+            if (result.getResult().hasNext()) {
                 System.out.println("Usao");
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
@@ -116,13 +114,12 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
 
-
     @Override
     public ArrayList<RDFNode> searchRDF(String jmbg) throws IOException {
         String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreirao> \"" + jmbg + "\" ;";
 
         ArrayList<RDFNode> nodes = new ArrayList<>();
-        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition);) {
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition)) {
             List<String> columnNames = result.getResult().getResultVars();
             while (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
@@ -140,10 +137,32 @@ public class InteresovanjeService implements IInteresovanjeService {
         ArrayList<InteresovanjeZaVakcinisanje> interesovanja = new ArrayList<>();
         for (RDFNode node : nodes) {
             String[] parts = node.toString().split("/");
-            InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = baseRepository.findById("/db/interesovanje", parts[parts.length - 1], InteresovanjeZaVakcinisanje.class);
+            InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = findById(parts[parts.length - 1]);
             interesovanja.add(interesovanjeZaVakcinisanje);
         }
         return interesovanja;
+    }
+
+    @Override
+    public ArrayList<InteresovanjeZaVakcinisanje> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception {
+        String value = metadataSearchDTO.getSearch();
+        String sparqlCondition = "?document ?d \"" + value + "\" .";
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+        }
+        ArrayList<InteresovanjeZaVakcinisanje> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = findById(parts[parts.length - 1]);
+            list.add(interesovanjeZaVakcinisanje);
+        }
+        return list;
     }
 
     @Override
@@ -152,7 +171,7 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
     @Override
-    public void delete(String id) throws Exception {
+    public void delete(String id) {
 
     }
 

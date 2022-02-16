@@ -1,5 +1,6 @@
 package main.java.com.xml.officialbackend.service.contract;
 
+import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.Doza;
@@ -29,4 +30,7 @@ public interface IDigitalniSertifikatService extends IService<DigitalniZeleniSer
     ArrayList<RDFNode> searchRDF(SearchDTO searchDTO) throws IOException;
 
     ArrayList<DigitalniZeleniSertifikat> searchByJMBG(SearchDTO searchDTO) throws Exception;
+
+    ArrayList<DigitalniZeleniSertifikat> searchMetadata(MetadataSearchDTO searchDTO) throws Exception;
+
 }

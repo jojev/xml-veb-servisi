@@ -1,5 +1,6 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
+import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xmldb.api.modules.XMLResource;
 
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
@@ -47,6 +49,8 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     private XSLFOTransformer xslfoTransformer;
 
     private HtmlTransformer htmlTransformer;
+
+    private HashMap<String, String> map = new HashMap<>();
 
 
     @Autowired
@@ -188,6 +192,29 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     }
 
     @Override
+    public ArrayList<DigitalniZeleniSertifikat> searchMetadata(MetadataSearchDTO searchDTO) throws Exception {
+        String value = searchDTO.getSearch();
+        String sparqlCondition = "?document ?d \"" + value + "\" .";
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/digitalni_sertifikat", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+        }
+        ArrayList<DigitalniZeleniSertifikat> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            DigitalniZeleniSertifikat digitalniZeleniSertifikat = baseRepository.findById("/db/digitalni_sertifikat", parts[parts.length - 1], DigitalniZeleniSertifikat.class);
+            list.add(digitalniZeleniSertifikat);
+        }
+        return list;
+
+    }
+
+    @Override
     public void send(ZahtevZaIzdavanjeSertifikata zahtev, ObrazacZaSprovodjenjeImunizacije obrazac, ArrayList<PotvrdaOVakcinaciji> potvrde) throws Exception {
         String u = UUID.randomUUID().toString();
 
@@ -209,6 +236,7 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
         Date date = new Date(System.currentTimeMillis());
         calendar.setTime(date);
         XMLGregorianCalendar datum = DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
+        datum.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
         podaciOSertifikatu.setDatum(datum);
 
         PodaciOSertifikatu.DatumVremeIzdavanja datumVremeIzdavanja = new PodaciOSertifikatu.DatumVremeIzdavanja();

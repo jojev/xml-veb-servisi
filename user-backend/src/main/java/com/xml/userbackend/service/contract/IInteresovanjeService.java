@@ -1,6 +1,7 @@
 package main.java.com.xml.userbackend.service.contract;
 
 
+import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import org.apache.jena.rdf.model.RDFNode;
 
@@ -16,4 +17,6 @@ public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisa
     ArrayList<RDFNode> searchRDF(String search) throws IOException;
 
     ArrayList<InteresovanjeZaVakcinisanje> searchByJMBG(String search) throws Exception;
+
+    ArrayList<InteresovanjeZaVakcinisanje> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
 }
