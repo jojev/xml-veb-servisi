@@ -167,7 +167,7 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
         String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
         System.out.println(formattedXQueryExpresion);
         List<Resource> resources =
-                existDbManager.executeXquery("/db/digitalni_sertifikat", "http://www.ftn.uns.ac.rs/digitalni_sertifikat",formattedXQueryExpresion);
+                existDbManager.executeXquery("/db/potvrda_o_vakcinaciji", "http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji",formattedXQueryExpresion);
         ArrayList<PotvrdaOVakcinaciji> potvrdaOVakcinacijis =  new ArrayList<PotvrdaOVakcinaciji>();
         for(Resource resource:resources){
             XMLResource xmlResource  = (XMLResource) resource;

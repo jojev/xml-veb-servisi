@@ -1,5 +1,5 @@
 xquery version "3.1";
-for $document in collection('/db/interesovanje')
+for $document in collection('/db/digitalni_sertifikat')
     where fn:contains($document//*:broj_sertifikata/text(),"%1$s") or  fn:contains($document//*:datum/text(),"%1$s")
     or fn:contains($document//*:ime_prezime/text(),"%1$s") or fn:contains($document//*:prezime/text(),"%1$s")
      or fn:contains($document//*:pol/text(),"%1$s")
