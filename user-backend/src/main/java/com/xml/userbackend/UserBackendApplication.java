@@ -7,9 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.core.userdetails.User;
 
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import java.util.Properties;
@@ -22,7 +24,7 @@ public class UserBackendApplication{
 
 		SpringApplication app = new SpringApplication(UserBackendApplication.class);
 		app.setDefaultProperties(Collections
-				.<String, Object>singletonMap("logging.level.org.springframework.web", "DEBUG"));
+				.<String, Object>singletonMap("server.port", "8080"));
 		app.run(args);
 	}
 

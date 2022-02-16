@@ -39,6 +39,16 @@
         <xjc schema="${data.dir}/digitalni_sertifikat.xsd" destdir="${gen.dir}"/>
     </target>
 
+    <target name="generate_classes_2" depends="init"> 
+        <xjc schema="${data.dir}/interesovanje.xsd" destdir="${gen.dir}"/>
+    </target>
+
+    <target name="generate_classes_3" depends="init">
+        <xjc schema="${data.dir}/izvestaj_o_imunizaciji.xsd" destdir="${gen.dir}"/>
+    </target>
+
+    </target>
+
     <target name="generate_classes_2" depends="init">
         <xjc schema="${data.dir}/interesovanje.xsd" destdir="${gen.dir}"/>
     </target>
@@ -46,6 +56,7 @@
     <target name="generate_classes_3" depends="init">
         <xjc schema="${data.dir}/izvestaj_o_imunizaciji.xsd" destdir="${gen.dir}"/>
     </target>
+
 
     <target name="generate_classes_4" depends="init">
         <xjc schema="${data.dir}/obrazac_za_sporovodjenje_imunizacije.xsd" destdir="${gen.dir}"/>
@@ -74,6 +85,7 @@
     <target name="generate_all" depends="generate_classes_1,generate_classes_2,generate_classes_3, generate_classes_4
                 ,generate_classes_5, generate_classes_6, generate_classes_7, generate_classes_8, generate_classes_9"/>
 
+    <target name="main" depends="generate_all"/>
 
 
 </project>

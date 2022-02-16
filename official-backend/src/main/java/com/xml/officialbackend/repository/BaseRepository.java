@@ -52,7 +52,7 @@ public class BaseRepository {
     }
 
     public void insertAfter(String collectionUri, String documentId, String contextPath, String newValue, String targetNamespace)
-            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+             throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         existDbManager.insertAfter(collectionUri, documentId, contextPath, newValue, targetNamespace);
 
     }
@@ -60,7 +60,7 @@ public class BaseRepository {
     public void removeElement(String collectionUri, String documentId, String contextPath, String targetNamespace)
             throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         existDbManager.remove(collectionUri, documentId, contextPath, targetNamespace);
-
+    }
 
     public void insertAsLastNode(String collectionUri, String documentId, String contextPath, String node, String targetNamespace)
             throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -73,7 +73,7 @@ public class BaseRepository {
 
     }
 
-    public <T> List<T> loadAllDocumentsFromCollection(String collectionUri, String targetNamespace, String xqueryExpression, Class genericClass)
+    public  <T>  List<T> loadAllDocumentsFromCollection(String collectionUri, String targetNamespace, String xqueryExpression, Class genericClass)
             throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {
         final List<T> allDocuments = new ArrayList<>();
         for (Resource resource: existDbManager.loadAllDocumentsInCollection(collectionUri, targetNamespace, xqueryExpression)) {

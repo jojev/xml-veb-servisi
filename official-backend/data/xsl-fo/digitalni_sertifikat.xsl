@@ -143,7 +143,8 @@
                                                                   select="b:digitalni_zeleni_sertifikat/b:podaci_o_sertifikatu/b:datum_vreme_izdavanja"/>
                                                     <xsl:variable name="date"
                                                                   select="substring-before($datetime, 'T')"/>
-                                                    <xsl:variable name="time" select="substring-after($datetime, 'T')"/>
+                                                    <xsl:variable name="alltime" select="substring-after($datetime, 'T')"/>
+                                                    <xsl:variable name="time" select ="substring-before($alltime, '.')"/>
                                                     <xsl:value-of select="concat($date,' ',$time)"/>
                                                 </fo:inline>
                                             </fo:block>
@@ -357,8 +358,12 @@
                                                                     за информационе технологије и електронску управу
                                                                     Немањина 11, БЕОГРАД
                                                                     Датум:
+                                                                    <xsl:variable name="datetime"
+                                                                                  select="b:digitalni_zeleni_sertifikat/b:podaci_o_sertifikatu/b:datum"/>
+                                                                    <xsl:variable name="date"
+                                                                                  select="substring-before($datetime, '+')"/>
                                                                     <xsl:value-of
-                                                                            select="b:digitalni_zeleni_sertifikat/b:podaci_o_sertifikatu/b:datum"/>
+                                                                            select="$date"/>
                                                                 </fo:block>
                                                             </fo:table-cell>
                                                         </fo:table-row>

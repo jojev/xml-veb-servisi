@@ -1,0 +1,32 @@
+package main.java.com.xml.officialbackend.service.contract;
+
+import main.java.com.xml.officialbackend.dto.SearchDTO;
+import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
+import main.java.com.xml.officialbackend.model.digitalni_sertifikat.Doza;
+import main.java.com.xml.officialbackend.model.digitalni_sertifikat.Test;
+import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
+import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
+import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
+import org.apache.jena.rdf.model.RDFNode;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+
+public interface IDigitalniSertifikatService extends IService<DigitalniZeleniSertifikat> {
+
+    void send(ZahtevZaIzdavanjeSertifikata zahtev,
+            ObrazacZaSprovodjenjeImunizacije obrazac, ArrayList<PotvrdaOVakcinaciji> potvrde) throws Exception;
+
+    DigitalniZeleniSertifikat create(DigitalniZeleniSertifikat digitalniZeleniSertifikat, String documentId, String email) throws Exception;
+
+    boolean check(ArrayList<Doza> doze, BigInteger redniBr);
+
+    String findManufacturer(String name);
+
+    ArrayList<Test> makeTests();
+
+    ArrayList<RDFNode> searchRDF(SearchDTO searchDTO) throws IOException;
+
+    ArrayList<DigitalniZeleniSertifikat> searchByJMBG(SearchDTO searchDTO) throws Exception;
+}

@@ -1,6 +1,8 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
+import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
+import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.model.lista_cekanja.ListaCekanja;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.rdf.FusekiReader;
@@ -11,9 +13,9 @@ import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.IListaCekanjaService;
 import main.java.com.xml.officialbackend.service.contract.IPotvrdaOVakcinacijiService;
 
-
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
+import org.checkerframework.checker.units.qual.A;
 import main.java.com.xml.officialbackend.service.contract.ITerminService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,11 @@ import org.xmldb.api.modules.XMLResource;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
 import java.time.LocalDate;
+
+import java.util.ArrayList;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -90,6 +96,7 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     public void delete(String id) throws Exception {
 
     }
+
     
     public int getNumberOfVaccinated(LocalDate startDate, LocalDate endDate) throws IOException {
     	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/Izdat> ?date. "
@@ -109,4 +116,32 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
 		return 0;
     }
     
+    public ArrayList<RDFNode> searchRDF(String jmbg) throws IOException {
+        String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/KreiranZa> \"" + jmbg + "\"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral> ;";
+
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/potvrda_o_vakcinaciji", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while(result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+
+            }
+            return nodes;
+        }
+    }
+    @Override
+    public ArrayList<PotvrdaOVakcinaciji> findPotvrdeByJMBG(String jmbg) throws Exception {
+        ArrayList<PotvrdaOVakcinaciji> potvrde = new ArrayList<>();
+        ArrayList<RDFNode> nodes = searchRDF(jmbg);
+        for(RDFNode node: nodes){
+            String[] parts = node.toString().split("/");
+            PotvrdaOVakcinaciji potvrda = baseRepository.findById("/db/potvrda_o_vakcinaciji",
+                    parts[parts.length - 1], PotvrdaOVakcinaciji.class);
+            potvrde.add(potvrda);
+        }
+        return potvrde;
+    }
+
 }

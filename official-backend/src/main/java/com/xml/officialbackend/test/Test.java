@@ -4,6 +4,7 @@ import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
+import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.rdf.FusekiReader;
 import main.java.com.xml.officialbackend.rdf.MetadataExtractor;
 import main.java.com.xml.officialbackend.rdf.RDFReadResult;
@@ -57,13 +58,13 @@ public class Test {
 //    }
 
     public void testWriteToExistDb() throws Exception {
-        File file = new File("data/documents/potvrda_o_vakcinaciji.xml");
-        baseRepository.save("/db/potvrda_o_vakcinaciji", "1.xml", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));
+        File file = new File("data/documents/obrazac_za_sprovodjenje_imunizacije.xml");
+        baseRepository.save("/db/obrazac_za_sprovodjenje_imunizacije", "1.xml", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));
     }
 
     public void testReadFromExistDb() throws Exception {
-        InteresovanjeZaVakcinisanje interesovanje = baseRepository.findById("/db/potvrda_o_vakcinaciji", "1.xml", InteresovanjeZaVakcinisanje.class);
-        System.out.println(interesovanje);
+        DigitalniZeleniSertifikat digitalniZeleniSertifikat = baseRepository.findById("/db/digitalni_sertifikat", "2.xml", DigitalniZeleniSertifikat.class);
+        System.out.println(digitalniZeleniSertifikat);
     }
 
     public void testUpdateDocumentFromExistDb() throws Exception {
@@ -74,12 +75,11 @@ public class Test {
 
     public void testWriteToRdf() throws IOException, TransformerException {
         byte[] out =  metadataExtractor.extractMetadata("data/documents/potvrda_o_vakcinaciji.xml");
-       // System.out.println(out);
-        FusekiWriter.saveRDF(new ByteArrayInputStream(out), "potvrdaOVakcinaciji");
+        FusekiWriter.saveRDF(new ByteArrayInputStream(out), "potvrda_o_vakcinaciji");
     }
 
     public void testReadFromRdf() throws IOException {
-        try(RDFReadResult result = FusekiReader.readRDF("/potvrdaOVakcinaciji")) {
+        try(RDFReadResult result = FusekiReader.readRDF("/obrazac_za_sprovodjenje_imunizacije")) {
             ResultSetFormatter.outputAsXML(result.getResult());
             for (String var: result.getResult().getResultVars()) {
                 System.out.println(var);
