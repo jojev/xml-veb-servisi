@@ -40,4 +40,11 @@ public class InteresovanjeController {
         return new ResponseEntity<>(interesovanjeList, HttpStatus.OK);
     }
 
+    @PostMapping("/search_by_text")
+    public ResponseEntity<?> searchByText(@RequestBody SearchDTO searchDTO) throws Exception {
+        ArrayList<InteresovanjeZaVakcinisanje> interesovanjeZaVakcinisanje = interesovanjeService.searchByText(searchDTO.getSearch());
+        InteresovanjeList interesovanjeList = new InteresovanjeList(interesovanjeZaVakcinisanje);
+        return new ResponseEntity<>(interesovanjeList, HttpStatus.OK);
+    }
+
 }

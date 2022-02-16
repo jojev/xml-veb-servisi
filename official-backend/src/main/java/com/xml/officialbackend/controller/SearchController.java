@@ -81,4 +81,12 @@ public class SearchController {
     }
 
 
+    @PostMapping(value = "/interesovanje/search_by_text")
+    public ResponseEntity<?> searchInteresovanjeByTekst(@RequestBody SearchDTO searchDTO,@RequestHeader("Authorization") String accessToken) throws Exception {
+        HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
+        ResponseEntity<InteresovanjeList> response = restTemplate.exchange("http://localhost:8080/api/v1/interesovanje/search_by_text", HttpMethod.POST,
+                httpEntity, InteresovanjeList.class);
+        return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+    }
+
 }
