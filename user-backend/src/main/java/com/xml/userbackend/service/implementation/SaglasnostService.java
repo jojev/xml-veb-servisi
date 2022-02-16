@@ -172,7 +172,7 @@ public class SaglasnostService implements ISaglasnostService {
             return null;
         }
     }
-    
+
     @Override
     public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(String jmbg) throws Exception {
         ArrayList<RDFNode> nodes = (ArrayList<RDFNode>) getAllSaglanostFromJMBG(jmbg);
