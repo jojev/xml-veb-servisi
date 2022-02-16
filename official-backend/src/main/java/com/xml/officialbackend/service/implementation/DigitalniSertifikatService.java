@@ -21,9 +21,12 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
-
 import javax.xml.datatype.DatatypeConstants;
+import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
@@ -31,6 +34,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.*;
 
@@ -212,6 +219,26 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
         }
         return list;
 
+    }
+    public ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws IOException, JAXBException, XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        String xqueryPath = "data/xquery/pretraga_po_tekstu_zahtev.xqy";
+        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+
+        String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
+        System.out.println(formattedXQueryExpresion);
+        List<Resource> resources =
+                existDbManager.executeXquery("/db/zahtev_za_sertifikat", "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat",formattedXQueryExpresion);
+        ArrayList<DigitalniZeleniSertifikat> interesovanjeZaVakcinisanjes =  new ArrayList<DigitalniZeleniSertifikat>();
+        for(Resource resource:resources){
+            XMLResource xmlResource  = (XMLResource) resource;
+            interesovanjeZaVakcinisanjes.add((DigitalniZeleniSertifikat) jaxBParser.unmarshall(xmlResource,DigitalniZeleniSertifikat.class));
+        }
+        return  interesovanjeZaVakcinisanjes;
+    }
+
+    public static String readFile(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
     }
 
     @Override

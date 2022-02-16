@@ -2,18 +2,20 @@ package main.java.com.xml.userbackend.existdb;
 
 import main.java.com.xml.userbackend.existdb.template.XUpdateTemplate;
 import main.java.com.xml.userbackend.util.ExistAuthenticationUtilities;
+import org.xmldb.api.base.Resource;
 import org.springframework.stereotype.Service;
 import org.xmldb.api.DatabaseManager;
-import org.xmldb.api.base.Collection;
-import org.xmldb.api.base.Database;
-import org.xmldb.api.base.XMLDBException;
+import org.xmldb.api.base.*;
 import org.xmldb.api.modules.CollectionManagementService;
 import org.xmldb.api.modules.XMLResource;
 import org.exist.xmldb.EXistResource;
+import org.xmldb.api.modules.XQueryService;
 import org.xmldb.api.modules.XUpdateQueryService;
 
 import javax.xml.transform.OutputKeys;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ExistDbManager {
@@ -178,4 +180,51 @@ public class ExistDbManager {
             closeConnection(collection, resource);
         }
     }
+
+    public List<Resource> executeXquery(String collectionUri, String targetNamespace, String query) throws ClassNotFoundException, InstantiationException, IllegalAccessException, XMLDBException, IOException {
+        openConnection();
+        Collection collection = null;
+        List<Resource> resources = new ArrayList<Resource>();
+
+        try {
+            collection = DatabaseManager.getCollection(ExistAuthenticationUtilities.loadProperties().uri + collectionUri,
+                    ExistAuthenticationUtilities.loadProperties().user,
+                    ExistAuthenticationUtilities.loadProperties().password);
+            collection.setProperty(OutputKeys.INDENT, "yes");
+
+            // get an instance of xquery service
+            XQueryService xqueryService = (XQueryService) collection.getService("XQueryService", "1.0");
+            xqueryService.setProperty("indent", "yes");
+
+            // make the service aware of namespaces
+            xqueryService.setNamespace("b", targetNamespace);
+
+            CompiledExpression compiledXquery = xqueryService.compile(query);
+            ResourceSet result = xqueryService.execute(compiledXquery);
+
+            ResourceIterator i = result.getIterator();
+            Resource res = null;
+
+            while(i.hasMoreResources()) {
+                try {
+                    res = i.nextResource();
+                    resources.add(res);
+                    System.out.println(res.getContent());
+
+                } finally {
+
+                    // don't forget to cleanup resources
+                    try {
+                        ((EXistResource)res).freeResources();
+                    } catch (XMLDBException xe) {
+                        xe.printStackTrace();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            closeConnection(collection, null);
+        }
+        return resources;
+    }
+
 }

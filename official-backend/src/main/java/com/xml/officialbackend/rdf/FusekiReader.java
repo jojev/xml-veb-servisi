@@ -1,6 +1,9 @@
 package main.java.com.xml.officialbackend.rdf;
 
 import main.java.com.xml.officialbackend.util.FusekiAuthenticationUtilities;
+import main.java.com.xml.officialbackend.rdf.RDFReadResult;
+import main.java.com.xml.officialbackend.rdf.SparqlUtil;
+
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.ResultSet;
@@ -27,6 +30,18 @@ public class FusekiReader {
 
         System.out.println("[INFO] Selecting the triples from the named graph \"" + graphUri + "\".");
         String sparqlQuery = SparqlUtil.selectData(conn.dataEndpoint + graphUri, sparqlCondition);
+        System.out.println(sparqlQuery);
+        QueryExecution query = QueryExecutionFactory.sparqlService(conn.queryEndpoint, sparqlQuery);
+        ResultSet results = query.execSelect();
+
+        return new RDFReadResult(results, query);
+    }
+    
+    public static RDFReadResult readRDFWithSparqlCountQuery(String graphUri, String sparqlCondition) throws IOException {
+        FusekiAuthenticationUtilities.ConnectionProperties conn = FusekiAuthenticationUtilities.loadProperties();
+
+        System.out.println("[INFO] Selecting the triples from the named graph \"" + graphUri + "\".");
+        String sparqlQuery = SparqlUtil.selectCount(conn.dataEndpoint + graphUri, sparqlCondition);
         System.out.println(sparqlQuery);
         QueryExecution query = QueryExecutionFactory.sparqlService(conn.queryEndpoint, sparqlQuery);
         ResultSet results = query.execSelect();

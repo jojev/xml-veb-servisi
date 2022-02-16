@@ -106,4 +106,29 @@ public class SearchController {
     }
 
 
+    @PostMapping(value = "/interesovanje/search_by_text")
+    public ResponseEntity<?> searchInteresovanjeByTekst(@RequestBody SearchDTO searchDTO,@RequestHeader("Authorization") String accessToken) throws Exception {
+        HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
+        ResponseEntity<InteresovanjeList> response = restTemplate.exchange("http://localhost:8080/api/v1/interesovanje/search_by_text", HttpMethod.POST,
+                httpEntity, InteresovanjeList.class);
+        return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/zahtev_za_sertifikat/search_by_text")
+    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
+    public ResponseEntity<?> searchZahtevByText(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
+        HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
+        ResponseEntity<ZahtevZaIzdavanjeSertifikata> response = restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/search_by_text", HttpMethod.POST,
+                httpEntity, ZahtevZaIzdavanjeSertifikata.class);
+        return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/digitalni_sertifikat/search_by_text")
+    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
+    public ResponseEntity<?> searchSertifikatByText(@RequestBody SearchDTO searchDTO) throws Exception {
+        ArrayList<DigitalniZeleniSertifikat> digitalniZeleniSertifikati = digitalniSertifikatService.searchByText(searchDTO);
+        DigitalniSertifikatList list = new DigitalniSertifikatList(digitalniZeleniSertifikati);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
 }
