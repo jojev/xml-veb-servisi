@@ -14,6 +14,7 @@
                                     <xs:simpleContent>
                                         <xs:extension base="xs:date">
                                             <xs:attribute name="property"/>
+                                            <xs:attribute name="datatype"/>
                                         </xs:extension>
                                     </xs:simpleContent>
                                 </xs:complexType>
@@ -23,6 +24,7 @@
                                     <xs:simpleContent>
                                         <xs:extension base="xs:date">
                                             <xs:attribute name="property"/>
+                                            <xs:attribute name="datatype"/>
                                         </xs:extension>
                                     </xs:simpleContent>
                                 </xs:complexType>
@@ -102,6 +104,7 @@
                         <xs:simpleContent>
                             <xs:extension base="xs:date">
                                 <xs:attribute name="property"/>
+                                <xs:attribute name="datatype"/>
                             </xs:extension>
                         </xs:simpleContent>
                     </xs:complexType>
@@ -109,6 +112,7 @@
             </xs:sequence>
             <xs:attribute name="about"/>
             <xs:attribute name="typeof"/>
+            <xs:anyAttribute/>
         </xs:complexType>
     </xs:element>
 </xs:schema>
