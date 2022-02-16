@@ -106,4 +106,21 @@ public class SearchController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/potvrda_o_vakcinaciji/search_by_text")
+    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
+    public ResponseEntity<?> searchPotvrdaByText(@RequestBody SearchDTO searchDTO) throws Exception {
+        ArrayList<PotvrdaOVakcinaciji> potvrde = potvrdaOVakcinacijiService.searchByText(searchDTO);
+        PotvrdaOVakcinacijiList list = new PotvrdaOVakcinacijiList(potvrde);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/obrazac/search_by_text")
+    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
+    public ResponseEntity<?> searchObrazacByText(@RequestBody SearchDTO searchDTO) throws Exception {
+        ArrayList<ObrazacZaSprovodjenjeImunizacije>  obrazac = obrazacZaSprovodjenjeImunizacijeService.searchByText(searchDTO);
+        ObrazacList list = new ObrazacList(obrazac);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
 }

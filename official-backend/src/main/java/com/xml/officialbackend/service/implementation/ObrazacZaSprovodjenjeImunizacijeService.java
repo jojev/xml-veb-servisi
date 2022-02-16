@@ -1,8 +1,10 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
+import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
+import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.rdf.FusekiReader;
 import main.java.com.xml.officialbackend.rdf.RDFReadResult;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
@@ -14,6 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import main.java.com.xml.officialbackend.config.dto.UserTokenStateDTO;
 import main.java.com.xml.officialbackend.exception.MissingEntityException;
@@ -33,7 +39,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.XMLDBException;
+import org.xmldb.api.modules.XMLResource;
 
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.List;
 
@@ -117,6 +128,27 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
         }
 
         return list;
+    }
+
+    @Override
+    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByText(SearchDTO searchDTO) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {
+        String xqueryPath = "data/xquery/pretraga_po_tekstu_obrazac.xqy";
+        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+
+        String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
+        List<Resource> resources =
+                existDbManager.executeXquery("/db/obrazac_za_sprovodjenje_imunizacije", "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije",formattedXQueryExpresion);
+        ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazacZaSprovodjenjeImunizacijes =  new ArrayList<ObrazacZaSprovodjenjeImunizacije>();
+        for(Resource resource:resources){
+            XMLResource xmlResource  = (XMLResource) resource;
+            obrazacZaSprovodjenjeImunizacijes.add((ObrazacZaSprovodjenjeImunizacije) jaxBParser.unmarshall(xmlResource,ObrazacZaSprovodjenjeImunizacije.class));
+        }
+        return  obrazacZaSprovodjenjeImunizacijes;
+    }
+
+    public static String readFile(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
     }
 
     @Override

@@ -1,6 +1,9 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
+import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
+import main.java.com.xml.officialbackend.jaxb.JaxBParser;
+import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.model.lista_cekanja.ListaCekanja;
@@ -20,12 +23,20 @@ import main.java.com.xml.officialbackend.service.contract.ITerminService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 
 import java.util.ArrayList;
@@ -46,6 +57,9 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
 
     @Autowired
     private ITerminService terminService;
+
+    @Autowired
+    private JaxBParser jaxBParser;
 
     @Autowired
     private IListaCekanjaService listaCekanjaService;
@@ -142,6 +156,29 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
             potvrde.add(potvrda);
         }
         return potvrde;
+    }
+
+
+    @Override
+    public ArrayList<PotvrdaOVakcinaciji> searchByText(SearchDTO searchDTO) throws XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, JAXBException {
+        String xqueryPath = "data/xquery/pretraga_po_tekstu_potvrda.xqy";
+        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+
+        String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
+        System.out.println(formattedXQueryExpresion);
+        List<Resource> resources =
+                existDbManager.executeXquery("/db/digitalni_sertifikat", "http://www.ftn.uns.ac.rs/digitalni_sertifikat",formattedXQueryExpresion);
+        ArrayList<PotvrdaOVakcinaciji> potvrdaOVakcinacijis =  new ArrayList<PotvrdaOVakcinaciji>();
+        for(Resource resource:resources){
+            XMLResource xmlResource  = (XMLResource) resource;
+            potvrdaOVakcinacijis.add((PotvrdaOVakcinaciji) jaxBParser.unmarshall(xmlResource,PotvrdaOVakcinaciji.class));
+        }
+        return  potvrdaOVakcinacijis;
+    }
+
+    public static String readFile(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
     }
 
 }

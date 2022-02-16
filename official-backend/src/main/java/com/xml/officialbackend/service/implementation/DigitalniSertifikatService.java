@@ -197,19 +197,19 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
 
     @Override
     public ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws IOException, JAXBException, XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        String xqueryPath = "data/xquery/pretraga_po_tekstu_zahtev.xqy";
+        String xqueryPath = "data/xquery/pretraga_po_tekstu_sertifikat.xqy";
         String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
 
         String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
         System.out.println(formattedXQueryExpresion);
         List<Resource> resources =
-                existDbManager.executeXquery("/db/zahtev_za_sertifikat", "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat",formattedXQueryExpresion);
-        ArrayList<DigitalniZeleniSertifikat> interesovanjeZaVakcinisanjes =  new ArrayList<DigitalniZeleniSertifikat>();
+                existDbManager.executeXquery("/db/digitalni_sertifikat", "http://www.ftn.uns.ac.rs/digitalni_sertifikat",formattedXQueryExpresion);
+        ArrayList<DigitalniZeleniSertifikat> digitalniZeleniSertifikats =  new ArrayList<DigitalniZeleniSertifikat>();
         for(Resource resource:resources){
             XMLResource xmlResource  = (XMLResource) resource;
-            interesovanjeZaVakcinisanjes.add((DigitalniZeleniSertifikat) jaxBParser.unmarshall(xmlResource,DigitalniZeleniSertifikat.class));
+            digitalniZeleniSertifikats.add((DigitalniZeleniSertifikat) jaxBParser.unmarshall(xmlResource,DigitalniZeleniSertifikat.class));
         }
-        return  interesovanjeZaVakcinisanjes;
+        return  digitalniZeleniSertifikats;
     }
 
     public static String readFile(String path, Charset encoding) throws IOException {
