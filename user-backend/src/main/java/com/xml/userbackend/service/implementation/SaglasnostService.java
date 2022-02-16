@@ -106,24 +106,24 @@ public class SaglasnostService implements ISaglasnostService {
     public ObrazacZaSprovodjenjeImunizacije update(String jmbg,
                                                    PodaciKojeJePopunioZdravstveniRadnik podaci) throws Exception {
         RDFNode saglasnostID = this.getSaglasnostIdFromJMBG(jmbg);
-        List<RDFNode> allSalganost = this.getAllSaglanostFromJMBG(jmbg);
+        List<RDFNode> allSaglasnost = this.getAllSaglanostFromJMBG(jmbg);
         if(saglasnostID==null){
             throw new MissingEntityException("Ne postoji saglasnost za unijetog korisnika.");
         }
         String[] parts = saglasnostID.toString().split("/");
-        ObrazacZaSprovodjenjeImunizacije obrazacZaSprovodjenjeImunizacije =
-                baseRepository.findById("/db/saglasnost", parts[parts.length-1],ObrazacZaSprovodjenjeImunizacije.class);
+        ObrazacZaSprovodjenjeImunizacije obrazacZaSprovodjenjeImunizacije;
 
-        if(obrazacZaSprovodjenjeImunizacije.getPodaciKojeJePopunioZdravstveniRadnik()!=null){
+        if(allSaglasnost.size()>1){
+            String[] parts1 = allSaglasnost.get(allSaglasnost.size()-2).toString().split("/");
+            ObrazacZaSprovodjenjeImunizacije pretposljednjiObrazacZaSprovodjenjeImunizacije =
+                    baseRepository.findById("/db/saglasnost", parts1[parts1.length-1],ObrazacZaSprovodjenjeImunizacije.class);
+            XMLResource resource = existDbManager.load("/db/saglasnost", parts1[parts1.length-1]);
             Doza secondDoza = podaci.getDoze().getDoza().get(0);
-            podaci.getDoze().getDoza().set(0,obrazacZaSprovodjenjeImunizacije.getPodaciKojeJePopunioZdravstveniRadnik().getDoze().getDoza().get(0));
+            podaci.getDoze().getDoza().set(0,pretposljednjiObrazacZaSprovodjenjeImunizacije.getPodaciKojeJePopunioZdravstveniRadnik().getDoze().getDoza().get(0));
             podaci.getDoze().getDoza().add(secondDoza);
-//            baseRepository.removeElement("/db/saglasnost", parts[parts.length-1],
-//                    "/obrazac_za_sprovodjenje_imunizacije/podaci_koje_je_popunio_zdravstveni_radnik",
-//                    "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije");
+
         }
         String content = jaxBParser.marshallWithoutSchema(podaci).toString();
-        System.out.println(content);
         content =  content.replace(" xmlns=\"http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije\"", "");
         content =  content.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "");
 
