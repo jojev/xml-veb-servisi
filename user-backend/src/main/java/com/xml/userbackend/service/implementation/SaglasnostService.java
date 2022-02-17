@@ -119,6 +119,17 @@ public class SaglasnostService implements ISaglasnostService {
     }
 
     @Override
+    public String readMetadata(String documentId, String format) throws IOException {
+        String sparqlCondition = "<http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/" + documentId + "> ?d ?s .";
+        try {
+            return FusekiReader.readMetadata("/saglasnosti", sparqlCondition, format);
+        }
+        catch (Exception e) {
+            throw new MissingEntityException("Ne postoji saglasnost sa tim id.");
+        }
+    }
+
+    @Override
     public ObrazacZaSprovodjenjeImunizacije update(String jmbg,
                                                    PodaciKojeJePopunioZdravstveniRadnik podaci) throws Exception {
         RDFNode saglasnostID = this.getSaglasnostIdFromJMBG(jmbg);

@@ -57,4 +57,14 @@ public class SaglasnostController {
         return new ResponseEntity<>(list, HttpStatus.OK);
 
     }
+
+    @GetMapping("/metadata/{id}")
+    public ResponseEntity<?> getMetadata(@PathVariable String id) throws IOException {
+        return new ResponseEntity<>(saglasnostService.readMetadata(id, "N-TRIPLE"), HttpStatus.OK);
+    }
+
+    @GetMapping("/metadata-json/{id}")
+    public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
+        return new ResponseEntity<>(saglasnostService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
+    }
 }

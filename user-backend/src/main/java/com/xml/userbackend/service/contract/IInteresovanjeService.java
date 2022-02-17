@@ -15,6 +15,7 @@ import org.xmldb.api.base.XMLDBException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisanje> {
 
@@ -35,6 +36,4 @@ public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisa
     ArrayList<InteresovanjeZaVakcinisanje> searchByText(String search) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
 
     int getNumberOfInterestedPatients(String startDate, String endDate) throws IOException;
-
-
 }

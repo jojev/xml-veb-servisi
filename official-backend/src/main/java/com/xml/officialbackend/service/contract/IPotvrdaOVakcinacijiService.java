@@ -23,4 +23,5 @@ public interface IPotvrdaOVakcinacijiService extends IService<PotvrdaOVakcinacij
 
     PotvrdaOVakcinaciji create(PotvrdaOVakcinaciji entity, String accessToken) throws Exception;
 
+    String readMetadata(String documentId, String format) throws IOException;
 }

@@ -3,6 +3,7 @@ package main.java.com.xml.officialbackend.service.implementation;
 import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.exception.BadLogicException;
+import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.*;
@@ -139,6 +140,17 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     @Override
     public void delete(String id) throws Exception {
 
+    }
+
+    @Override
+    public String readMetadata(String documentId, String format) throws IOException {
+        String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/digitalni_sertifikat/" + documentId + "> ?d ?s .";
+        try {
+            return FusekiReader.readMetadata("/digitalni_sertifikat", sparqlCondition, format);
+        }
+        catch (Exception e) {
+            throw new MissingEntityException("Ne postoji saglasnost sa tim id.");
+        }
     }
 
     @Override

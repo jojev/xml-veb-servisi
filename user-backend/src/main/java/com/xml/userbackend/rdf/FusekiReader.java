@@ -4,7 +4,9 @@ import main.java.com.xml.userbackend.util.FusekiAuthenticationUtilities;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Model;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class FusekiReader {
@@ -19,6 +21,20 @@ public class FusekiReader {
         ResultSet results = query.execSelect();
 
         return new RDFReadResult(results, query);
+    }
+
+    public static String readMetadata(String graphUri, String sparqlCondition, String format) throws IOException {
+        FusekiAuthenticationUtilities.ConnectionProperties conn = FusekiAuthenticationUtilities.loadProperties();
+
+        String sparqlQuery = SparqlUtil.constructData(conn.dataEndpoint + graphUri, sparqlCondition);
+        System.out.println(sparqlQuery);
+        QueryExecution query = QueryExecutionFactory.sparqlService(conn.queryEndpoint, sparqlQuery);
+        Model model = query.execConstruct();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        model.write(out, format);
+
+        return new String(out.toByteArray());
     }
 
     public static RDFReadResult readRDFWithSparqlQuery(String graphUri, String sparqlCondition) throws IOException {
