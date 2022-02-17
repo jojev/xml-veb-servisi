@@ -21,6 +21,26 @@ const routes: Routes = [
             import("./../user/user.module").then((m) => m.UserModule),
         },
       ],
+  },
+  {
+    path: "saglasnost",
+      children: [
+        {
+          path: "",
+          loadChildren: () =>
+            import("./../saglasnost/saglasnost.module").then((m) => m.SaglasnostModule),
+        },
+      ],
+  },
+  {
+    path: "interesovanje",
+      children: [
+        {
+          path: "",
+          loadChildren: () =>
+            import("./../interesovanje/interesovanje.module").then((m) => m.InteresovanjeModule),
+        },
+      ],
   }
 ];
 

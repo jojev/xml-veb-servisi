@@ -1,21 +1,12 @@
 package main.java.com.xml.officialbackend.test;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
+import main.java.com.xml.officialbackend.existdb.ExistDbManager;
+import main.java.com.xml.officialbackend.service.implementation.ListaCekanjaService;
+import main.java.com.xml.officialbackend.service.implementation.TerminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import main.java.com.xml.officialbackend.existdb.ExistDbManager;
-
-import main.java.com.xml.officialbackend.service.implementation.ListaCekanjaService;
-import main.java.com.xml.officialbackend.service.implementation.TerminService;
 
 @Component
 public class RunAfterStartup {
@@ -34,7 +25,6 @@ public class RunAfterStartup {
     @EventListener(ApplicationReadyEvent.class)
     public void runAfterStartup() throws Exception {
 
-    	//ts.findVaccineByManufacturer(LocalDate.now().minusDays(5), LocalDate.now());
-        
+    	test.test();        
     }
 }

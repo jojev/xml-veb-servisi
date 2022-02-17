@@ -6,11 +6,15 @@ import { RegistrationComponent } from './pages/registration/registration.compone
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { ReactiveFormsModule } from "@angular/forms";
-import { MatInputModule } from '@angular/material/input'
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { DocumentsPreviewComponent } from './pages/documents-preview/documents-preview.component'
 
 @NgModule({
   declarations: [
-    RegistrationComponent
+    RegistrationComponent,
+    DocumentsPreviewComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +22,9 @@ import { MatInputModule } from '@angular/material/input'
     MatCardModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatTableModule,
+    MatButtonModule
   ]
 })
 export class UserModule { }

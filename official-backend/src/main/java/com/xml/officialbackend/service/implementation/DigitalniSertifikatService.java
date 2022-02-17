@@ -354,5 +354,11 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
         digitalniZeleniSertifikat.setTestovi(testovi);
         create(digitalniZeleniSertifikat, u, obrazac.getPodaciKojeJePopunioPacijent().getLicniPodaci().getImejl(), accesToken);
     }
+    
+    @Override
+    public byte[] generateDigitalniToXHTML(String id) throws Exception {
+    	DigitalniZeleniSertifikat sertifikat = findById(id);
+    	return htmlTransformer.generateHTMLtoByteArray(sertifikat);
+    }
 
 }

@@ -16,18 +16,17 @@ public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSe
 
     ZahtevZaIzdavanjeSertifikata create(ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata, String accessToken) throws Exception;
 
-
     int getNumberOfRequestForDigitalSertificate(String startDate, String endDate) throws IOException;
 
     ArrayList<RDFNode> searchRDF(SearchDTO searchDTO) throws IOException;
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchByJMBG(SearchDTO searchDTO) throws Exception;
 
+	  byte[] generateZahtevToXHTML(String id) throws Exception;
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
 
     String getByJmbg(String jmbg) throws IOException;
-
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchByText(String search) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
 

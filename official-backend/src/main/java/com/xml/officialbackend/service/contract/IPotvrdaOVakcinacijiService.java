@@ -15,6 +15,8 @@ public interface IPotvrdaOVakcinacijiService extends IService<PotvrdaOVakcinacij
 
     ArrayList<PotvrdaOVakcinaciji> findPotvrdeByJMBG(String jmbg) throws Exception;
 
+	  byte[] generatePotvrdaToXHTML(String id) throws Exception;
+
     ArrayList<PotvrdaOVakcinaciji> searchByText(SearchDTO search) throws Exception;
 
     ArrayList<PotvrdaOVakcinaciji> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
