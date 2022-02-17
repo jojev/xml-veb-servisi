@@ -16,9 +16,11 @@ public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisa
 
     InteresovanjeZaVakcinisanje create(InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje) throws Exception;
 
-	  int getNumberOfInterestedPatients(LocalDate startDate, LocalDate endDate) throws IOException;
+	int getNumberOfInterestedPatients(LocalDate startDate, LocalDate endDate) throws IOException;
 
     ArrayList<RDFNode> searchRDF(String search) throws IOException;
 
     ArrayList<InteresovanjeZaVakcinisanje> searchByJMBG(String search) throws Exception;
+
+	byte[] generateIntersovanjeToXHTML(String id) throws Exception;
 }

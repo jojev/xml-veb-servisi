@@ -14,6 +14,7 @@ import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.repository.BaseRepository;
 import main.java.com.xml.userbackend.service.EmailService;
 import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
+import main.java.com.xml.userbackend.transformations.HtmlTransformer;
 import main.java.com.xml.userbackend.transformations.XSLFOTransformer;
 
 import org.apache.jena.query.QuerySolution;
@@ -39,6 +40,8 @@ public class InteresovanjeService implements IInteresovanjeService {
     private EmailService emailService;
 
     private XSLFOTransformer xslfoTransformer;
+    
+    private HtmlTransformer htmlTransformer;
 
     private JaxBParser jaxBParser;
 
@@ -48,10 +51,11 @@ public class InteresovanjeService implements IInteresovanjeService {
 
 
     @Autowired
-    public InteresovanjeService(BaseRepository baseRepository, EmailService emailService, XSLFOTransformer xslfoTransformer,
+    public InteresovanjeService(BaseRepository baseRepository, EmailService emailService, XSLFOTransformer xslfoTransformer, HtmlTransformer htmlTransformer,
                                 JaxBParser jaxBParser, ExistDbManager existDbManager, MetadataExtractor metadataExtractor) {
         this.baseRepository = baseRepository;
         this.emailService = emailService;
+        this.htmlTransformer = htmlTransformer;
         this.xslfoTransformer = xslfoTransformer;
         this.jaxBParser = jaxBParser;
         this.existDbManager = existDbManager;
@@ -66,7 +70,7 @@ public class InteresovanjeService implements IInteresovanjeService {
 
     @Override
     public InteresovanjeZaVakcinisanje findById(String id) throws Exception {
-        return null;
+        return baseRepository.findById("/db/interesovanje", id, InteresovanjeZaVakcinisanje.class);
     }
 
     @Override
@@ -147,6 +151,12 @@ public class InteresovanjeService implements IInteresovanjeService {
             interesovanja.add(interesovanjeZaVakcinisanje);
         }
         return interesovanja;
+    }
+    
+    @Override
+    public byte[] generateIntersovanjeToXHTML(String id) throws Exception {
+    	InteresovanjeZaVakcinisanje interesovanje = findById(id);
+    	return htmlTransformer.generateHTMLtoByteArray(interesovanje);
     }
 
     @Override

@@ -19,4 +19,6 @@ public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSe
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchByJMBG(SearchDTO searchDTO) throws Exception;
 
+	byte[] generateZahtevToXHTML(String id) throws Exception;
+
 }

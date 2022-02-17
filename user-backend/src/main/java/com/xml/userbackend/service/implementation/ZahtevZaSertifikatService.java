@@ -5,6 +5,7 @@ import main.java.com.xml.userbackend.dto.SearchDTO;
 import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
+import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
@@ -14,7 +15,7 @@ import main.java.com.xml.userbackend.repository.BaseRepository;
 import main.java.com.xml.userbackend.service.EmailService;
 import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
 import main.java.com.xml.userbackend.service.contract.IZahtevZaSertifikatService;
-
+import main.java.com.xml.userbackend.transformations.HtmlTransformer;
 import main.java.com.xml.userbackend.transformations.XSLFOTransformer;
 
 import org.apache.jena.query.QuerySolution;
@@ -41,6 +42,8 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     private ExistDbManager existDbManager;
 
     private MetadataExtractor metadataExtractor;
+    
+    private HtmlTransformer htmlTransformer;
 
     private EmailService emailService;
 
@@ -48,13 +51,14 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
 
 
     @Autowired
-    public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser,
+    public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser, HtmlTransformer htmlTransformer,
                                      ExistDbManager existDbManager, MetadataExtractor metadataExtractor,
                                      EmailService emailService, IInteresovanjeService interesovanjeService) {
         this.baseRepository = baseRepository;
         this.jaxBParser = jaxBParser;
         this.existDbManager = existDbManager;
         this.metadataExtractor = metadataExtractor;
+        this.htmlTransformer = htmlTransformer;
         this.emailService = emailService;
         this.interesovanjeService = interesovanjeService;
 
@@ -144,9 +148,17 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         ArrayList<RDFNode> nodes = searchRDF(searchDTO);
         ArrayList<ZahtevZaIzdavanjeSertifikata> list = new ArrayList<>();
         for (RDFNode node : nodes) {
-            String[] parts = nodes.toString().split("/");
+            String[] parts = node.toString().split("/");
             ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = baseRepository.findById("/db/zahtev_za_sertifikat", parts[parts.length - 1], ZahtevZaIzdavanjeSertifikata.class);
+            list.add(zahtevZaIzdavanjeSertifikata);
         }
         return list;
     }
+    
+    @Override
+    public byte[] generateZahtevToXHTML(String id) throws Exception {
+    	ZahtevZaIzdavanjeSertifikata zahtev = findById(id);
+    	return htmlTransformer.generateHTMLtoByteArray(zahtev);
+    }
+
 }

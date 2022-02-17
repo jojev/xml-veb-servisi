@@ -105,7 +105,7 @@ public class TerminService implements ITerminService {
     public void assignToPatient() throws Exception {
         ListaCekanja lista = listaCekanjaService.findById("ListaCekanja");
         List<String> vaccineTypes = new ArrayList<>();
-        vaccineTypes.add("Pfizer-BioNTech");
+        vaccineTypes.add("Pfizer");
         vaccineTypes.add("Moderna");
         vaccineTypes.add("Sputnik V");
         vaccineTypes.add("Sinopharm");

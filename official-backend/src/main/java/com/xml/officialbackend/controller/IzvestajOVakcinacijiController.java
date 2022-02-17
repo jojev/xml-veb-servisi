@@ -34,7 +34,6 @@ public class IzvestajOVakcinacijiController {
 	@GetMapping("")
 	public ResponseEntity<IzvestajOImunizaciji> searchInteresovanjeByJMBG(@RequestHeader("Authorization") String accessToken, @RequestParam String startDate, 
 			@RequestParam String endDate) throws Exception {
-		System.out.println("fsfds");
 		HttpHeaders headers = new HttpHeaders();
 	    headers.add("Authorization", accessToken);
 	    headers.setContentType(MediaType.APPLICATION_XML);

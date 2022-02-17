@@ -42,7 +42,7 @@ public class SearchController {
     //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchInteresovanjeByJMBG(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
         HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
-        ResponseEntity<InteresovanjeList> response = restTemplate.exchange("http://localhost:8080/api/v1/interesovanje/search_by_jmbg", HttpMethod.POST,
+        ResponseEntity<InteresovanjeList> response = restTemplate.exchange("http://localhost:8080/api/v1/preview/interesovanje/search_jmbg", HttpMethod.POST,
                 httpEntity, InteresovanjeList.class);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
@@ -51,7 +51,7 @@ public class SearchController {
     //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchZahtevByJMBG(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
         HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
-        ResponseEntity<ZahtevZaIzdavanjeSertifikata> response = restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/search_by_jmbg", HttpMethod.POST,
+        ResponseEntity<ZahtevZaIzdavanjeSertifikata> response = restTemplate.exchange("http://localhost:8080/api/v1/preview/zahtev_za_sertifikat/search_jmbg", HttpMethod.POST,
                 httpEntity, ZahtevZaIzdavanjeSertifikata.class);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }

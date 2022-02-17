@@ -6,6 +6,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import main.java.com.xml.officialbackend.model.termin.Termin;
+
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
@@ -25,6 +27,10 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
+    public void sednTermin(String toEmail, Termin termin) {
+    	
+    }
+    
     public void sendResponse(String toEmail, String path, String htmlPath, String reason) {
         try {
             MimeMessage msg = javaMailSender.createMimeMessage();

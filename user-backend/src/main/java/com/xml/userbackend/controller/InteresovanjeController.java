@@ -53,12 +53,13 @@ public class InteresovanjeController {
 		return new ResponseEntity<>(new CountResponse(interesovanjeService.getNumberOfInterestedPatients(LocalDate.parse(startDate), LocalDate.parse(endDate))), HttpStatus.OK);
     }
 
+    /*
     @PostMapping("/search_by_jmbg")
-    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
+    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<?> searchByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<InteresovanjeZaVakcinisanje> interesovanjeZaVakcinisanje = interesovanjeService.searchByJMBG(searchDTO.getSearch());
         InteresovanjeList interesovanjeList = new InteresovanjeList(interesovanjeZaVakcinisanje);
         return new ResponseEntity<>(interesovanjeList, HttpStatus.OK);
-    }
+    } */
 
 }

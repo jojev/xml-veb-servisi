@@ -8,4 +8,6 @@ import java.util.ArrayList;
 public interface IPotvrdaOVakcinacijiService extends IService<PotvrdaOVakcinaciji> {
 
     ArrayList<PotvrdaOVakcinaciji> findPotvrdeByJMBG(String jmbg) throws Exception;
+
+	byte[] generatePotvrdaToXHTML(String id) throws Exception;
 }

@@ -29,4 +29,6 @@ public interface IDigitalniSertifikatService extends IService<DigitalniZeleniSer
     ArrayList<RDFNode> searchRDF(SearchDTO searchDTO) throws IOException;
 
     ArrayList<DigitalniZeleniSertifikat> searchByJMBG(SearchDTO searchDTO) throws Exception;
+
+	byte[] generateDigitalniToXHTML(String id) throws Exception;
 }
