@@ -1,7 +1,10 @@
 package main.java.com.xml.userbackend.service.implementation;
 
 
+
+import main.java.com.xml.userbackend.dto.SearchDTO;
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
+
 import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
@@ -9,12 +12,15 @@ import main.java.com.xml.userbackend.model.korisnik.Korisnik;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.Doza;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
+import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
 import main.java.com.xml.userbackend.rdf.MetadataExtractor;
 import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.repository.BaseRepository;
 import main.java.com.xml.userbackend.service.contract.ISaglasnostService;
+import main.java.com.xml.userbackend.transformations.HtmlTransformer;
+
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,14 +46,17 @@ public class SaglasnostService implements ISaglasnostService {
 
     private InteresovanjeService interesovanjeService;
 
+    private HtmlTransformer htmlTransformer;
+
     private JaxBParser jaxBParser;
 
-    public SaglasnostService(ExistDbManager existDbManager,BaseRepository baseRepository,
+    public SaglasnostService(ExistDbManager existDbManager,BaseRepository baseRepository, HtmlTransformer htmlTransformer, 
                              MetadataExtractor metadataExtractor, InteresovanjeService interesovanjeService,
                              JaxBParser jaxBParser){
         this.baseRepository = baseRepository;
         this.existDbManager = existDbManager;
         this.metadataExtractor = metadataExtractor;
+        this.htmlTransformer = htmlTransformer;
         this.interesovanjeService = interesovanjeService;
         this.jaxBParser =  jaxBParser;
     }
@@ -65,7 +74,9 @@ public class SaglasnostService implements ISaglasnostService {
     @Override
     public ObrazacZaSprovodjenjeImunizacije create(ObrazacZaSprovodjenjeImunizacije entity) throws Exception {
         String userId = UUID.randomUUID().toString();
+
         entity.setAbout(entity.getAbout()+userId);
+
         entity.setTypeof("pred:IdentifikatorDokumenta");
         entity.getOtherAttributes().put(QName.valueOf("xmlns:pred"), "http://www.ftn.uns.ac.rs/rdf/saglasnosti/predicate/");
         entity.getOtherAttributes().put(QName.valueOf("xmlns:xs"), "http://www.w3.org/2001/XMLSchema#");
@@ -82,17 +93,18 @@ public class SaglasnostService implements ISaglasnostService {
             }
         }
         RDFNode rdfNode = interesovanjeService.getInteresovanje(entity.getPodaciKojeJePopunioPacijent().getLicniPodaci().getJmbg().getValue());
+
         entity.setInteresovanjeRef(new ObrazacZaSprovodjenjeImunizacije.InteresovanjeRef());
         entity.getInteresovanjeRef().setProperty("pred:Referencira");
         entity.getInteresovanjeRef().setDatatype("xs:string");
         entity.getInteresovanjeRef().setValue(rdfNode.toString());
+
         baseRepository.save("/db/saglasnost", userId, entity, ObrazacZaSprovodjenjeImunizacije.class);
         XMLResource resource = existDbManager.load("/db/saglasnost", userId);
         byte[] out =  metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "saglasnosti");
         return entity;
     }
-
     @Override
     public ObrazacZaSprovodjenjeImunizacije update(ObrazacZaSprovodjenjeImunizacije entity, String id) throws Exception {
         return null;
@@ -172,19 +184,37 @@ public class SaglasnostService implements ISaglasnostService {
             return null;
         }
     }
+    
+    public ArrayList<RDFNode> searchRDF(SearchDTO searchDTO) throws IOException {
+        String jmbg = searchDTO.getSearch();
 
-    @Override
-    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(String jmbg) throws Exception {
-        ArrayList<RDFNode> nodes = (ArrayList<RDFNode>) getAllSaglanostFromJMBG(jmbg);
-        ArrayList<ObrazacZaSprovodjenjeImunizacije> list = new ArrayList<>();
-        for (RDFNode node : nodes) {
-            String[] parts = node.toString().split("/");
-            ObrazacZaSprovodjenjeImunizacije obrazac = findById(parts[parts.length - 1]);
-            list.add(obrazac);
+        String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/saglasnosti/predicate/Kreirao> \"" + jmbg + "\".";
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            if (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+
         }
-
-        return list;
+        return nodes;
     }
+    
+       
+//    @Override
+//    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(String jmbg) throws Exception {
+//        ArrayList<RDFNode> nodes = (ArrayList<RDFNode>) getAllSaglanostFromJMBG(jmbg);
+//        ArrayList<ObrazacZaSprovodjenjeImunizacije> list = new ArrayList<>();
+//        for (RDFNode node : nodes) {
+//            String[] parts = node.toString().split("/");
+//            ObrazacZaSprovodjenjeImunizacije obrazac = findById(parts[parts.length - 1]);
+//            list.add(obrazac);
+//        }
+//
+//        return list;
+//    }
 
 
 
@@ -210,6 +240,27 @@ public class SaglasnostService implements ISaglasnostService {
         return list;
     }
 
+    @Override
+    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(SearchDTO searchDTO) throws Exception {
+        ArrayList<RDFNode> nodes = searchRDF(searchDTO);
+        ArrayList<ObrazacZaSprovodjenjeImunizacije> list = new ArrayList<>();
+        for(RDFNode node: nodes){
+            String[] parts = node.toString().split("/");
+            ObrazacZaSprovodjenjeImunizacije obrazac = baseRepository.findById("/db/saglasnost",
+                    parts[parts.length - 1], ObrazacZaSprovodjenjeImunizacije.class);
+            list.add(obrazac);
+        }
+
+        return list;
+    }
+
+    @Override
+    public byte[] generateSaglasnostToXHTML(String id) throws Exception {
+    	ObrazacZaSprovodjenjeImunizacije saglasnost = findById(id);
+    	return htmlTransformer.generateHTMLtoByteArray(saglasnost);
+    }
+        
+
 
 
     public List<RDFNode> getAllSaglanostFromJMBG(String jmbg) throws IOException {
@@ -228,6 +279,5 @@ public class SaglasnostService implements ISaglasnostService {
             return nodes;
         }
     }
-
 
 }

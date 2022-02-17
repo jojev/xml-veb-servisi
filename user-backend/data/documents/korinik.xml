@@ -1,0 +1,12 @@
+<korisnik xmlns="http://www.ftn.uns.ac.rs/korisnik"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.ftn.uns.ac.rs/korisnik Faks/CetvrtaGodina/XML/xml-veb-servisi/official-backend/data/schemes/korisnik.xsd">
+    <ime>Dragna</ime>
+    <prezime>Filipovic</prezime>
+    <korisnickoIme>2412998125026</korisnickoIme>
+    <lozinka>dada123</lozinka>
+    <uloga>
+        <naziv>Gradjanin</naziv>
+    </uloga>
+    <email>filipovic.dada@gmail.com</email>
+</korisnik>

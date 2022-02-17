@@ -139,7 +139,16 @@ public class UserService implements IUserService {
                 "<jwtauthenticationrequest><username>%s</username><password>%s</password></jwtauthenticationrequest>",
                 jwtAuthenticationRequest.getUsername(),jwtAuthenticationRequest.getPassword()), headers);
         ResponseEntity<UserTokenStateDTO> response;
-           response = restTemplate.postForEntity("http://localhost:8080/api/v1/auth/login", request, UserTokenStateDTO.class);
+        try {
+
+            response = restTemplate.postForEntity("http://localhost:8080/api/v1/auth/login", request, UserTokenStateDTO.class);
+        }
+        catch (Exception e){
+             throw new BadCredentialException("Pogrešni kredencijali");
+        }
+        if(response.getBody().getRoles().get(0).equals("ROLE_GRADJANIN")){
+            throw new BadCredentialException("Logovanje isključivo za građanina");
+        }
         return response.getBody();
     }
 }

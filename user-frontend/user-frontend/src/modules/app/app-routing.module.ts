@@ -23,6 +23,16 @@ const routes: Routes = [
       ],
   },
   {
+    path: "saglasnost",
+      children: [
+        {
+          path: "",
+          loadChildren: () =>
+            import("./../saglasnost/saglasnost.module").then((m) => m.SaglasnostModule),
+        },
+      ],
+  },
+  {
     path: "interesovanje",
       children: [
         {

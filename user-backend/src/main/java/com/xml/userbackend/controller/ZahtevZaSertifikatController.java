@@ -49,13 +49,14 @@ public class ZahtevZaSertifikatController {
 		return new ResponseEntity<>(new CountResponse(zahtevZaSertifikatService.getNumberOfRequestForDigitalSertificate(startDate, endDate)), HttpStatus.OK);
     }
 
+    /*
     @PostMapping("/search_by_jmbg")
-    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
+  //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<?> searchByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchByJMBG(searchDTO);
         ZahtevList list = new ZahtevList(zahtevi);
         return new ResponseEntity<>(list, HttpStatus.OK);
-    }
+    } */
 
     @PostMapping("/odgovor")
     public ResponseEntity<?> getZahtev(@RequestBody RazlogDTO razlogDTO) throws Exception {

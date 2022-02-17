@@ -12,7 +12,7 @@
         <ime_prezime>Dragana Filipovic</ime_prezime>
         <datum_rodjenja>1998-12-24</datum_rodjenja>
         <pol>Muski</pol>
-        <jmbg property="pred:PodneoJmbg">1234567891234</jmbg>
+        <jmbg property="pred:PodneoJmbg">2412998125026</jmbg>
         <broj_pasosa property="pred:PodneoBrPasosa">123456789</broj_pasosa>
     </podnosilac_zahteva>
     <razlog_za_podnosenje>razlog podnosenja zahteva</razlog_za_podnosenje>
