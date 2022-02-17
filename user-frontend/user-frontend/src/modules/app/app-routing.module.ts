@@ -21,6 +21,16 @@ const routes: Routes = [
             import("./../user/user.module").then((m) => m.UserModule),
         },
       ],
+  },
+  {
+    path: "interesovanje",
+      children: [
+        {
+          path: "",
+          loadChildren: () =>
+            import("./../interesovanje/interesovanje.module").then((m) => m.InteresovanjeModule),
+        },
+      ],
   }
 ];
 

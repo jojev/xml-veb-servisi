@@ -1,5 +1,6 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
+import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
@@ -20,8 +21,12 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
@@ -29,6 +34,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.*;
 
@@ -185,6 +194,50 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
             list.add(digitalniZeleniSertifikat);
         }
         return list;
+    }
+
+    @Override
+    public ArrayList<DigitalniZeleniSertifikat> searchMetadata(MetadataSearchDTO searchDTO) throws Exception {
+        String value = searchDTO.getSearch();
+        String sparqlCondition = "?document ?d \"" + value + "\" .";
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/digitalni_sertifikat", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+        }
+        ArrayList<DigitalniZeleniSertifikat> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            DigitalniZeleniSertifikat digitalniZeleniSertifikat = baseRepository.findById("/db/digitalni_sertifikat", parts[parts.length - 1], DigitalniZeleniSertifikat.class);
+            list.add(digitalniZeleniSertifikat);
+        }
+        return list;
+    }
+
+    @Override
+    public ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws IOException, JAXBException, XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        String xqueryPath = "data/xquery/pretraga_po_tekstu_sertifikat.xqy";
+        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+
+        String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
+        System.out.println(formattedXQueryExpresion);
+        List<Resource> resources =
+                existDbManager.executeXquery("/db/digitalni_sertifikat", "http://www.ftn.uns.ac.rs/digitalni_sertifikat",formattedXQueryExpresion);
+        ArrayList<DigitalniZeleniSertifikat> digitalniZeleniSertifikats =  new ArrayList<DigitalniZeleniSertifikat>();
+        for(Resource resource:resources){
+            XMLResource xmlResource  = (XMLResource) resource;
+            digitalniZeleniSertifikats.add((DigitalniZeleniSertifikat) jaxBParser.unmarshall(xmlResource,DigitalniZeleniSertifikat.class));
+        }
+        return  digitalniZeleniSertifikats;
+    }
+
+    public static String readFile(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
     }
 
     @Override

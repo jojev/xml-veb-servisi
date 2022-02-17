@@ -1,8 +1,8 @@
 package main.java.com.xml.userbackend.service.implementation;
 
 
+import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.userbackend.dto.SearchDTO;
-import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
@@ -12,23 +12,29 @@ import main.java.com.xml.userbackend.rdf.FusekiWriter;
 import main.java.com.xml.userbackend.rdf.MetadataExtractor;
 import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.repository.BaseRepository;
-import main.java.com.xml.userbackend.service.EmailService;
-import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
 import main.java.com.xml.userbackend.service.contract.IZahtevZaSertifikatService;
+
 import main.java.com.xml.userbackend.transformations.HtmlTransformer;
 import main.java.com.xml.userbackend.transformations.XSLFOTransformer;
+
 
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.time.LocalDate;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -37,7 +43,6 @@ import java.util.UUID;
 public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     private BaseRepository baseRepository;
 
-    private JaxBParser jaxBParser;
 
     private ExistDbManager existDbManager;
 
@@ -45,22 +50,22 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     
     private HtmlTransformer htmlTransformer;
 
-    private EmailService emailService;
-
-    private IInteresovanjeService interesovanjeService;
-
+    private JaxBParser jaxBParser;
 
     @Autowired
+
     public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser, HtmlTransformer htmlTransformer,
                                      ExistDbManager existDbManager, MetadataExtractor metadataExtractor,
                                      EmailService emailService, IInteresovanjeService interesovanjeService) {
+
         this.baseRepository = baseRepository;
-        this.jaxBParser = jaxBParser;
         this.existDbManager = existDbManager;
         this.metadataExtractor = metadataExtractor;
         this.htmlTransformer = htmlTransformer;
         this.emailService = emailService;
         this.interesovanjeService = interesovanjeService;
+        this.jaxBParser = jaxBParser;
+
 
     }
 
@@ -80,7 +85,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     }
 
     @Override
-    public void delete(String id) throws Exception {
+    public void delete(String id) {
 
     }
 
@@ -108,7 +113,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     }
     
     @Override
-    public int getNumberOfRequestForDigitalSertificate(LocalDate startDate, LocalDate endDate) throws IOException {
+    public int getNumberOfRequestForDigitalSertificate(String startDate, String endDate) throws IOException {
     	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/IzdatDatuma> ?date. "
 				+ "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>)." ;
 
@@ -131,7 +136,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/PodneoJmbg> \"" + jmbg + "\" ;";
 
         ArrayList<RDFNode> nodes = new ArrayList<>();
-        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/zahtev_za_sertifikat", sparqlCondition);) {
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/zahtev_za_sertifikat", sparqlCondition)) {
             List<String> columnNames = result.getResult().getResultVars();
             while (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
@@ -149,16 +154,62 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         ArrayList<ZahtevZaIzdavanjeSertifikata> list = new ArrayList<>();
         for (RDFNode node : nodes) {
             String[] parts = node.toString().split("/");
-            ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = baseRepository.findById("/db/zahtev_za_sertifikat", parts[parts.length - 1], ZahtevZaIzdavanjeSertifikata.class);
+            ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = findById(parts[parts.length - 1]);
             list.add(zahtevZaIzdavanjeSertifikata);
         }
         return list;
     }
+
+    @Override
+    public ArrayList<ZahtevZaIzdavanjeSertifikata> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception {
+        String value = metadataSearchDTO.getSearch();
+        String sparqlCondition = "?document ?d \"" + value + "\" .";
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/zahtev_za_sertifikat", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+        }
+        ArrayList<ZahtevZaIzdavanjeSertifikata> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = findById(parts[parts.length - 1]);
+            list.add(zahtevZaIzdavanjeSertifikata);
+        }
+        return list;
+    }
+
     
     @Override
     public byte[] generateZahtevToXHTML(String id) throws Exception {
     	ZahtevZaIzdavanjeSertifikata zahtev = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(zahtev);
+    }
+
+
+    @Override
+    public ArrayList<ZahtevZaIzdavanjeSertifikata> searchByText(String search) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {
+        String xqueryPath = "data/xquery/pretraga_po_tekstu_zahtev.xqy";
+        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+
+        String formattedXQueryExpresion = String.format(xqueryExpression, search);
+        System.out.println(formattedXQueryExpresion);
+        List<Resource> resources =
+                existDbManager.executeXquery("/db/zahtev_za_sertifikat", "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat",formattedXQueryExpresion);
+        ArrayList<ZahtevZaIzdavanjeSertifikata> interesovanjeZaVakcinisanjes =  new ArrayList<ZahtevZaIzdavanjeSertifikata>();
+        for(Resource resource:resources){
+            XMLResource xmlResource  = (XMLResource) resource;
+            interesovanjeZaVakcinisanjes.add((ZahtevZaIzdavanjeSertifikata) jaxBParser.unmarshall(xmlResource,ZahtevZaIzdavanjeSertifikata.class));
+        }
+        return  interesovanjeZaVakcinisanjes;
+    }
+
+    public static String readFile(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
     }
 
 }

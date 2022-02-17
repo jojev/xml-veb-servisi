@@ -1,12 +1,11 @@
 package main.java.com.xml.userbackend.service.implementation;
 
 
-import main.java.com.xml.userbackend.dto.SearchDTO;
-import main.java.com.xml.userbackend.exception.MissingEntityException;
+import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
+
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
-import main.java.com.xml.userbackend.model.korisnik.Korisnik;
 import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
 import main.java.com.xml.userbackend.rdf.MetadataExtractor;
@@ -21,16 +20,26 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
+import org.xmldb.api.base.Resource;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.time.LocalDate;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+
 
 @Service
 public class InteresovanjeService implements IInteresovanjeService {
@@ -77,11 +86,11 @@ public class InteresovanjeService implements IInteresovanjeService {
     public RDFNode getInteresovanje(String jmbg) throws IOException {
         String sparqlCondition = "?person <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreirao> \"" + jmbg + "\" .";
 
-        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition);) {
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition)) {
             List<String> columnNames = result.getResult().getResultVars();
             System.out.println(columnNames.get(0));
             System.out.println(columnNames.size());
-            if(result.getResult().hasNext()) {
+            if (result.getResult().hasNext()) {
                 System.out.println("Usao");
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
@@ -123,13 +132,12 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
 
-
     @Override
     public ArrayList<RDFNode> searchRDF(String jmbg) throws IOException {
         String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreirao> \"" + jmbg + "\" ;";
 
         ArrayList<RDFNode> nodes = new ArrayList<>();
-        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition);) {
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition)) {
             List<String> columnNames = result.getResult().getResultVars();
             while (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
@@ -147,7 +155,7 @@ public class InteresovanjeService implements IInteresovanjeService {
         ArrayList<InteresovanjeZaVakcinisanje> interesovanja = new ArrayList<>();
         for (RDFNode node : nodes) {
             String[] parts = node.toString().split("/");
-            InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = baseRepository.findById("/db/interesovanje", parts[parts.length - 1], InteresovanjeZaVakcinisanje.class);
+            InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = findById(parts[parts.length - 1]);
             interesovanja.add(interesovanjeZaVakcinisanje);
         }
         return interesovanja;
@@ -160,20 +168,59 @@ public class InteresovanjeService implements IInteresovanjeService {
     }
 
     @Override
+
+    public ArrayList<InteresovanjeZaVakcinisanje> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception {
+        String value = metadataSearchDTO.getSearch();
+        String sparqlCondition = "?document ?d \"" + value + "\" .";
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+        }
+        ArrayList<InteresovanjeZaVakcinisanje> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = findById(parts[parts.length - 1]);
+            list.add(interesovanjeZaVakcinisanje);
+        }
+        return list;
+    }
+    public ArrayList<InteresovanjeZaVakcinisanje> searchByText(String search) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {
+        String xqueryPath = "data/xquery/pretraga_po_tekstu_interesovanje.xqy";
+        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+
+        String formattedXQueryExpresion = String.format(xqueryExpression, search);
+        System.out.println(formattedXQueryExpresion);
+        List<Resource> resources =
+                existDbManager.executeXquery("/db/interesovanje", "http://www.ftn.uns.ac.rs/interesovanje",formattedXQueryExpresion);
+        System.out.println(resources.size());
+        ArrayList<InteresovanjeZaVakcinisanje> interesovanjeZaVakcinisanjes =  new ArrayList<InteresovanjeZaVakcinisanje>();
+        for(Resource resource:resources){
+            XMLResource xmlResource  = (XMLResource) resource;
+            interesovanjeZaVakcinisanjes.add((InteresovanjeZaVakcinisanje) jaxBParser.unmarshall(xmlResource,InteresovanjeZaVakcinisanje.class));
+        }
+        return  interesovanjeZaVakcinisanjes;
+
+    }
+
+    @Override
     public InteresovanjeZaVakcinisanje update(InteresovanjeZaVakcinisanje entity, String id) throws Exception {
         return null;
     }
 
     @Override
-    public void delete(String id) throws Exception {
+    public void delete(String id) {
 
     }
     
     @Override
-    public int getNumberOfInterestedPatients(LocalDate startDate, LocalDate endDate) throws IOException {
+    public int getNumberOfInterestedPatients(String startDate, String endDate) throws IOException {
     	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreiran> ?date. "
 				+ "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>)." ;
-
         try(RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/interesovanje", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
             if(result.getResult().hasNext()) {
@@ -185,5 +232,10 @@ public class InteresovanjeService implements IInteresovanjeService {
         }
         
         return 0;
+    }
+
+    public static String readFile(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
     }
 }

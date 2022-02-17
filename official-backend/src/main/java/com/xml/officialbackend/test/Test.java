@@ -44,9 +44,15 @@ public class Test {
     @Autowired IPotvrdaOVakcinacijiService potvrdaService;
 
     public void test() throws Exception {
-
        //createDigitalni();
        //createPotvrdu();
+
+
+    }
+
+    public void testWriteToExistDb() throws Exception {
+        File file = new File("data/documents/obrazac_za_sprovodjenje_imunizacije.xml");
+        baseRepository.save("/db/obrazac_za_sprovodjenje_imunizacije", "1", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));
     }
     
     public void createDigitalni() throws Exception {
@@ -57,7 +63,13 @@ public class Test {
 
         DigitalniZeleniSertifikat k = jaxBParser.unmarshall(resource, DigitalniZeleniSertifikat.class);
 
+
         zeleniService.create(k,"2412998125026", "filipovic.dada@gmail.com");
+    }
+    public void testWriteToRdf() throws IOException, TransformerException {
+        byte[] out =  metadataExtractor.extractMetadata("data/documents/obrazac_za_sprovodjenje_imunizacije.xml");
+        FusekiWriter.saveRDF(new ByteArrayInputStream(out), "obrazac_za_sprovodjenje_imunizacije");
+
     }
     
     public void createPotvrdu() throws IOException, Exception {

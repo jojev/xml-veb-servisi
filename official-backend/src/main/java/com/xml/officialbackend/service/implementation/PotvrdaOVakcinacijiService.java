@@ -1,10 +1,19 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
+
+import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
+
+import main.java.com.xml.officialbackend.jaxb.JaxBParser;
+
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.model.lista_cekanja.ListaCekanja;
+
+import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
+
+
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.rdf.FusekiReader;
 import main.java.com.xml.officialbackend.rdf.FusekiWriter;
@@ -13,6 +22,9 @@ import main.java.com.xml.officialbackend.rdf.RDFReadResult;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.IListaCekanjaService;
 import main.java.com.xml.officialbackend.service.contract.IPotvrdaOVakcinacijiService;
+import main.java.com.xml.officialbackend.service.contract.ITerminService;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.rdf.model.RDFNode;
 
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
@@ -22,12 +34,20 @@ import main.java.com.xml.officialbackend.transformations.HtmlTransformer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +66,9 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
 
     @Autowired
     private ITerminService terminService;
+
+    @Autowired
+    private JaxBParser jaxBParser;
 
     @Autowired
     private IListaCekanjaService listaCekanjaService;
@@ -100,6 +123,7 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
 
     }
 
+
     
     public int getNumberOfVaccinated(LocalDate startDate, LocalDate endDate) throws IOException {
     	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/Izdat> ?date. "
@@ -120,12 +144,13 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     }
     
     public ArrayList<RDFNode> searchRDF(String jmbg) throws IOException {
-        String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/KreiranZa> \"" + jmbg + "\".";
+
+        String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/KreiranZa> \"" + jmbg + "\" ;";
 
         ArrayList<RDFNode> nodes = new ArrayList<>();
-        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/potvrda_o_vakcinaciji", sparqlCondition);) {
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/potvrda_o_vakcinaciji", sparqlCondition)) {
             List<String> columnNames = result.getResult().getResultVars();
-            while(result.getResult().hasNext()) {
+            while (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
                 nodes.add(row.get(columnName));
@@ -134,14 +159,14 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
             return nodes;
         }
     }
+
     @Override
     public ArrayList<PotvrdaOVakcinaciji> findPotvrdeByJMBG(String jmbg) throws Exception {
         ArrayList<PotvrdaOVakcinaciji> potvrde = new ArrayList<>();
         ArrayList<RDFNode> nodes = searchRDF(jmbg);
-        for(RDFNode node: nodes){
+        for (RDFNode node : nodes) {
             String[] parts = node.toString().split("/");
-            PotvrdaOVakcinaciji potvrda = baseRepository.findById("/db/potvrda_o_vakcinaciji",
-                    parts[parts.length - 1], PotvrdaOVakcinaciji.class);
+            PotvrdaOVakcinaciji potvrda = findById(parts[parts.length - 1]);
             potvrde.add(potvrda);
         }
         return potvrde;
@@ -151,6 +176,53 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     public byte[] generatePotvrdaToXHTML(String id) throws Exception {
     	PotvrdaOVakcinaciji potvrda = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(potvrda);
+    }
+
+
+
+    @Override
+    public ArrayList<PotvrdaOVakcinaciji> searchByText(SearchDTO searchDTO) throws XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, JAXBException {
+        String xqueryPath = "data/xquery/pretraga_po_tekstu_potvrda.xqy";
+        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+
+        String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
+        System.out.println(formattedXQueryExpresion);
+        List<Resource> resources =
+                existDbManager.executeXquery("/db/potvrda_o_vakcinaciji", "http://www.ftn.uns.ac.rs/potvrda_o_vakcinaciji",formattedXQueryExpresion);
+        ArrayList<PotvrdaOVakcinaciji> potvrdaOVakcinacijis =  new ArrayList<PotvrdaOVakcinaciji>();
+        for(Resource resource:resources){
+            XMLResource xmlResource  = (XMLResource) resource;
+            potvrdaOVakcinacijis.add((PotvrdaOVakcinaciji) jaxBParser.unmarshall(xmlResource,PotvrdaOVakcinaciji.class));
+        }
+        return  potvrdaOVakcinacijis;
+    }
+
+    public static String readFile(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
+    }
+  
+    @Override
+    public ArrayList<PotvrdaOVakcinaciji> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception {
+        String value = metadataSearchDTO.getSearch();
+        String sparqlCondition = "?document ?d \"" + value + "\" .";
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/potvrda_o_vakcinaciji", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+        }
+        ArrayList<PotvrdaOVakcinaciji> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            PotvrdaOVakcinaciji potvrdaOVakcinaciji = findById(parts[parts.length - 1]);
+            list.add(potvrdaOVakcinaciji);
+        }
+        return list;
+
     }
 
 }

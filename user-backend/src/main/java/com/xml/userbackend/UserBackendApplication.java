@@ -23,8 +23,10 @@ public class UserBackendApplication{
 	public static void main(String[] args) {
 
 		SpringApplication app = new SpringApplication(UserBackendApplication.class);
-		app.setDefaultProperties(Collections
-				.<String, Object>singletonMap("server.port", "8080"));
+		Map<String,Object> settings =  new HashMap<>();
+		settings.put("server.port","8080");
+		settings.put("logging.level.org.springframework.web","DEBUG");
+		app.setDefaultProperties(settings);
 		app.run(args);
 	}
 

@@ -1,5 +1,6 @@
 package main.java.com.xml.officialbackend.service.contract;
 
+import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.Doza;
@@ -8,7 +9,10 @@ import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizaci
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import org.apache.jena.rdf.model.RDFNode;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.XMLDBException;
 
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -30,5 +34,9 @@ public interface IDigitalniSertifikatService extends IService<DigitalniZeleniSer
 
     ArrayList<DigitalniZeleniSertifikat> searchByJMBG(SearchDTO searchDTO) throws Exception;
 
-	byte[] generateDigitalniToXHTML(String id) throws Exception;
+	  byte[] generateDigitalniToXHTML(String id) throws Exception;
+
+    ArrayList<DigitalniZeleniSertifikat> searchMetadata(MetadataSearchDTO searchDTO) throws Exception;
+
+    ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws IOException, JAXBException, XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException;
 }

@@ -35,10 +35,19 @@
                         </xs:simpleContent>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="saglasnost_ref">
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="property"/>
+                                <xs:attribute name="datatype"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
             <xs:attribute name="about"/>
             <xs:attribute name="typeof"/>
-            <xs:attribute name="referencira"/>
             <xs:anyAttribute/>
         </xs:complexType>
     </xs:element>

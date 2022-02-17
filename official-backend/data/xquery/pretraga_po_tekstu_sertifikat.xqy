@@ -1,0 +1,17 @@
+xquery version "3.1";
+for $document in collection('/db/digitalni_sertifikat')
+    where fn:contains($document//*:broj_sertifikata/text(),"%1$s") or  fn:contains($document//*:datum/text(),"%1$s")
+    or fn:contains($document//*:ime_prezime/text(),"%1$s") or fn:contains($document//*:prezime/text(),"%1$s")
+     or fn:contains($document//*:pol/text(),"%1$s")
+     or fn:contains($document//*:datum_rodjenja/text(),"%1$s")
+     or fn:contains($document//*:jmbg/text(),"%1$s")
+     or fn:contains($document//*:broj_pasosa/text(),"%1$s")
+     or fn:contains($document//*:tip/text(),"%1$s")
+     or fn:contains($document//*:proizvodjac_serija/text(),"%1$s")
+     or fn:contains($document//*:zdravstvena_ustanova/text(),"%1$s")
+     or fn:contains($document//*:vrsta_uzorka/text(),"%1$s")
+     or fn:contains($document//*:proizvodjac_testa/text(),"%1$s")
+     or fn:contains($document//*:datum_vreme_uzorkovanja/text(),"%1$s")
+     or fn:contains($document//*:rezultat/text(),"%1$s")
+     or fn:contains($document//*:laboratorija/text(),"%1$s")
+    return $document
