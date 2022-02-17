@@ -24,12 +24,20 @@ import main.java.com.xml.userbackend.transformations.HtmlTransformer;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -143,16 +151,13 @@ public class SaglasnostService implements ISaglasnostService {
             podaci.getDoze().getDoza().add(secondDoza);
 
         }
-        System.out.println("ANDRIJA1");
         String content = jaxBParser.marshallWithoutSchema(podaci).toString();
         content = content.replace(" xmlns=\"http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije\"", "");
         content = content.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "");
-        System.out.println("ANDRIJA2");
         baseRepository.insertAfter("/db/saglasnost", parts[parts.length - 1],
                 "/obrazac_za_sprovodjenje_imunizacije/podaci_koje_je_popunio_pacijent", content,
                 "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije");
         XMLResource resource = existDbManager.load("/db/saglasnost", parts[parts.length - 1]);
-        System.out.println("ANDRIJA3");
         byte[] out = metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "saglasnosti");
         obrazacZaSprovodjenjeImunizacije =
@@ -192,6 +197,26 @@ public class SaglasnostService implements ISaglasnostService {
 
         }
         return nodes;
+    }
+
+    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByText(SearchDTO searchDTO) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {
+        String xqueryPath = "data/xquery/pretraga_po_tekstu_obrazac.xqy";
+        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+
+        String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
+        List<Resource> resources =
+                existDbManager.executeXquery("/db/saglasnost", "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije", formattedXQueryExpresion);
+        ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazacZaSprovodjenjeImunizacijes = new ArrayList<ObrazacZaSprovodjenjeImunizacije>();
+        for (Resource resource : resources) {
+            XMLResource xmlResource = (XMLResource) resource;
+            obrazacZaSprovodjenjeImunizacijes.add((ObrazacZaSprovodjenjeImunizacije) jaxBParser.unmarshall(xmlResource, ObrazacZaSprovodjenjeImunizacije.class));
+        }
+        return obrazacZaSprovodjenjeImunizacijes;
+    }
+
+    public static String readFile(String path, Charset encoding) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
     }
     
        
