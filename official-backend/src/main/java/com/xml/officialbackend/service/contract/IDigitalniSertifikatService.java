@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 public interface IDigitalniSertifikatService extends IService<DigitalniZeleniSertifikat> {
 
-    void send(ZahtevZaIzdavanjeSertifikata zahtev,
-            ObrazacZaSprovodjenjeImunizacije obrazac, ArrayList<PotvrdaOVakcinaciji> potvrde, String accessToken) throws Exception;
+    void send(ZahtevZaIzdavanjeSertifikata zahtev, ObrazacZaSprovodjenjeImunizacije obrazac, ArrayList<PotvrdaOVakcinaciji> potvrde, String accessToken) throws Exception;
+
 
     DigitalniZeleniSertifikat create(DigitalniZeleniSertifikat digitalniZeleniSertifikat, String documentId, String email, String accesToken) throws Exception;
 

@@ -66,5 +66,12 @@ public class SaglasnostController {
     @GetMapping("/metadata-json/{id}")
     public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(saglasnostService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
+
+    }
+  
+    @PostMapping("/find_one_jmbg")
+    public ResponseEntity<?> findByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
+        ObrazacZaSprovodjenjeImunizacije obrazac = saglasnostService.searchByJMBG(searchDTO).get(0);
+        return new ResponseEntity<>(obrazac, HttpStatus.OK);
     }
 }

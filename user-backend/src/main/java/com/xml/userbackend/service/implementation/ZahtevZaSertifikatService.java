@@ -2,6 +2,7 @@ package main.java.com.xml.userbackend.service.implementation;
 
 
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
+import main.java.com.xml.userbackend.dto.RazlogDTO;
 import main.java.com.xml.userbackend.dto.SearchDTO;
 import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
@@ -71,6 +72,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser, HtmlTransformer htmlTransformer,
                                      ExistDbManager existDbManager, MetadataExtractor metadataExtractor,
                                      EmailService emailService, IInteresovanjeService interesovanjeService, RestTemplate restTemplate) {
+
 
 
         this.baseRepository = baseRepository;
@@ -144,23 +146,37 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "zahtev_za_sertifikat");
         return zahtevZaIzdavanjeSertifikata;
     }
-    
+
+    @Override
+    public ZahtevZaIzdavanjeSertifikata setOdgovor(RazlogDTO razlogDTO) throws Exception {
+        String odgovor = "odobren";
+        if (!razlogDTO.getOdobren()) {
+            odgovor = "odbijen";
+        }
+
+        baseRepository.update("/db/zahtev_za_sertifikat", razlogDTO.getZahtev(), "/zahtev_za_izdavanje_sertifikata/odgovor", odgovor,
+                "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat");
+
+        return findById(razlogDTO.getZahtev());
+
+    }
+
     @Override
     public int getNumberOfRequestForDigitalSertificate(String startDate, String endDate) throws IOException {
-    	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/IzdatDatuma> ?date. "
-				+ "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>)." ;
+        String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/IzdatDatuma> ?date. "
+                + "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>).";
 
-        try(RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/zahtev_za_sertifikat", sparqlCondition);) {
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/zahtev_za_sertifikat", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
-            
-            if(result.getResult().hasNext()) {
+
+            if (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
                 RDFNode rdfNode = row.get(columnName);
                 return rdfNode.asLiteral().getInt();
             }
         }
-		return 0;
+        return 0;
     }
 
     @Override
@@ -231,13 +247,13 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         String formattedXQueryExpresion = String.format(xqueryExpression, search);
         System.out.println(formattedXQueryExpresion);
         List<Resource> resources =
-                existDbManager.executeXquery("/db/zahtev_za_sertifikat", "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat",formattedXQueryExpresion);
-        ArrayList<ZahtevZaIzdavanjeSertifikata> interesovanjeZaVakcinisanjes =  new ArrayList<ZahtevZaIzdavanjeSertifikata>();
-        for(Resource resource:resources){
-            XMLResource xmlResource  = (XMLResource) resource;
-            interesovanjeZaVakcinisanjes.add((ZahtevZaIzdavanjeSertifikata) jaxBParser.unmarshall(xmlResource,ZahtevZaIzdavanjeSertifikata.class));
+                existDbManager.executeXquery("/db/zahtev_za_sertifikat", "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat", formattedXQueryExpresion);
+        ArrayList<ZahtevZaIzdavanjeSertifikata> interesovanjeZaVakcinisanjes = new ArrayList<ZahtevZaIzdavanjeSertifikata>();
+        for (Resource resource : resources) {
+            XMLResource xmlResource = (XMLResource) resource;
+            interesovanjeZaVakcinisanjes.add((ZahtevZaIzdavanjeSertifikata) jaxBParser.unmarshall(xmlResource, ZahtevZaIzdavanjeSertifikata.class));
         }
-        return  interesovanjeZaVakcinisanjes;
+        return interesovanjeZaVakcinisanjes;
     }
 
     public static String readFile(String path, Charset encoding) throws IOException {
@@ -247,6 +263,21 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
 
 
     @Override
+    public ArrayList<ZahtevZaIzdavanjeSertifikata> findPendingZahtevi() throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {
+        String xqueryPath = "data/xquery/neodobreni_zahtevi.xqy";
+        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+
+        String formattedXQueryExpresion = String.format(xqueryExpression, "ceka odgovor");
+        List<Resource> resources =
+                existDbManager.executeXquery("/db/zahtev_za_sertifikat", "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat", formattedXQueryExpresion);
+        ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = new ArrayList<>();
+        for (Resource resource : resources) {
+            XMLResource xmlResource = (XMLResource) resource;
+            zahtevi.add((ZahtevZaIzdavanjeSertifikata) jaxBParser.unmarshall(xmlResource, ZahtevZaIzdavanjeSertifikata.class));
+        }
+        return zahtevi;
+    }
+
     public String getByJmbg(String jmbg) throws IOException {
         String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/PodneoJmbg> \"" + jmbg + "\" ;";
 
@@ -264,4 +295,5 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         String[] documentUri = lastZahtev.split("/");
         return documentUri[documentUri.length - 1];
     }
+
 }
