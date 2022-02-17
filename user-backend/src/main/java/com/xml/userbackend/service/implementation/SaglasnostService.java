@@ -146,10 +146,9 @@ public class SaglasnostService implements ISaglasnostService {
                     baseRepository.findById("/db/saglasnost", parts1[parts1.length - 1], ObrazacZaSprovodjenjeImunizacije.class);
             XMLResource resource = existDbManager.load("/db/saglasnost", parts1[parts1.length - 1]);
             System.out.println(resource);
-            Doza secondDoza = podaci.getDoze().getDoza().get(0);
+            Doza secondDoza = podaci.getDoze().getDoza().get(podaci.getDoze().getDoza().size()-1);
             podaci.getDoze().getDoza().set(0, pretposljednjiObrazacZaSprovodjenjeImunizacije.getPodaciKojeJePopunioZdravstveniRadnik().getDoze().getDoza().get(0));
             podaci.getDoze().getDoza().add(secondDoza);
-
         }
         String content = jaxBParser.marshallWithoutSchema(podaci).toString();
         content = content.replace(" xmlns=\"http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije\"", "");
