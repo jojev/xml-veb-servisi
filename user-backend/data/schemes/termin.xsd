@@ -8,6 +8,8 @@
                 <xs:element name="datum_vreme" type="xs:dateTime"/>
                 <xs:element name="trajanje" type="xs:integer"/>
                 <xs:element name="pacijent" type="xs:string"/>
+                <xs:element name="tip_vakcine" type="xs:string"/>
+                <xs:element name="doza" type="xs:int"/>
                 <xs:element name="ispostovan" type="xs:boolean"/>
             </xs:sequence>
             <xs:attribute name="about"/>

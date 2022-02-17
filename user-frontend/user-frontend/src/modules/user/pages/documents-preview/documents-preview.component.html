@@ -1,0 +1,129 @@
+<mat-card>
+  <mat-card-content style="text-align: left;">
+      <table *ngIf="interesovanjaList.length > 0" mat-table [dataSource]="interesovanjaList" class="mat-elevation-z8">
+      
+          <ng-container matColumnDef="dokument">
+              <th mat-header-cell *matHeaderCellDef> Dokument </th>
+              <td mat-cell *matCellDef="let element">Interesovanje</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="jmbg">
+              <th mat-header-cell *matHeaderCellDef> Jmbg pacijenta </th>
+              <td mat-cell *matCellDef="let element"> {{element.licni_podaci[0].jmbg[0]._}} </td>
+          </ng-container>
+      
+          <ng-container matColumnDef="datum">
+              <th mat-header-cell *matHeaderCellDef> Datum podnosenja
+              <td mat-cell *matCellDef="let element"> {{element.datum_podnosenja[0]._}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="prikaz">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element"><button mat-button color="primary" (click)="showInteresovanje(element)">Prikazi</button></td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content style="text-align: left;">
+      <table *ngIf="zahtevi.length > 0" mat-table [dataSource]="zahtevi" class="mat-elevation-z8">
+      
+        <ng-container matColumnDef="dokument">
+            <td mat-cell *matCellDef="let element">Zahtev za digitalni</td>
+        </ng-container>
+
+        <ng-container matColumnDef="jmbg">
+            <td mat-cell *matCellDef="let element"> {{element.podnosilac_zahteva[0].jmbg[0]._}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="datum">
+            <td mat-cell *matCellDef="let element"> {{element.datum_podnosenja_zahteva[0]._}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="prikaz">
+            <td mat-cell *matCellDef="let element"><button mat-button color="primary" (click)="showZahtev(element)">Prikazi</button></td>
+        </ng-container>
+    
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-content style="text-align: left;">
+    <table *ngIf="saglasnosti.length > 0" mat-table [dataSource]="saglasnosti" class="mat-elevation-z8">
+    
+      <ng-container matColumnDef="dokument">
+          <td mat-cell *matCellDef="let element">Saglasnost</td>
+      </ng-container>
+
+      <ng-container matColumnDef="jmbg">
+          <td mat-cell *matCellDef="let element"> {{element.podaci_koje_je_popunio_pacijent[0].licni_podaci[0].jmbg[0]._}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="datum">
+          <td mat-cell *matCellDef="let element"> {{element.podaci_koje_je_popunio_pacijent[0].datum[0]._}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="prikaz">
+          <td mat-cell *matCellDef="let element"><button mat-button color="primary" (click)="showSaglasnost(element)">Prikazi</button></td>
+      </ng-container>
+  
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-content style="text-align: left;">
+    <table *ngIf="potvrde.length > 0" mat-table [dataSource]="potvrde" class="mat-elevation-z8">
+    
+      <ng-container matColumnDef="dokument">
+          <td mat-cell *matCellDef="let element">Potvrda</td>
+      </ng-container>
+
+      <ng-container matColumnDef="jmbg">
+          <td mat-cell *matCellDef="let element"> {{element.licni_podaci[0].jmbg[0]._}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="datum">
+          <td mat-cell *matCellDef="let element"> {{element.datum_izdavanja_potvrde[0]._}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="prikaz">
+          <td mat-cell *matCellDef="let element"><button mat-button color="primary" (click)="showPotvrda(element)">Prikazi</button></td>
+      </ng-container>
+  
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-content style="text-align: left;">
+    <table *ngIf="digitalni.length > 0" mat-table [dataSource]="digitalni" class="mat-elevation-z8">
+    
+      <ng-container matColumnDef="dokument">
+          <td mat-cell *matCellDef="let element">Potvrda</td>
+      </ng-container>
+
+      <ng-container matColumnDef="jmbg">
+          <td mat-cell *matCellDef="let element"> {{element.licni_podaci[0].jmbg[0]._}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="datum">
+          <td mat-cell *matCellDef="let element"> {{element.podaci_o_sertifikatu[0].datum_vreme_izdavanja[0]._}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="prikaz">
+          <td mat-cell *matCellDef="let element"><button mat-button color="primary" (click)="showPotvrda(element)">Prikazi</button></td>
+      </ng-container>
+  
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-card-content>
+</mat-card>
+<div id="preview">
+
+</div>
