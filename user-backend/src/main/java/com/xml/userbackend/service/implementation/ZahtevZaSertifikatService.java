@@ -51,6 +51,8 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     private MetadataExtractor metadataExtractor;
     
     private HtmlTransformer htmlTransformer;
+    
+    private XSLFOTransformer xslfoTransformer;
 
     private JaxBParser jaxBParser;
     
@@ -60,7 +62,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
 
     @Autowired
 
-    public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser, HtmlTransformer htmlTransformer,
+    public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser, HtmlTransformer htmlTransformer, XSLFOTransformer xslfoTransformer,
                                      ExistDbManager existDbManager, MetadataExtractor metadataExtractor,
                                      EmailService emailService, IInteresovanjeService interesovanjeService) {
 
@@ -71,6 +73,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         this.emailService = emailService;
         this.interesovanjeService = interesovanjeService;
         this.jaxBParser = jaxBParser;
+        this.xslfoTransformer = xslfoTransformer;
 
 
     }
@@ -193,6 +196,12 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     public byte[] generateZahtevToXHTML(String id) throws Exception {
     	ZahtevZaIzdavanjeSertifikata zahtev = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(zahtev);
+    }
+    
+    @Override
+    public byte[] generateZahtevToPDF(String id) throws Exception {
+    	ZahtevZaIzdavanjeSertifikata zahtev = findById(id);
+    	return xslfoTransformer.generatePDFtoByteArray(zahtev);
     }
 
 

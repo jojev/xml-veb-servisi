@@ -27,4 +27,7 @@ public interface ISaglasnostService extends    IService<ObrazacZaSprovodjenjeImu
     ArrayList<ObrazacZaSprovodjenjeImunizacije> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
 
     String getByDopunjenDatuma(XMLGregorianCalendar calendar) throws IOException;
+
+
+	byte[] generateSaglasnostToPDF(String id) throws Exception;
 }

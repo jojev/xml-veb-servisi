@@ -4,6 +4,7 @@ import com.itextpdf.text.DocumentException;
 
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
+import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
@@ -49,6 +50,8 @@ public class HtmlTransformer {
         shemaLocationRegistry.put(ObrazacZaSprovodjenjeImunizacije.class, "./data/xslt/obrazac_za_sprovodjenje_imunizacije.xsl");
         shemaLocationRegistry.put(ZahtevZaIzdavanjeSertifikata.class, "./data/xslt/zahtev_za_izdavanje_sertifikata.xsl");
         shemaLocationRegistry.put(PotvrdaOVakcinaciji.class, "./data/xslt/potvrda_o_vakcinaciji.xsl");
+        shemaLocationRegistry.put(IzvestajOImunizaciji.class, "./data/xslt/izvestaj_o_imunizaciji.xsl");
+
     }
     
     public HtmlTransformer(){}

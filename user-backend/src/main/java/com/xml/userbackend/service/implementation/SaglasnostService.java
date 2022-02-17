@@ -20,6 +20,7 @@ import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.repository.BaseRepository;
 import main.java.com.xml.userbackend.service.contract.ISaglasnostService;
 import main.java.com.xml.userbackend.transformations.HtmlTransformer;
+import main.java.com.xml.userbackend.transformations.XSLFOTransformer;
 
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
@@ -47,18 +48,21 @@ public class SaglasnostService implements ISaglasnostService {
     private InteresovanjeService interesovanjeService;
 
     private HtmlTransformer htmlTransformer;
+    
+    private XSLFOTransformer xslfoTransformer;
 
     private JaxBParser jaxBParser;
 
     public SaglasnostService(ExistDbManager existDbManager,BaseRepository baseRepository, HtmlTransformer htmlTransformer, 
                              MetadataExtractor metadataExtractor, InteresovanjeService interesovanjeService,
-                             JaxBParser jaxBParser){
+                             JaxBParser jaxBParser, XSLFOTransformer xslfoTransformer){
         this.baseRepository = baseRepository;
         this.existDbManager = existDbManager;
         this.metadataExtractor = metadataExtractor;
         this.htmlTransformer = htmlTransformer;
         this.interesovanjeService = interesovanjeService;
         this.jaxBParser =  jaxBParser;
+        this.xslfoTransformer = xslfoTransformer;
     }
     @Override
     public List<ObrazacZaSprovodjenjeImunizacije> findAll() {
@@ -258,6 +262,12 @@ public class SaglasnostService implements ISaglasnostService {
     public byte[] generateSaglasnostToXHTML(String id) throws Exception {
     	ObrazacZaSprovodjenjeImunizacije saglasnost = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(saglasnost);
+    }
+        
+    @Override
+    public byte[] generateSaglasnostToPDF(String id) throws Exception {
+    	ObrazacZaSprovodjenjeImunizacije saglasnost = findById(id);
+    	return xslfoTransformer.generatePDFtoByteArray(saglasnost);
     }
         
 

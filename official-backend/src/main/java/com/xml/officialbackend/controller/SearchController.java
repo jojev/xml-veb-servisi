@@ -67,6 +67,7 @@ public class SearchController {
 
     @PostMapping(value = "/potvrda_o_vakcinaciji/search_jmbg")
     public ResponseEntity<?> searchPotvrdaByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
+    	System.out.println("EEEEEEEEEEEEEEEEEE " + searchDTO.getSearch());
         ArrayList<PotvrdaOVakcinaciji> potvrde = potvrdaOVakcinacijiService.findPotvrdeByJMBG(searchDTO.getSearch());
         PotvrdaOVakcinacijiList list = new PotvrdaOVakcinacijiList(potvrde);
         return new ResponseEntity<>(list, HttpStatus.OK);

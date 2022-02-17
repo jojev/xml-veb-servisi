@@ -80,8 +80,8 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     }
 
     @Override
-    public void response(RazlogDTO razlogDTO, ZahtevZaIzdavanjeSertifikata zahtev) throws Exception {
-        ObrazacZaSprovodjenjeImunizacije obrazac = obrazacService.findByJMBG(zahtev.getPodnosilacZahteva().getJmbg().getValue()).get(0);
+    public void response(RazlogDTO razlogDTO, ZahtevZaIzdavanjeSertifikata zahtev, String token) throws Exception {
+        ObrazacZaSprovodjenjeImunizacije obrazac = obrazacService.findByJMBG(token, zahtev.getPodnosilacZahteva().getJmbg().getValue()).get(0);
         ArrayList<PotvrdaOVakcinaciji> potvrde = potvrdaOVakcinacijiService.findPotvrdeByJMBG(zahtev.getPodnosilacZahteva().getJmbg().getValue());
         if (!razlogDTO.getOdobren()) {
             emailService.sendResponse(obrazac.getPodaciKojeJePopunioPacijent().getLicniPodaci().getImejl(), " ", " ", razlogDTO.getRazlog());

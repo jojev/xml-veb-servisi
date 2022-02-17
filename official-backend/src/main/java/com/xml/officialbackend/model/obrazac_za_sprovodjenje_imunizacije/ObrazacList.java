@@ -1,7 +1,5 @@
 package main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije;
 
-import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
-
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;

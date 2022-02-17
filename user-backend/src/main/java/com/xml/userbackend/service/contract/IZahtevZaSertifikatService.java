@@ -28,4 +28,6 @@ public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSe
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchByText(String search) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
 
+	byte[] generateZahtevToPDF(String id) throws Exception;
+
 }

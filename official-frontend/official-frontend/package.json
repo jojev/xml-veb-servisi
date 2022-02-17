@@ -22,10 +22,12 @@
     "@angular/router": "~13.1.0",
     "@auth0/angular-jwt": "^5.0.2",
     "@jsonforms/core": "^2.5.2",
+    "moment": "^2.29.1",
+    "momentjs": "^2.0.0",
     "ngx-toastr": "^14.2.1",
     "rxjs": "~7.4.0",
     "timers": "^0.1.1",
-    "tslib": "^2.3.0",
+    "tslib": "^2.3.1",
     "xml2js": "^0.4.23",
     "zone.js": "~0.11.4"
   },

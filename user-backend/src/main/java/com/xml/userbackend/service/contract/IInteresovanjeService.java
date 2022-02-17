@@ -36,5 +36,7 @@ public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisa
 
     int getNumberOfInterestedPatients(String startDate, String endDate) throws IOException;
 
+	byte[] generateIntersovanjeToPDF(String id) throws Exception;
+
 
 }

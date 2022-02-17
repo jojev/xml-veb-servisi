@@ -26,10 +26,12 @@ import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOI
 import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji.RaspodelaPoDozama.Doza;
 import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji.RaspodelaProizvodjaca;
 import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji.RaspodelaProizvodjaca.Vakcina;
+import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.rdf.FusekiWriter;
 import main.java.com.xml.officialbackend.rdf.MetadataExtractor;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.IIzvestajService;
+import main.java.com.xml.officialbackend.transformations.HtmlTransformer;
 
 @Service
 public class IzvestajService implements IIzvestajService{
@@ -41,14 +43,17 @@ public class IzvestajService implements IIzvestajService{
     private ExistDbManager existDbManager;
 
 	private TerminService terminService;
+   
+    private HtmlTransformer htmlTransformer;
 	
 	@Autowired
 	public IzvestajService(BaseRepository baseRepository, ExistDbManager existDbManager, MetadataExtractor metadataExctractor,
-			TerminService terminService) {
+			TerminService terminService, HtmlTransformer htmlTransformer) {
 		this.baseRepository = baseRepository;
 		this.metadataExctractor = metadataExctractor;
 		this.existDbManager = existDbManager;
 		this.terminService = terminService;
+		this.htmlTransformer = htmlTransformer;
 	}
 	
 	
@@ -138,8 +143,8 @@ public class IzvestajService implements IIzvestajService{
 		raspodelaProizvodjaca.getVakcina().addAll(vakcine);
 		izvestaj.setRaspodelaProizvodjaca(raspodelaProizvodjaca);
 		
-		create(izvestaj);
-		return izvestaj;
+		return create(izvestaj);
+		
 	}
 	
 	private List<Doza> findDosages(List<Resource> resource) throws Exception {
@@ -182,4 +187,11 @@ public class IzvestajService implements IIzvestajService{
 		
 		return totalVaccines;
 	}
+	
+	 @Override
+	    public byte[] generatePotvrdaToXHTML(String id) throws Exception {
+		 IzvestajOImunizaciji izvestaj = findById(id);
+	    	return htmlTransformer.generateHTMLtoByteArray(izvestaj);
+	    }
+
 }

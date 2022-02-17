@@ -18,6 +18,7 @@ public class PotvrdaOVakcinacijiController {
 
     @PostMapping("")
     private ResponseEntity<?> createPotvrdaOVakcinaciji(@RequestBody PotvrdaOVakcinaciji potvrdaOVakcinaciji) throws Exception {
+    	System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
         return new ResponseEntity<>(potvrdaOVakcinacijiService.create(potvrdaOVakcinaciji), HttpStatus.CREATED);
     }
 }

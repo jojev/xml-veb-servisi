@@ -166,6 +166,12 @@ public class InteresovanjeService implements IInteresovanjeService {
     	InteresovanjeZaVakcinisanje interesovanje = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(interesovanje);
     }
+    
+    @Override
+    public byte[] generateIntersovanjeToPDF(String id) throws Exception {
+    	InteresovanjeZaVakcinisanje interesovanje = findById(id);
+    	return xslfoTransformer.generatePDFtoByteArray(interesovanje);
+    }
 
     @Override
 

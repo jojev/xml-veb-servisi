@@ -5,6 +5,7 @@ import { InteresovanjeService } from 'src/modules/shared/services/interesovanje/
 import { PotvrdaService } from 'src/modules/shared/services/potvrda/potvrda.service';
 import { SaglasnostService } from 'src/modules/shared/services/saglasnost/saglasnost.service';
 import { ZahtevService } from 'src/modules/shared/services/zahtev-za-sertifikat/zahtev.service';
+import * as download from 'downloadjs';
 import * as x2js from 'xml2js';
 @Component({
   selector: 'app-documents-preview',
@@ -21,7 +22,7 @@ export class DocumentsPreviewComponent implements OnInit {
   domParser = new DOMParser();
   o2x = require('object-to-xml');
   searchDTO: any;
-  displayedColumns: string[] = ['dokument','jmbg', 'datum', "prikaz"];
+  displayedColumns: string[] = ['dokument','jmbg', 'datum', "prikaz", "html", "pdf"];
   constructor(
     private interesovanjeService: InteresovanjeService,
     private zahtevService: ZahtevService,
@@ -46,7 +47,9 @@ export class DocumentsPreviewComponent implements OnInit {
       (result) => {
         this.parser.parseString(result, function(err: any, res: any) {
           result = res;
-          _this.interesovanjaList = result.interesovanjeList.interesovanje_za_vakcinisanje;
+          if (result.interesovanjeList.interesovanje_za_vakcinisanje.length > 0) {
+            _this.interesovanjaList = result.interesovanjeList.interesovanje_za_vakcinisanje;
+          }
         })
       }
     ) 
@@ -57,7 +60,9 @@ export class DocumentsPreviewComponent implements OnInit {
       (result) => {
         this.parser.parseString(result, function(err: any, res: any) {
           result = res;
-          _this.zahtevi = result.zahtevList.zahtev_za_izdavanje_sertifikata;
+          if(result.zahtevList.zahtev_za_izdavanje_sertifikata.length > 0) {
+            _this.zahtevi = result.zahtevList.zahtev_za_izdavanje_sertifikata;
+          }
         })
       }
     ) 
@@ -70,8 +75,10 @@ export class DocumentsPreviewComponent implements OnInit {
         console.log(result);
         this.parser.parseString(result, function(err: any, res: any) {
           result = res;
-          _this.saglasnosti = result.obrazacList.obrazac_za_sprovodjenje_imunizacije;
-          console.log(_this.saglasnosti);
+          if(result.obrazacList.obrazac_za_sprovodjenje_imunizacije.length > 0) {
+            _this.saglasnosti = result.obrazacList.obrazac_za_sprovodjenje_imunizacije;
+            console.log(_this.saglasnosti); 
+          }
         })
       }
     ) 
@@ -83,8 +90,10 @@ export class DocumentsPreviewComponent implements OnInit {
         console.log(result);
         this.parser.parseString(result, function(err: any, res: any) {
           result = res;
-          _this.digitalni = result.digitalniSertifikatList.digitalni_zeleni_sertifikat;
-          console.log(_this.digitalni);
+          if(result.length > 0) {
+            _this.digitalni = result.digitalniSertifikatList.digitalni_zeleni_sertifikat;
+            console.log(_this.digitalni);
+          }
         })
       }
     ) 
@@ -96,7 +105,10 @@ export class DocumentsPreviewComponent implements OnInit {
         console.log(result);
         this.parser.parseString(result, function(err: any, res: any) {
           result = res;
-          _this.potvrde = result.potvrdaOVakcinacijiList.potvrda_o_vakcinaciji;
+          if(result.potvrdaOVakcinacijiList.potvrda_o_vakcinaciji.length > 0) {
+            _this.potvrde = result.potvrdaOVakcinacijiList.potvrda_o_vakcinaciji;
+          }
+          
         })
       }
     ) 
@@ -111,6 +123,7 @@ export class DocumentsPreviewComponent implements OnInit {
       (result) => {
         console.log(result);
         (document.getElementById("preview") as any).innerHTML = result;
+        download( result, "interesovanje.html", "text/plain" );
       }
     )
   }
@@ -124,6 +137,7 @@ export class DocumentsPreviewComponent implements OnInit {
       (result) => {
         console.log(result);
         (document.getElementById("preview") as any).innerHTML = result;
+        download( result, "zahtev.html", "text/plain" );
       }
     )
   }
@@ -136,6 +150,7 @@ export class DocumentsPreviewComponent implements OnInit {
       (result) => {
         console.log(result);
         (document.getElementById("preview") as any).innerHTML = result;
+        download( result, "saglasnost.html", "text/plain" );
       }
     )
   }
@@ -148,6 +163,7 @@ export class DocumentsPreviewComponent implements OnInit {
       (result) => {
         console.log(result);
         (document.getElementById("preview") as any).innerHTML = result;
+        download( result, "potvrda.html", "text/plain" );
       }
     )
   }
@@ -160,6 +176,64 @@ export class DocumentsPreviewComponent implements OnInit {
       (result) => {
         console.log(result);
         (document.getElementById("preview") as any).innerHTML = result;
+        download( result, "digitalni.html", "text/plain" );
+      }
+    )
+  }
+
+  pdfInteresovanje(element: any) {
+    let tokens : string[] = element.$.about.toString().split("/");
+    let documentId = tokens[tokens.length-1];
+    console.log(documentId);
+    const searchDTO = { searchdto: {search: documentId}};
+    this.interesovanjeService.getPdfTransformation(searchDTO).subscribe(
+      (result) => {
+        download( result, "interesovanje.pdf", "application/pdf" );
+      }
+    )
+  }
+
+  pdfZahtev(element: any): void {
+    let tokens : string[] = element.$.about.toString().split("/");
+    let documentId = tokens[tokens.length-1];
+    console.log(documentId);
+    const searchDTO = { searchdto: {search: documentId}};
+    this.zahtevService.getPdfTransformation(searchDTO).subscribe(
+      (result) => {
+        download( result, "zahtev.pdf", "text/plain" );
+      }
+    )
+  }
+  pdfSaglasnost(element: any): void {
+    let tokens : string[] = element.$.about.toString().split("/");
+    let documentId = tokens[tokens.length-1];
+    console.log(documentId);
+    const searchDTO = { searchdto: {search: documentId}};
+    this.saglasnostService.getPdfTransformation(searchDTO).subscribe(
+      (result) => {
+        download( result, "saglasnost.pdf", "text/plain" );
+      }
+    )
+  }
+  pdfPotvrda(element: any): void {
+    let tokens : string[] = element.$.about.toString().split("/");
+    let documentId = tokens[tokens.length-1];
+    console.log(documentId);
+    const searchDTO = { searchdto: {search: documentId}};
+    this.potvrdaService.getPdfTransformation(searchDTO).subscribe(
+      (result) => {
+        download( result, "potvrda.pdf", "text/plain" );
+      }
+    )
+  }
+  pdfDigitalni(element: any): void {
+    let tokens : string[] = element.$.about.toString().split("/");
+    let documentId = tokens[tokens.length-1];
+    console.log(documentId);
+    const searchDTO = { searchdto: {search: documentId}};
+    this.digitalniService.getPdfTransformation(searchDTO).subscribe(
+      (result) => {
+        download( result, "digitalni.pdf", "text/plain" );
       }
     )
   }

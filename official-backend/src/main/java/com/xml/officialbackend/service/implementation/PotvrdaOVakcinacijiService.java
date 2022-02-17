@@ -31,6 +31,7 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.checkerframework.checker.units.qual.A;
 import main.java.com.xml.officialbackend.service.contract.ITerminService;
 import main.java.com.xml.officialbackend.transformations.HtmlTransformer;
+import main.java.com.xml.officialbackend.transformations.XSLFOTransformer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,6 +77,9 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     @Autowired
     private HtmlTransformer htmlTransformer;
     
+    @Autowired
+    private XSLFOTransformer xslfoTransformer;
+    
     @Override
     public List<PotvrdaOVakcinaciji> findAll() {
         return null;
@@ -100,15 +104,14 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
         entity.getOtherAttributes().put(QName.valueOf("xmlns:pred"), "http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/");
         entity.getOtherAttributes().put(QName.valueOf("xmlns:xs"), "http://www.w3.org/2001/XMLSchema#");
         baseRepository.save("/db/potvrda_o_vakcinaciji", potvrdaOVakcinicijiId, entity, PotvrdaOVakcinaciji.class);
-
         XMLResource resource = existDbManager.load("/db/potvrda_o_vakcinaciji", potvrdaOVakcinicijiId);
         byte[] out =  metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "potvrda_o_vakcinaciji");
 
         int numberOfVaccine = entity.getPodaciOVakcinaciji().getDoze().getDoza().size();
 
-        terminService.addTerminOrAddToListaCekanja(entity.getPodaciOVakcinaciji().getNazivVakcine().trim(), numberOfVaccine + 1,
-                entity.getLicniPodaci().getJmbg().getValue(), entity.getPodaciOVakcinaciji().getDoze().getDoza().get(numberOfVaccine - 1).getDatumDavanja());
+       // terminService.addTerminOrAddToListaCekanja(entity.getPodaciOVakcinaciji().getNazivVakcine().trim(), numberOfVaccine + 1,
+       //         entity.getLicniPodaci().getJmbg().getValue(), entity.getPodaciOVakcinaciji().getDoze().getDoza().get(numberOfVaccine - 1).getDatumDavanja());
 
         return entity;
     }
@@ -176,6 +179,12 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     public byte[] generatePotvrdaToXHTML(String id) throws Exception {
     	PotvrdaOVakcinaciji potvrda = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(potvrda);
+    }
+
+    @Override
+    public byte[] generatePotvrdaToPDF(String id) throws Exception {
+    	PotvrdaOVakcinaciji potvrda = findById(id);
+    	return xslfoTransformer.generatePDFtoByteArray(potvrda);
     }
 
 

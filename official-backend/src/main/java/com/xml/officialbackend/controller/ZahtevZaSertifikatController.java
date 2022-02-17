@@ -33,7 +33,7 @@ public class ZahtevZaSertifikatController {
                 restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/{documentId}",
                         HttpMethod.GET,  httpEntity,ZahtevZaIzdavanjeSertifikata.class, razlogDTO.getZahtev());
         System.out.println(responseEntity.getBody().getAbout());
-        zahtevZaSertifikatService.response(razlogDTO, responseEntity.getBody());
+        zahtevZaSertifikatService.response(razlogDTO, responseEntity.getBody(), accessToken);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

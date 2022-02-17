@@ -13,13 +13,14 @@ import javax.xml.bind.JAXBException;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface IObrazacZaSprovodjenjeImunizacijeService extends IService<ObrazacZaSprovodjenjeImunizacije>{
 
     ObrazacZaSprovodjenjeImunizacije update(String jmbg,
                                             PodaciKojeJePopunioZdravstveniRadnik podaci) throws Exception;
   
-    ArrayList<ObrazacZaSprovodjenjeImunizacije> findByJMBG(String jmbg) throws Exception;
+    List<ObrazacZaSprovodjenjeImunizacije> findByJMBG(String token, String jmbg) throws Exception;
 
 
 
