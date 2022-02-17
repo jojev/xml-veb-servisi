@@ -19,6 +19,7 @@
                         </xs:simpleContent>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="odgovor" type="xs:string"/>
                 <xs:element minOccurs="0" name="potvrde_ref">
                     <xs:complexType>
                         <xs:sequence>

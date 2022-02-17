@@ -57,4 +57,10 @@ public class SaglasnostController {
         return new ResponseEntity<>(list, HttpStatus.OK);
 
     }
+
+    @PostMapping("/find_one_jmbg")
+    public ResponseEntity<?> findByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
+        ObrazacZaSprovodjenjeImunizacije obrazac = saglasnostService.searchByJMBG(searchDTO).get(0);
+        return new ResponseEntity<>(obrazac, HttpStatus.OK);
+    }
 }

@@ -32,6 +32,16 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: "zahtev",
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("./../zahtev/zahtev.module").then((m) => m.ZahtevModule),
+      },
+    ],
+  },
 ];
 
 @NgModule({

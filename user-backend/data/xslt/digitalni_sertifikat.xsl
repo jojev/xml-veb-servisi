@@ -348,7 +348,12 @@
                                 електронску управу
                                 Немањина 11, БЕОГРАД
                                 Датум:
-                                <xsl:value-of select="b:digitalni_zeleni_sertifikat/b:podaci_o_sertifikatu/b:datum"/>
+                                <xsl:variable name="datetime"
+                                              select="b:digitalni_zeleni_sertifikat/b:podaci_o_sertifikatu/b:datum"/>
+                                <xsl:variable name="date"
+                                              select="substring-before($datetime, '+')"/>
+                                <xsl:value-of
+                                        select="$date"/>
                             </p>
                         </div>
                     </div>

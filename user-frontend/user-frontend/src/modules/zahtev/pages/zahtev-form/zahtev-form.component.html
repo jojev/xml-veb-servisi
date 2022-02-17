@@ -1,0 +1,42 @@
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <h2>Zahtev za izdavanje digitalnog zelenog sertifikata</h2>
+            <mat-form-field>
+                <input matInput placeholder="Ime" formControlName="ime" required />
+                <mat-error *ngIf="!form.valid">Ime je <strong>obavezno</strong></mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Prezime" formControlName="prezime" required />
+                <mat-error *ngIf="!form.valid">Prezime je <strong>obavezno</strong></mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Datum rođenja" formControlName="datum" required />
+                <mat-error *ngIf="!form.valid">Datum rođenja je <strong>obavezan</strong></mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="select">
+                <mat-label>Pol</mat-label>
+                <mat-select required formControlName="pol">
+                    <mat-option *ngFor="let option of options" [value]="option.value">
+                        {{option.value}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Jmbg" formControlName="jmbg" required />
+                <mat-error *ngIf="!form.valid">Jmbg je <strong>obavezan</strong></mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Broj pasoša" formControlName="brPasosa" required />
+                <mat-error *ngIf="!form.valid">Broj pasoša je <strong>obavezan</strong></mat-error>
+            </mat-form-field>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <textarea matInput placeholder="Razlog za podnošenje zahteva" formControlName="razlog"
+                    required></textarea>
+            </mat-form-field>
+            <button class="b" mat-raised-button color="primary" [disabled]="!form.valid">
+                Kreiraj
+            </button>
+        </form>
+    </mat-card-content>
+</mat-card>
