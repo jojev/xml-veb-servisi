@@ -15,37 +15,37 @@ export class InteresovanjeFormComponent implements OnInit {
   form: FormGroup;
   parser = new x2js.Parser();
   options: any[] = [
-    {value:'Drzavljanin Republike Srbije', viewValue: 'Državljanin Republike Srbije'},
-    {value: 'Strani drzavljanin sa boravkom u RS', viewValue: 'Strani državljanin sa boravkom u RS'},
-    {value:'Strani drzavljanin bez boravka u RS',viewValue:'Strani državljanin bez boravka u RS'},
+    { value: 'Drzavljanin Republike Srbije', viewValue: 'Državljanin Republike Srbije' },
+    { value: 'Strani drzavljanin sa boravkom u RS', viewValue: 'Strani državljanin sa boravkom u RS' },
+    { value: 'Strani drzavljanin bez boravka u RS', viewValue: 'Strani državljanin bez boravka u RS' },
   ];
   vaccines: any[] = [
-    {value: 'Pfizer-BioNtech'},
-    {value: 'Sputnik V'},
-    {value: 'Sinopharm'},
-    {value: 'AstraZeneca'},
-    {value: 'Moderna'},
-    {value: 'Bilo koja'},
+    { value: 'Pfizer-BioNtech' },
+    { value: 'Sputnik V' },
+    { value: 'Sinopharm' },
+    { value: 'AstraZeneca' },
+    { value: 'Moderna' },
+    { value: 'Bilo koja' },
   ];
   yesNo: any[] = [
-    {value: 'Da'},
-    {value: 'Ne'},
+    { value: 'Da' },
+    { value: 'Ne' },
 
   ];
   opstine: any[] = [
-    {value: 'Novi Sad'},
-    {value: 'Petrovaradin'},
-    {value: 'Temerin'},
-    {value: 'Titel'},
-    {value: 'Irig'},
-    {value: 'Inđija'},
-    {value: 'Ruma'},
-    {value: 'Sremska Mitrovica'},
-    {value: 'Zrenjanin'},
-    {value: 'Kikinda'},
+    { value: 'Novi Sad' },
+    { value: 'Petrovaradin' },
+    { value: 'Temerin' },
+    { value: 'Titel' },
+    { value: 'Irig' },
+    { value: 'Inđija' },
+    { value: 'Ruma' },
+    { value: 'Sremska Mitrovica' },
+    { value: 'Zrenjanin' },
+    { value: 'Kikinda' },
   ];
 
-  constructor(private notificationService: NotificationService, private interesovanjeService:InteresovanjeService) { 
+  constructor(private notificationService: NotificationService, private interesovanjeService: InteresovanjeService) {
     this.form = new FormGroup({
       jmbg: new FormControl('', [Validators.required, Validators.pattern('[0-9 ]{13}')]),
       ime: new FormControl('', [Validators.required]),
@@ -57,17 +57,18 @@ export class InteresovanjeFormComponent implements OnInit {
       vakcina: new FormControl('', [Validators.required]),
       davalac: new FormControl('', [Validators.required]),
       opstina: new FormControl('', [Validators.required]),
-      
-    });}
+
+    });
+  }
 
   ngOnInit(): void {
   }
 
   submit(): void {
-    var obj = { 
-      interesovanje_za_vakcinisanje : {
+    var obj = {
+      interesovanje_za_vakcinisanje: {
         '#': {
-          licni_podaci:   {
+          licni_podaci: {
             jmbg: this.form.get('jmbg')?.value,
             drzavljanstvo: this.form.get('opcija')?.value,
             ime: this.form.get('ime')?.value,
@@ -87,12 +88,12 @@ export class InteresovanjeFormComponent implements OnInit {
     };
     this.interesovanjeService.create(obj).subscribe(
       (result) => {
-        this.parser.parseString(result, function(err: any,res: any){
+        this.parser.parseString(result, function (err: any, res: any) {
         });
         this.notificationService.success("Uspešno kreirano interesovanje.")
       },
       (error) => {
-        if(error.status === 400) {
+        if (error.status === 400) {
           this.notificationService.error('Pogrešni podaci')
         }
         else {

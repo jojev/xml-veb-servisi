@@ -19,6 +19,7 @@
                         </xs:simpleContent>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="odgovor" type="xs:string"/>
             </xs:sequence>
             <xs:attribute name="about"/>
             <xs:attribute name="typeof"/>

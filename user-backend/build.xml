@@ -39,16 +39,6 @@
         <xjc schema="${data.dir}/digitalni_sertifikat.xsd" destdir="${gen.dir}"/>
     </target>
 
-    <target name="generate_classes_2" depends="init"> 
-        <xjc schema="${data.dir}/interesovanje.xsd" destdir="${gen.dir}"/>
-    </target>
-
-    <target name="generate_classes_3" depends="init">
-        <xjc schema="${data.dir}/izvestaj_o_imunizaciji.xsd" destdir="${gen.dir}"/>
-    </target>
-
-    </target>
-
     <target name="generate_classes_2" depends="init">
         <xjc schema="${data.dir}/interesovanje.xsd" destdir="${gen.dir}"/>
     </target>
