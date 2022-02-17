@@ -1,6 +1,7 @@
 package main.java.com.xml.userbackend.service.implementation;
 
 
+import main.java.com.xml.userbackend.exception.BadLogicException;
 import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
@@ -81,10 +82,16 @@ public class SaglasnostService implements ISaglasnostService {
             }
         }
         RDFNode rdfNode = interesovanjeService.getInteresovanje(entity.getPodaciKojeJePopunioPacijent().getLicniPodaci().getJmbg().getValue());
+
+        if(rdfNode == null) {
+            throw new BadLogicException("Prvo morate podneti interesovanje.");
+        }
+
         entity.setInteresovanjeRef(new ObrazacZaSprovodjenjeImunizacije.InteresovanjeRef());
         entity.getInteresovanjeRef().setProperty("pred:Referencira");
         entity.getInteresovanjeRef().setDatatype("xs:string");
-        entity.getInteresovanjeRef().setValue(rdfNode.toString());
+        String[] documentUri = rdfNode.toString().split("/");
+        entity.getInteresovanjeRef().setValue(documentUri[documentUri.length - 1]);
         baseRepository.save("/db/saglasnost", userId, entity, ObrazacZaSprovodjenjeImunizacije.class);
         XMLResource resource = existDbManager.load("/db/saglasnost", userId);
         byte[] out =  metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
@@ -140,22 +147,6 @@ public class SaglasnostService implements ISaglasnostService {
     }
 
     @Override
-    public String getByDopunjenDatuma(XMLGregorianCalendar calendar) throws IOException {
-        String sparqlCondition = "?person <http://www.ftn.uns.ac.rs/rdf/saglasnost/predicate/DopunjenDatuma> \"" + calendar + "\" .";
-        ArrayList<RDFNode> nodes = new ArrayList<>();
-        List<String> columnNames = new ArrayList<>();
-        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/obrazac_za_sprovodjenje_imunizacije", sparqlCondition)) {
-            columnNames = result.getResult().getResultVars();
-            while (result.getResult().hasNext()) {
-                QuerySolution row = result.getResult().nextSolution();
-                String columnName = columnNames.get(0);
-                nodes.add(row.get(columnName));
-            }
-        }
-        return columnNames.size() > 0 ? columnNames.get(0) : null;
-    }
-
-
     public RDFNode getSaglasnostIdFromJMBG(String jmbg) throws IOException {
         String sparqlCondition = "?person <http://www.ftn.uns.ac.rs/rdf/saglasnosti/predicate/Kreirao> \"" + jmbg + "\" .";
         try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition);) {

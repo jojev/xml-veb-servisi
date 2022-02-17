@@ -32,8 +32,9 @@ public class SaglasnostController {
         return new ResponseEntity<>(saglasnostService.update(jmbg, podaciKojeJePopunioZdravstveniRadnik), HttpStatus.OK);
     }
 
-    @GetMapping("/by-dopunjen-datuma/{date}")
-    public ResponseEntity<?> getByDopunjenDatuma(@PathVariable XMLGregorianCalendar calendar) throws IOException {
-        return new ResponseEntity<>(saglasnostService.getByDopunjenDatuma(calendar), HttpStatus.OK);
+    @GetMapping("/by-jmbg/{jmbg}")
+    public ResponseEntity<?> getByJmbg(@PathVariable String jmbg) throws IOException {
+       String[] documentUri = saglasnostService.getSaglasnostIdFromJMBG(jmbg).toString().split("/");
+        return new ResponseEntity<>(documentUri[documentUri.length - 1], HttpStatus.OK);
     }
 }

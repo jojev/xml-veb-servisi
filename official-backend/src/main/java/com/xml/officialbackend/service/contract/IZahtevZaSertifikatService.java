@@ -5,5 +5,5 @@ import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzda
 
 public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSertifikata>{
 
-    void response(RazlogDTO razlogDTO, ZahtevZaIzdavanjeSertifikata zahtev) throws Exception;
+    void response(RazlogDTO razlogDTO, ZahtevZaIzdavanjeSertifikata zahtev, String accessToken) throws Exception;
 }

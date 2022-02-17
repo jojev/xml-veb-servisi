@@ -1,12 +1,14 @@
-package main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji;
+package main.java.com.xml.userbackend.model.potvrda_o_vakcinaciji;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso(PotvrdaOVakcinaciji.class)
 public class PotvrdaOVakcinacijiList {
+    @XmlElement(name="ListOfEntityObjects")
     private List<PotvrdaOVakcinaciji> listOfEntityObjects;
 
     public PotvrdaOVakcinacijiList() {

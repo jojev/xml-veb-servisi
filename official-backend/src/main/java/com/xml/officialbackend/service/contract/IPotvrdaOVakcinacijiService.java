@@ -19,4 +19,6 @@ public interface IPotvrdaOVakcinacijiService extends IService<PotvrdaOVakcinacij
 
     ArrayList<PotvrdaOVakcinaciji> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
 
+    PotvrdaOVakcinaciji create(PotvrdaOVakcinaciji entity, String accessToken) throws Exception;
+
 }
