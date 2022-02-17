@@ -10,11 +10,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { ResponseModalComponent } from './components/response-modal/response-modal.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
   declarations: [
-    ZahtevTableComponent
+    ZahtevTableComponent,
+    ResponseModalComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +29,9 @@ import { MatTableModule } from '@angular/material/table';
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
-    MatTableModule
+    MatTableModule,
+    MatButtonModule,
+    MatDialogModule
   ]
 })
 export class ZahtevModule { }

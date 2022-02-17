@@ -1,0 +1,12 @@
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+        <input matInput placeholder="Razlog odbijanja" formControlName="razlog" required>
+        <mat-error *ngIf="!form.valid"><strong>Obavezno</strong></mat-error>
+    </mat-form-field>
+
+</mat-dialog-content>
+
+<div mat-dialog-actions>
+    <button class="mat-raised-button" (click)="closeDialog()">Odustani</button>
+    <button class="mat-raised-button mat-primary" (click)="save()" [disabled]="!form.valid">Pošalji odgovor</button>
+</div>
