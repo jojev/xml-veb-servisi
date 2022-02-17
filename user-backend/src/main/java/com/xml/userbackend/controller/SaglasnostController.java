@@ -38,7 +38,7 @@ public class SaglasnostController {
 
     @PostMapping("/search_by_jmbg")
     public ResponseEntity<?> searchByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
-        ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazac = saglasnostService.searchByJMBG(searchDTO.getSearch());
+        ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazac = saglasnostService.searchByJMBG(searchDTO);
         ObrazacList list = new ObrazacList(obrazac);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
