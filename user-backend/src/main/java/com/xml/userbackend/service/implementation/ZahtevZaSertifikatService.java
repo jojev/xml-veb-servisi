@@ -71,10 +71,6 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     private RestTemplate restTemplate;
 
     @Autowired
-    public ZahtevZaSertifikatService(BaseRepository baseRepository, ExistDbManager existDbManager,
-                                     MetadataExtractor metadataExtractor,JaxBParser jaxBParser, RestTemplate restTemplate) {
-
-
     public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser, HtmlTransformer htmlTransformer,
                                      ExistDbManager existDbManager, MetadataExtractor metadataExtractor,
                                      EmailService emailService, IInteresovanjeService interesovanjeService, RestTemplate restTemplate) {

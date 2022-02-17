@@ -21,6 +21,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.jena.query.ResultSetFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.xmldb.api.modules.XMLResource;
 
 import javax.xml.transform.TransformerException;
 import java.io.ByteArrayInputStream;
@@ -69,7 +70,7 @@ public class Test {
         DigitalniZeleniSertifikat k = jaxBParser.unmarshall(resource, DigitalniZeleniSertifikat.class);
 
 
-        zeleniService.create(k,"2412998125026", "filipovic.dada@gmail.com");
+//        zeleniService.create(k,"2412998125026", "filipovic.dada@gmail.com");
     }
     public void testWriteToRdf() throws IOException, TransformerException {
         byte[] out =  metadataExtractor.extractMetadata("data/documents/obrazac_za_sprovodjenje_imunizacije.xml");
