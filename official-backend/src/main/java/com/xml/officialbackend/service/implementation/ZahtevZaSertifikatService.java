@@ -3,7 +3,6 @@ package main.java.com.xml.officialbackend.service.implementation;
 import main.java.com.xml.officialbackend.dto.RazlogDTO;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
-import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
@@ -80,13 +79,13 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     }
 
     @Override
-    public void response(RazlogDTO razlogDTO, ZahtevZaIzdavanjeSertifikata zahtev) throws Exception {
+    public void response(RazlogDTO razlogDTO, ZahtevZaIzdavanjeSertifikata zahtev, String accesToken) throws Exception {
         ObrazacZaSprovodjenjeImunizacije obrazac = obrazacService.findByJMBG(zahtev.getPodnosilacZahteva().getJmbg().getValue()).get(0);
         ArrayList<PotvrdaOVakcinaciji> potvrde = potvrdaOVakcinacijiService.findPotvrdeByJMBG(zahtev.getPodnosilacZahteva().getJmbg().getValue());
         if (!razlogDTO.getOdobren()) {
             emailService.sendResponse(obrazac.getPodaciKojeJePopunioPacijent().getLicniPodaci().getImejl(), " ", " ", razlogDTO.getRazlog());
         } else {
-            digitalniSertifikatService.send(zahtev, obrazac, potvrde);
+            digitalniSertifikatService.send(zahtev, obrazac, potvrde, accesToken);
 
         }
     }

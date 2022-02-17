@@ -5,7 +5,6 @@ import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
-
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
@@ -33,7 +32,9 @@ import main.java.com.xml.officialbackend.service.contract.ITerminService;
 import main.java.com.xml.officialbackend.transformations.HtmlTransformer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.XMLDBException;
@@ -48,7 +49,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -71,6 +74,9 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     private JaxBParser jaxBParser;
 
     @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
     private IListaCekanjaService listaCekanjaService;
 
     @Autowired
@@ -88,17 +94,36 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
 
     @Override
     public PotvrdaOVakcinaciji create(PotvrdaOVakcinaciji entity) throws Exception {
+        return null;
+    }
+
+    @Override
+    public PotvrdaOVakcinaciji create(PotvrdaOVakcinaciji entity, String accessToken) throws Exception {
         String potvrdaOVakcinicijiId = UUID.randomUUID().toString();
         entity.setAbout("http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/" + potvrdaOVakcinicijiId);
         entity.setTypeof("pred:IdentifikatorDokumenta");
         entity.getLicniPodaci().getJmbg().setProperty("pred:KreiranZa");
         entity.getLicniPodaci().getJmbg().setDatatype("xs:string");
         entity.getDatumIzdavanjaPotvrde().setProperty("pred:Izdat");
-        entity.getDatumIzdavanjaPotvrde().setDatatype("xs:date");
+        entity.getDatumIzdavanjaPotvrde().setDatatype("xs:string");
         entity.getQrKod().setProperty("pred:Linkuje");
         entity.getQrKod().setDatatype("xs:string");
         entity.getOtherAttributes().put(QName.valueOf("xmlns:pred"), "http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/");
         entity.getOtherAttributes().put(QName.valueOf("xmlns:xs"), "http://www.w3.org/2001/XMLSchema#");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", accessToken);
+        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8080/api/v1/saglasnost/by-jmbg/" +
+                                entity.getLicniPodaci().getJmbg().getValue(), HttpMethod.GET, httpEntity, String.class);
+
+        String node = response.getBody();
+
+        entity.setSaglasnostRef(new PotvrdaOVakcinaciji.SaglasnostRef());
+        entity.getSaglasnostRef().setProperty("pred:Referencira");
+        entity.getSaglasnostRef().setDatatype("xs:string");
+        entity.getSaglasnostRef().setValue(node);
+
         baseRepository.save("/db/potvrda_o_vakcinaciji", potvrdaOVakcinicijiId, entity, PotvrdaOVakcinaciji.class);
 
         XMLResource resource = existDbManager.load("/db/potvrda_o_vakcinaciji", potvrdaOVakcinicijiId);
@@ -125,23 +150,23 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
 
 
     
-    public int getNumberOfVaccinated(LocalDate startDate, LocalDate endDate) throws IOException {
-    	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/Izdat> ?date. "
+   public int getNumberOfVaccinated(LocalDate startDate, LocalDate endDate) throws IOException {
+   	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/Izdat> ?date. "
 				+ "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>)." ;
 
-        try(RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/potvrdaOVakcinaciji", sparqlCondition);) {
-            List<String> columnNames = result.getResult().getResultVars();
-            
-            if(result.getResult().hasNext()) {
-                QuerySolution row = result.getResult().nextSolution();
-                String columnName = columnNames.get(0);
-                RDFNode rdfNode = row.get(columnName);
-                System.out.println(rdfNode.asLiteral().getInt());
-                return rdfNode.asLiteral().getInt();
-            }
-        }
+       try(RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/potvrdaOVakcinaciji", sparqlCondition);) {
+           List<String> columnNames = result.getResult().getResultVars();
+
+           if(result.getResult().hasNext()) {
+               QuerySolution row = result.getResult().nextSolution();
+               String columnName = columnNames.get(0);
+               RDFNode rdfNode = row.get(columnName);
+               System.out.println(rdfNode.asLiteral().getInt());
+               return rdfNode.asLiteral().getInt();
+           }
+       }
 		return 0;
-    }
+   }
     
     public ArrayList<RDFNode> searchRDF(String jmbg) throws IOException {
 

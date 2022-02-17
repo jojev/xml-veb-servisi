@@ -5,7 +5,12 @@ import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.userbackend.dto.SearchDTO;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
+
+import main.java.com.xml.userbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
+import main.java.com.xml.userbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinacijiList;
+
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
+
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
@@ -23,7 +28,11 @@ import main.java.com.xml.userbackend.transformations.XSLFOTransformer;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.XMLDBException;
@@ -38,6 +47,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,11 +68,13 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     
     private IInteresovanjeService interesovanjeService;
 
-    @Autowired
+    private RestTemplate restTemplate;
 
+    @Autowired
     public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser, HtmlTransformer htmlTransformer,
                                      ExistDbManager existDbManager, MetadataExtractor metadataExtractor,
-                                     EmailService emailService, IInteresovanjeService interesovanjeService) {
+                                     EmailService emailService, IInteresovanjeService interesovanjeService, RestTemplate restTemplate) {
+
 
         this.baseRepository = baseRepository;
         this.existDbManager = existDbManager;
@@ -71,6 +83,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         this.emailService = emailService;
         this.interesovanjeService = interesovanjeService;
         this.jaxBParser = jaxBParser;
+        this.restTemplate = restTemplate;
 
 
     }
@@ -86,6 +99,11 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     }
 
     @Override
+    public ZahtevZaIzdavanjeSertifikata create(ZahtevZaIzdavanjeSertifikata entity) throws Exception {
+        return null;
+    }
+
+    @Override
     public ZahtevZaIzdavanjeSertifikata update(ZahtevZaIzdavanjeSertifikata entity, String id) throws Exception {
         return null;
     }
@@ -96,7 +114,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     }
 
     @Override
-    public ZahtevZaIzdavanjeSertifikata create(ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata) throws Exception {
+    public ZahtevZaIzdavanjeSertifikata create(ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata, String accessToken) throws Exception {
         String documentId = UUID.randomUUID().toString();
         zahtevZaIzdavanjeSertifikata.setAbout("http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/" + documentId);
         zahtevZaIzdavanjeSertifikata.setTypeof("pred:IdentifikatorDokumenta");
@@ -218,4 +236,23 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         return new String(encoded, encoding);
     }
 
+
+    @Override
+    public String getByJmbg(String jmbg) throws IOException {
+        String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/PodneoJmbg> \"" + jmbg + "\" ;";
+
+        String lastZahtev = "";
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/zahtev_za_sertifikat", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            if (!result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                lastZahtev = row.get(columnName).toString();
+            }
+
+        }
+        String[] documentUri = lastZahtev.split("/");
+        return documentUri[documentUri.length - 1];
+    }
 }

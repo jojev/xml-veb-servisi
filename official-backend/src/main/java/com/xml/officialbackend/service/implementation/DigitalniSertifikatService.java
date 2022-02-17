@@ -2,6 +2,7 @@ package main.java.com.xml.officialbackend.service.implementation;
 
 import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.officialbackend.dto.SearchDTO;
+import main.java.com.xml.officialbackend.exception.BadLogicException;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.*;
@@ -20,7 +21,12 @@ import main.java.com.xml.officialbackend.transformations.XSLFOTransformer;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.XMLDBException;
@@ -57,6 +63,9 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
 
     private HtmlTransformer htmlTransformer;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
 
     @Autowired
     public DigitalniSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser,
@@ -88,7 +97,24 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     }
 
     @Override
-    public DigitalniZeleniSertifikat create(DigitalniZeleniSertifikat digitalniZeleniSertifikat, String documentId, String email) throws Exception {
+    public DigitalniZeleniSertifikat create(DigitalniZeleniSertifikat digitalniZeleniSertifikat, String documentId, String email, String accessToken) throws Exception {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", accessToken);
+        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/by-jmbg/" +
+                digitalniZeleniSertifikat.getLicniPodaci().getJmbg().getValue(), HttpMethod.GET, httpEntity, String.class);
+
+        String zahtevId = response.getBody();
+
+        if (zahtevId == "") {
+            throw new BadLogicException("Da bi se kreirao digitalni sertifikat korisnik mora da podnese zahtev.");
+        }
+
+        digitalniZeleniSertifikat.setZahtevZaSertifikatRef(new DigitalniZeleniSertifikat.ZahtevZaSertifikatRef());
+        digitalniZeleniSertifikat.getZahtevZaSertifikatRef().setProperty("pred:Referencira");
+        digitalniZeleniSertifikat.getZahtevZaSertifikatRef().setDatatype("xs:string");
+        digitalniZeleniSertifikat.getZahtevZaSertifikatRef().setValue(zahtevId);
 
         baseRepository.save("db/digitalni_sertifikat", documentId, digitalniZeleniSertifikat, DigitalniZeleniSertifikat.class);
         OutputStream outputStream = jaxBParser.marshall(digitalniZeleniSertifikat, DigitalniZeleniSertifikat.class);
@@ -241,7 +267,7 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     }
 
     @Override
-    public void send(ZahtevZaIzdavanjeSertifikata zahtev, ObrazacZaSprovodjenjeImunizacije obrazac, ArrayList<PotvrdaOVakcinaciji> potvrde) throws Exception {
+    public void send(ZahtevZaIzdavanjeSertifikata zahtev, ObrazacZaSprovodjenjeImunizacije obrazac, ArrayList<PotvrdaOVakcinaciji> potvrde, String accesToken) throws Exception {
         String u = UUID.randomUUID().toString();
 
         String lUUID = String.format("%040d", new BigInteger(UUID.randomUUID().toString().replace("-", ""), 16));
@@ -250,7 +276,6 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
         digitalniZeleniSertifikat.setAbout("http://www.ftn.uns.ac.rs/rdf/digitalni_sertifikat/" + u);
         digitalniZeleniSertifikat.setTypeof("pred:IdentifikatorDokumenta");
 
-        digitalniZeleniSertifikat.setReferencira(zahtev.getAbout());
 
         digitalniZeleniSertifikat.getOtherAttributes().put(QName.valueOf("xmlns:pred"), "http://www.ftn.uns.ac.rs/rdf/digitalni_sertifikat/predicate/");
         digitalniZeleniSertifikat.getOtherAttributes().put(QName.valueOf("xmlns:xs"), "http://www.w3.org/2001/XMLSchema#");
@@ -327,7 +352,7 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
         DigitalniZeleniSertifikat.Testovi testovi = new DigitalniZeleniSertifikat.Testovi();
         testovi.setTest(makeTests());
         digitalniZeleniSertifikat.setTestovi(testovi);
-        create(digitalniZeleniSertifikat, u, obrazac.getPodaciKojeJePopunioPacijent().getLicniPodaci().getImejl());
+        create(digitalniZeleniSertifikat, u, obrazac.getPodaciKojeJePopunioPacijent().getLicniPodaci().getImejl(), accesToken);
     }
     
     @Override
