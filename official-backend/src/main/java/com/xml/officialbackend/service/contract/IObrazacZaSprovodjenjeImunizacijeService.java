@@ -19,9 +19,9 @@ public interface IObrazacZaSprovodjenjeImunizacijeService extends IService<Obraz
 
     ObrazacZaSprovodjenjeImunizacije update(String jmbg,
                                             PodaciKojeJePopunioZdravstveniRadnik podaci) throws Exception;
-  
-    List<ObrazacZaSprovodjenjeImunizacije> findByJMBG(String token, String jmbg) throws Exception;
-
+ 
+   
+    ObrazacZaSprovodjenjeImunizacije findByJMBG(String accessToken, String jmbg) throws Exception;
 
 
     ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByText(SearchDTO searchDTO) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;

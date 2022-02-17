@@ -1,0 +1,40 @@
+mat-card {
+    max-width: 700px;
+    margin: 1em auto;
+    text-align: center;
+  }
+  
+  mat-form-field {
+    display: block;
+  }
+  table {
+    width: 100%;
+  }
+.th {
+ text-align: center;
+}
+
+.button-accept {
+    width: 80px;
+  margin-right: 10px;
+  background-color: green;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 2px;
+}
+
+.button-decline {
+    width: 80px;
+    background-color: red;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 2px;
+  }

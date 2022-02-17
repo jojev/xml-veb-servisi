@@ -23,12 +23,32 @@ const routes: Routes = [
     ]
   },
   {
+    path: "saglasnost",
+      children: [
+        {
+          path: "",
+          loadChildren: () =>
+            import("./../saglasnost/saglasnost.module").then((m) => m.SaglasnostModule),
+        },
+      ],
+  },
+  {
     path: "vaccine-status",
     children: [
       {
         path: "",
         loadChildren: () =>
           import("./../vaccine-status/vaccine-status.module").then((m) => m.VaccineStatusModule),
+      },
+    ],
+  },
+  {
+    path: "zahtev",
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("./../zahtev/zahtev.module").then((m) => m.ZahtevModule),
       },
     ],
   },

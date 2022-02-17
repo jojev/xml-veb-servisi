@@ -8,6 +8,7 @@ import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
+import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.ArrayList;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -17,7 +18,8 @@ public interface ISaglasnostService extends    IService<ObrazacZaSprovodjenjeImu
     ObrazacZaSprovodjenjeImunizacije update(String jmbg,
                                             PodaciKojeJePopunioZdravstveniRadnik podaciKojeJePopunioZdravstveniRadnik) throws Exception;
 
-
+    public RDFNode getSaglasnostIdFromJMBG(String jmbg) throws IOException;
+  
 	  byte[] generateSaglasnostToXHTML(String id) throws Exception;
 
 	  ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(SearchDTO searchDTO) throws Exception;
@@ -30,4 +32,5 @@ public interface ISaglasnostService extends    IService<ObrazacZaSprovodjenjeImu
 
 
 	byte[] generateSaglasnostToPDF(String id) throws Exception;
+
 }

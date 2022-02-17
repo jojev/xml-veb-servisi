@@ -26,6 +26,13 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(BadLogicException.class)
+    public ResponseEntity<ExceptionResponse> handleExceptions(BadLogicException exception, WebRequest webRequest) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setMessage(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(BadCredentialException.class)
     public ResponseEntity<ExceptionResponse> handleExceptions(BadCredentialException exception, WebRequest webRequest) {
         ExceptionResponse response = new ExceptionResponse();

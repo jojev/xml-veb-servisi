@@ -23,4 +23,7 @@ public interface IPotvrdaOVakcinacijiService extends IService<PotvrdaOVakcinacij
 
 	byte[] generatePotvrdaToPDF(String id) throws Exception;
 
+    PotvrdaOVakcinaciji create(PotvrdaOVakcinaciji entity, String accessToken) throws Exception;
+
+
 }

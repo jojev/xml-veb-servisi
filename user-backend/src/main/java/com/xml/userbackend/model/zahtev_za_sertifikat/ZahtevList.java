@@ -24,3 +24,4 @@ public class ZahtevList {
         return listOfEntityObjects;
     }
 }
+

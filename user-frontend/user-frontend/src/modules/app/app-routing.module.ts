@@ -41,6 +41,16 @@ const routes: Routes = [
             import("./../interesovanje/interesovanje.module").then((m) => m.InteresovanjeModule),
         },
       ],
+  },
+  {
+    path: "zahtev",
+      children: [
+        {
+          path: "",
+          loadChildren: () =>
+            import("./../zahtev/zahtev.module").then((m) => m.ZahtevModule),
+        },
+      ],
   }
 ];
 

@@ -1,6 +1,7 @@
 package main.java.com.xml.userbackend.service.contract;
 
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
+import main.java.com.xml.userbackend.dto.RazlogDTO;
 import main.java.com.xml.userbackend.dto.SearchDTO;
 
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
@@ -14,7 +15,9 @@ import java.util.ArrayList;
 
 public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSertifikata> {
 
-    ZahtevZaIzdavanjeSertifikata create(ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata) throws Exception;
+    ZahtevZaIzdavanjeSertifikata create(ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata, String accessToken) throws Exception;
+
+    ZahtevZaIzdavanjeSertifikata setOdgovor(RazlogDTO razlogDTO) throws Exception;
 
     int getNumberOfRequestForDigitalSertificate(String startDate, String endDate) throws IOException;
 
@@ -26,8 +29,11 @@ public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSe
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
 
+    String getByJmbg(String jmbg) throws IOException;
+
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchByText(String search) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
 
 	byte[] generateZahtevToPDF(String id) throws Exception;
 
+    ArrayList<ZahtevZaIzdavanjeSertifikata> findPendingZahtevi() throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
 }

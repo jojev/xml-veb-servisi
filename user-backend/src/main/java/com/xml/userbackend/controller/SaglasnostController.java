@@ -36,6 +36,13 @@ public class SaglasnostController {
         return new ResponseEntity<>(saglasnostService.update(jmbg, podaciKojeJePopunioZdravstveniRadnik), HttpStatus.OK);
     }
 
+
+    @GetMapping("/by-jmbg/{jmbg}")
+    public ResponseEntity<?> getByJmbg(@PathVariable String jmbg) throws IOException {
+       String[] documentUri = saglasnostService.getSaglasnostIdFromJMBG(jmbg).toString().split("/");
+        return new ResponseEntity<>(documentUri[documentUri.length - 1], HttpStatus.OK);
+    }
+  
     @PostMapping("/search_by_jmbg")
     public ResponseEntity<?> searchByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazac = saglasnostService.searchByJMBG(searchDTO);
@@ -50,8 +57,10 @@ public class SaglasnostController {
         return new ResponseEntity<>(list, HttpStatus.OK);
 
     }
-    @GetMapping("/by-dopunjen-datuma/{date}")
-    public ResponseEntity<?> getByDopunjenDatuma(@PathVariable XMLGregorianCalendar calendar) throws IOException {
-        return new ResponseEntity<>(saglasnostService.getByDopunjenDatuma(calendar), HttpStatus.OK);
+
+    @PostMapping("/find_one_jmbg")
+    public ResponseEntity<?> findByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
+        ObrazacZaSprovodjenjeImunizacije obrazac = saglasnostService.searchByJMBG(searchDTO).get(0);
+        return new ResponseEntity<>(obrazac, HttpStatus.OK);
     }
 }

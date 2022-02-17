@@ -4,10 +4,10 @@ import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
+import main.java.com.xml.userbackend.dto.RazlogDTO;
+import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,21 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import main.java.com.xml.userbackend.dto.SearchDTO;
-import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeList;
-import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevList;
-import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.service.contract.IZahtevZaSertifikatService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
-import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.responses.CountResponse;
-import main.java.com.xml.userbackend.service.contract.IZahtevZaSertifikatService;
 
 @RestController
 @RequestMapping(value = "/api/v1/zahtev_za_sertifikat", produces = {"application/xml"})
@@ -45,8 +39,8 @@ public class ZahtevZaSertifikatController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> create(@RequestBody ZahtevZaIzdavanjeSertifikata zahtev) throws Exception {
-        ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.create(zahtev);
+    public ResponseEntity<?> create(@RequestBody ZahtevZaIzdavanjeSertifikata zahtev, @RequestHeader("Authorization") String accessToken) throws Exception {
+        ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.create(zahtev, accessToken);
         return new ResponseEntity<>(zahtevZaIzdavanjeSertifikata, HttpStatus.OK);
     }
     
@@ -64,9 +58,9 @@ public class ZahtevZaSertifikatController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     } */
 
-    @GetMapping("/{documentId}")
-    public ResponseEntity<?> getZahtev(@PathVariable String documentId) throws Exception {
-        ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.findById(documentId);
+    @PostMapping("/odgovor")
+    public ResponseEntity<?> getZahtev(@RequestBody RazlogDTO razlogDTO) throws Exception {
+        ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.setOdgovor(razlogDTO);
         return new ResponseEntity<>(zahtevZaIzdavanjeSertifikata, HttpStatus.OK);
     }
 
@@ -86,4 +80,18 @@ public class ZahtevZaSertifikatController {
     }
 
 
+    @GetMapping("/pending")
+    public ResponseEntity<?> getPendingZahtevi() throws Exception {
+        ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.findPendingZahtevi();
+        ZahtevList list = new ZahtevList(zahtevi);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-jmbg/{jmbg}")
+    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
+    public ResponseEntity<?> getLastByJMBG(@RequestBody String jmbg, @RequestHeader("Authorization") String accessToken) throws Exception {
+        System.out.println("LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        String zahtevId = zahtevZaSertifikatService.getByJmbg(jmbg);
+        return new ResponseEntity<>(zahtevId, HttpStatus.OK);
+    }
 }
