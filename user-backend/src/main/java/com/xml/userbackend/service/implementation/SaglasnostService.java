@@ -203,18 +203,18 @@ public class SaglasnostService implements ISaglasnostService {
     }
     
        
-    @Override
-    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(String jmbg) throws Exception {
-        ArrayList<RDFNode> nodes = (ArrayList<RDFNode>) getAllSaglanostFromJMBG(jmbg);
-        ArrayList<ObrazacZaSprovodjenjeImunizacije> list = new ArrayList<>();
-        for (RDFNode node : nodes) {
-            String[] parts = node.toString().split("/");
-            ObrazacZaSprovodjenjeImunizacije obrazac = findById(parts[parts.length - 1]);
-            list.add(obrazac);
-        }
-
-        return list;
-    }
+//    @Override
+//    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(String jmbg) throws Exception {
+//        ArrayList<RDFNode> nodes = (ArrayList<RDFNode>) getAllSaglanostFromJMBG(jmbg);
+//        ArrayList<ObrazacZaSprovodjenjeImunizacije> list = new ArrayList<>();
+//        for (RDFNode node : nodes) {
+//            String[] parts = node.toString().split("/");
+//            ObrazacZaSprovodjenjeImunizacije obrazac = findById(parts[parts.length - 1]);
+//            list.add(obrazac);
+//        }
+//
+//        return list;
+//    }
 
 
 

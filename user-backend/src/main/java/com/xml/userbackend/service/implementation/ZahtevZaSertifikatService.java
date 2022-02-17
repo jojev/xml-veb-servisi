@@ -12,6 +12,8 @@ import main.java.com.xml.userbackend.rdf.FusekiWriter;
 import main.java.com.xml.userbackend.rdf.MetadataExtractor;
 import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.repository.BaseRepository;
+import main.java.com.xml.userbackend.service.EmailService;
+import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
 import main.java.com.xml.userbackend.service.contract.IZahtevZaSertifikatService;
 
 import main.java.com.xml.userbackend.transformations.HtmlTransformer;
@@ -51,6 +53,10 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     private HtmlTransformer htmlTransformer;
 
     private JaxBParser jaxBParser;
+    
+    private EmailService emailService;
+    
+    private IInteresovanjeService interesovanjeService;
 
     @Autowired
 

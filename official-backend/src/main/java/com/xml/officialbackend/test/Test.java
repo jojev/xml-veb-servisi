@@ -36,12 +36,18 @@ public class Test {
 
     @Autowired
     private JaxBParser jaxBParser;
+    
+    @Autowired
+    private MetadataExtractor metadataExtractor;
 
+    @Autowired
+    private BaseRepository baseRepository;
     
     @Autowired
     private IDigitalniSertifikatService zeleniService;
     
-    @Autowired IPotvrdaOVakcinacijiService potvrdaService;
+    @Autowired 
+    private IPotvrdaOVakcinacijiService potvrdaService;
 
     public void test() throws Exception {
        //createDigitalni();
