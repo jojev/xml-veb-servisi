@@ -1,6 +1,7 @@
 package main.java.com.xml.userbackend.repository;
 
 
+import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class BaseRepository {
 
     public <T> T findById(String collectionId, String documentId, Class genericClass) throws Exception {
         XMLResource resource = existDbManager.load(collectionId, documentId);
+        if (resource == null) {
+            throw new MissingEntityException("Ne postoji entite koji trazite.");
+        }
         T loadedObject = jaxBParser.unmarshall(resource, genericClass);
         return loadedObject;
     }

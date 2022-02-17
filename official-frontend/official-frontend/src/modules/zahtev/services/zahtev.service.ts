@@ -14,6 +14,10 @@ export class ZahtevService {
 
 
   getPendingZahtev(): Observable<any> {
+    const item = localStorage.getItem("user") || "";
+    const decodedItem = JSON.parse(item);
+    console.log(decodedItem.usertokenstate.accessToken)
+    this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
     return this.http.get<any>("/api/v1/preview/zahtev_za_sertifikat/pending",  {
       headers: this.headers,
       responseType: 'test/xml' as 'json'

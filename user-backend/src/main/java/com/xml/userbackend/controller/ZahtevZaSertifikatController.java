@@ -39,8 +39,8 @@ public class ZahtevZaSertifikatController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> create(@RequestBody ZahtevZaIzdavanjeSertifikata zahtev) throws Exception {
-        ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.create(zahtev);
+    public ResponseEntity<?> create(@RequestBody ZahtevZaIzdavanjeSertifikata zahtev, @RequestHeader("Authorization") String accessToken) throws Exception {
+        ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.create(zahtev, accessToken);
         return new ResponseEntity<>(zahtevZaIzdavanjeSertifikata, HttpStatus.OK);
     }
     
@@ -79,10 +79,19 @@ public class ZahtevZaSertifikatController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+
     @GetMapping("/pending")
     public ResponseEntity<?> getPendingZahtevi() throws Exception {
         ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.findPendingZahtevi();
         ZahtevList list = new ZahtevList(zahtevi);
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-jmbg/{jmbg}")
+    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
+    public ResponseEntity<?> getLastByJMBG(@RequestBody String jmbg, @RequestHeader("Authorization") String accessToken) throws Exception {
+        System.out.println("LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        String zahtevId = zahtevZaSertifikatService.getByJmbg(jmbg);
+        return new ResponseEntity<>(zahtevId, HttpStatus.OK);
     }
 }

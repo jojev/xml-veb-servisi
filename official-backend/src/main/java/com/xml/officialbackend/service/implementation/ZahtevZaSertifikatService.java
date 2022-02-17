@@ -7,7 +7,6 @@ import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizaci
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.officialbackend.rdf.MetadataExtractor;
-import main.java.com.xml.officialbackend.reponses.CountResponse;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.EmailService;
 import main.java.com.xml.officialbackend.service.contract.IDigitalniSertifikatService;
@@ -15,7 +14,6 @@ import main.java.com.xml.officialbackend.service.contract.IObrazacZaSprovodjenje
 import main.java.com.xml.officialbackend.service.contract.IPotvrdaOVakcinacijiService;
 import main.java.com.xml.officialbackend.service.contract.IZahtevZaSertifikatService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -85,13 +83,14 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     }
 
     @Override
-    public void response(RazlogDTO razlogDTO, ZahtevZaIzdavanjeSertifikata zahtev) throws Exception {
-        ObrazacZaSprovodjenjeImunizacije obrazac = obrazacService.findByJMBG(zahtev.getPodnosilacZahteva().getJmbg().getValue()).get(0);
+    public void response(RazlogDTO razlogDTO, ZahtevZaIzdavanjeSertifikata zahtev, String accessToken) throws Exception {
+        ObrazacZaSprovodjenjeImunizacije obrazac = obrazacService.findByJMBG(accessToken, zahtev.getPodnosilacZahteva().getJmbg().getValue());
         ArrayList<PotvrdaOVakcinaciji> potvrde = potvrdaOVakcinacijiService.findPotvrdeByJMBG(zahtev.getPodnosilacZahteva().getJmbg().getValue());
         if (!razlogDTO.getOdobren()) {
             emailService.sendResponse(obrazac.getPodaciKojeJePopunioPacijent().getLicniPodaci().getImejl(), " ", " ", razlogDTO.getRazlog());
         } else {
-            digitalniSertifikatService.send(zahtev, obrazac, potvrde);
+            digitalniSertifikatService.send(zahtev, obrazac, potvrde, accessToken);
+
         }
     }
 }

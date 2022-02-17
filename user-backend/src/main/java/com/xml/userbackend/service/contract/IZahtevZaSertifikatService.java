@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSertifikata> {
 
-    ZahtevZaIzdavanjeSertifikata create(ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata) throws Exception;
+    ZahtevZaIzdavanjeSertifikata create(ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata, String accessToken) throws Exception;
 
     ZahtevZaIzdavanjeSertifikata setOdgovor(RazlogDTO razlogDTO) throws Exception;
 
@@ -28,6 +28,8 @@ public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSe
 	  byte[] generateZahtevToXHTML(String id) throws Exception;
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
+
+    String getByJmbg(String jmbg) throws IOException;
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchByText(String search) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
 

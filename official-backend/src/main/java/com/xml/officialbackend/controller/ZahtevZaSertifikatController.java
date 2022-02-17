@@ -31,12 +31,12 @@ public class ZahtevZaSertifikatController {
         ResponseEntity<ZahtevZaIzdavanjeSertifikata> responseEntity =
                 restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/odgovor",
                         HttpMethod.POST, httpEntity, ZahtevZaIzdavanjeSertifikata.class);
-        zahtevZaSertifikatService.response(razlogDTO, responseEntity.getBody());
+        zahtevZaSertifikatService.response(razlogDTO, responseEntity.getBody(), accessToken);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "/pending")
-    public ResponseEntity<?> findPendingZahtevi(@RequestHeader("Authorization") String accessToken) throws Exception {
+    public ResponseEntity<?> findPendingZahtevi(@RequestHeader("Authorization") String accessToken) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", accessToken);
