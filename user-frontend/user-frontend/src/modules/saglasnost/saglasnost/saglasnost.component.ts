@@ -185,8 +185,10 @@ export class SaglasnostComponent implements OnInit {
       (error) => {
         if(error.status === 400) {
           this.notificationService.error('Pogrešni podaci')
+          console.log(error)
         }
         else {
+          console.log(error)
           this.notificationService.error("Došlo je do greške, pokušajte ponovo.")
         }
       }

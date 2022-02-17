@@ -5,7 +5,6 @@ import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
-import main.java.com.xml.userbackend.model.korisnik.Korisnik;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.Doza;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
@@ -17,7 +16,6 @@ import main.java.com.xml.userbackend.repository.BaseRepository;
 import main.java.com.xml.userbackend.service.contract.ISaglasnostService;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.xmldb.api.modules.XMLResource;
 
@@ -25,7 +23,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -42,15 +39,16 @@ public class SaglasnostService implements ISaglasnostService {
 
     private JaxBParser jaxBParser;
 
-    public SaglasnostService(ExistDbManager existDbManager,BaseRepository baseRepository,
+    public SaglasnostService(ExistDbManager existDbManager, BaseRepository baseRepository,
                              MetadataExtractor metadataExtractor, InteresovanjeService interesovanjeService,
-                             JaxBParser jaxBParser){
+                             JaxBParser jaxBParser) {
         this.baseRepository = baseRepository;
         this.existDbManager = existDbManager;
         this.metadataExtractor = metadataExtractor;
         this.interesovanjeService = interesovanjeService;
-        this.jaxBParser =  jaxBParser;
+        this.jaxBParser = jaxBParser;
     }
+
     @Override
     public List<ObrazacZaSprovodjenjeImunizacije> findAll() {
         return null;
@@ -65,7 +63,8 @@ public class SaglasnostService implements ISaglasnostService {
     @Override
     public ObrazacZaSprovodjenjeImunizacije create(ObrazacZaSprovodjenjeImunizacije entity) throws Exception {
         String userId = UUID.randomUUID().toString();
-        entity.setAbout(entity.getAbout()+userId);
+        entity.setAbout("http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/");
+        entity.setAbout(entity.getAbout() + userId);
         entity.setTypeof("pred:IdentifikatorDokumenta");
         entity.getOtherAttributes().put(QName.valueOf("xmlns:pred"), "http://www.ftn.uns.ac.rs/rdf/saglasnosti/predicate/");
         entity.getOtherAttributes().put(QName.valueOf("xmlns:xs"), "http://www.w3.org/2001/XMLSchema#");
@@ -75,7 +74,7 @@ public class SaglasnostService implements ISaglasnostService {
         entity.getPodaciKojeJePopunioPacijent().getLicniPodaci().getJmbg().setProperty("pred:Kreirao");
         entity.getPodaciKojeJePopunioPacijent().getZeljenaVakcina().setProperty("pred:ZeljenaVakcina");
         entity.getPodaciKojeJePopunioPacijent().getDatum().setProperty("pred:KreiranDatuma");
-        if(entity.getPodaciKojeJePopunioZdravstveniRadnik()!=null) {
+        if (entity.getPodaciKojeJePopunioZdravstveniRadnik() != null) {
             for (int i = 0; i < entity.getPodaciKojeJePopunioZdravstveniRadnik().getDoze().getDoza().size(); i++) {
                 entity.getPodaciKojeJePopunioZdravstveniRadnik().getDoze().getDoza().get(i).getDatumDavanjaVakcine().setDatatype("xs:date");
                 entity.getPodaciKojeJePopunioZdravstveniRadnik().getDoze().getDoza().get(i).getDatumDavanjaVakcine().setProperty("pred:VakcinisanDatuma");
@@ -88,7 +87,7 @@ public class SaglasnostService implements ISaglasnostService {
         entity.getInteresovanjeRef().setValue(rdfNode.toString());
         baseRepository.save("/db/saglasnost", userId, entity, ObrazacZaSprovodjenjeImunizacije.class);
         XMLResource resource = existDbManager.load("/db/saglasnost", userId);
-        byte[] out =  metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
+        byte[] out = metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "saglasnosti");
         return entity;
     }
@@ -108,35 +107,40 @@ public class SaglasnostService implements ISaglasnostService {
                                                    PodaciKojeJePopunioZdravstveniRadnik podaci) throws Exception {
         RDFNode saglasnostID = this.getSaglasnostIdFromJMBG(jmbg);
         List<RDFNode> allSaglasnost = this.getAllSaglanostFromJMBG(jmbg);
-        if(saglasnostID==null){
+        if (saglasnostID == null) {
             throw new MissingEntityException("Ne postoji saglasnost za unijetog korisnika.");
         }
         String[] parts = saglasnostID.toString().split("/");
         ObrazacZaSprovodjenjeImunizacije obrazacZaSprovodjenjeImunizacije;
-
-        if(allSaglasnost.size()>1){
-            String[] parts1 = allSaglasnost.get(allSaglasnost.size()-2).toString().split("/");
+        System.out.println(allSaglasnost.size());
+        podaci.getDoze().getDoza().get(0).getDatumDavanjaVakcine().setProperty("pred:VakcinisanDatuma");
+        podaci.getDoze().getDoza().get(0).getDatumDavanjaVakcine().setDatatype("xs:date");
+        if (allSaglasnost.size() > 1) {
+            String[] parts1 = allSaglasnost.get(allSaglasnost.size() - 2).toString().split("/");
+            System.out.println(parts1[parts1.length-1]);
             ObrazacZaSprovodjenjeImunizacije pretposljednjiObrazacZaSprovodjenjeImunizacije =
-                    baseRepository.findById("/db/saglasnost", parts1[parts1.length-1],ObrazacZaSprovodjenjeImunizacije.class);
-            XMLResource resource = existDbManager.load("/db/saglasnost", parts1[parts1.length-1]);
+                    baseRepository.findById("/db/saglasnost", parts1[parts1.length - 1], ObrazacZaSprovodjenjeImunizacije.class);
+            XMLResource resource = existDbManager.load("/db/saglasnost", parts1[parts1.length - 1]);
+            System.out.println(resource);
             Doza secondDoza = podaci.getDoze().getDoza().get(0);
-            podaci.getDoze().getDoza().set(0,pretposljednjiObrazacZaSprovodjenjeImunizacije.getPodaciKojeJePopunioZdravstveniRadnik().getDoze().getDoza().get(0));
+            podaci.getDoze().getDoza().set(0, pretposljednjiObrazacZaSprovodjenjeImunizacije.getPodaciKojeJePopunioZdravstveniRadnik().getDoze().getDoza().get(0));
             podaci.getDoze().getDoza().add(secondDoza);
 
         }
+        System.out.println("ANDRIJA1");
         String content = jaxBParser.marshallWithoutSchema(podaci).toString();
-        content =  content.replace(" xmlns=\"http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije\"", "");
-        content =  content.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "");
-
-        baseRepository.insertAfter("/db/saglasnost", parts[parts.length-1],
+        content = content.replace(" xmlns=\"http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije\"", "");
+        content = content.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "");
+        System.out.println("ANDRIJA2");
+        baseRepository.insertAfter("/db/saglasnost", parts[parts.length - 1],
                 "/obrazac_za_sprovodjenje_imunizacije/podaci_koje_je_popunio_pacijent", content,
                 "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije");
-        XMLResource resource = existDbManager.load("/db/saglasnost", parts[parts.length-1]);
-        byte[] out =  metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
+        XMLResource resource = existDbManager.load("/db/saglasnost", parts[parts.length - 1]);
+        System.out.println("ANDRIJA3");
+        byte[] out = metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "saglasnosti");
         obrazacZaSprovodjenjeImunizacije =
-                baseRepository.findById("/db/saglasnost", parts[parts.length-1],ObrazacZaSprovodjenjeImunizacije.class);
-
+                baseRepository.findById("/db/saglasnost", parts[parts.length - 1], ObrazacZaSprovodjenjeImunizacije.class);
         return obrazacZaSprovodjenjeImunizacije;
     }
 
@@ -159,11 +163,11 @@ public class SaglasnostService implements ISaglasnostService {
 
     public RDFNode getSaglasnostIdFromJMBG(String jmbg) throws IOException {
         String sparqlCondition = "?person <http://www.ftn.uns.ac.rs/rdf/saglasnosti/predicate/Kreirao> \"" + jmbg + "\" .";
-        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition);) {
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
-            while(result.getResult().hasNext()) {
+            while (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
-                if(!result.getResult().hasNext()) {
+                if (!result.getResult().hasNext()) {
                     String columnName = columnNames.get(0);
                     RDFNode rdfNode = row.get(columnName);
                     return rdfNode;
@@ -185,7 +189,6 @@ public class SaglasnostService implements ISaglasnostService {
 
         return list;
     }
-
 
 
     @Override
@@ -211,14 +214,13 @@ public class SaglasnostService implements ISaglasnostService {
     }
 
 
-
     public List<RDFNode> getAllSaglanostFromJMBG(String jmbg) throws IOException {
         String sparqlCondition = "?person <http://www.ftn.uns.ac.rs/rdf/saglasnosti/predicate/Kreirao> \"" + jmbg + "\" .";
-        List<RDFNode> nodes =  new ArrayList<>();
+        List<RDFNode> nodes = new ArrayList<>();
 
-        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition);) {
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
-            while(result.getResult().hasNext()) {
+            while (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
                 RDFNode rdfNode = row.get(columnName);

@@ -131,9 +131,9 @@ public class UserService implements IUserService {
         if(!passwordEncoder.matches(jwtAuthenticationRequest.getPassword(),korisnik.getLozinka())){
             throw new BadCredentialException("Pogrešni kredencijali");
         }
-        if(!korisnik.getUloga().get(0).getNaziv().equals("ROLE_GRADJANIN")){
-            throw new BadCredentialException("Logovanje isključivo za građanina");
-        }
+//        if(!korisnik.getUloga().get(0).getNaziv().equals("ROLE_GRADJANIN")){
+//            throw new BadCredentialException("Logovanje isključivo za građanina");
+//        }
         String role = korisnik.getUloga().get(0).getNaziv();
         List<String> roles = new ArrayList<String>();
         roles.add(role);
