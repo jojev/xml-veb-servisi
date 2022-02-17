@@ -3,6 +3,7 @@ package main.java.com.xml.userbackend.service.implementation;
 
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 
+import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
@@ -34,7 +35,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -232,6 +232,18 @@ public class InteresovanjeService implements IInteresovanjeService {
         }
         
         return 0;
+    }
+
+    @Override
+    public String readMetadata(String documentId, String format) throws IOException {
+        String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/interesovanje/" + documentId + "> ?d ?s .";
+        try {
+            return FusekiReader.readMetadata("/interesovanje", sparqlCondition, format);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new MissingEntityException("Ne postoji interesovanje sa tim id.");
+        }
     }
 
     public static String readFile(String path, Charset encoding) throws IOException {

@@ -100,6 +100,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public String readMetadata(String documentId, String format) throws IOException {
+        return null;
+    }
+
+    @Override
     public RDFNode getUserWithUsername(String username) throws IOException {
         String sparqlCondition = "?person <http://www.ftn.uns.ac.rs/rdf/korisnici/predicate/Ima> \"" + username + "\" .";
 
