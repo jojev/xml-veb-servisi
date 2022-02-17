@@ -9,10 +9,10 @@
                 <xs:element name="vakcina">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:enumeration value="Pfizer, BioNTech"/>
+                            <xs:enumeration value="Pfizer-BioNTech"/>
                             <xs:enumeration value="Sinopharm"/>
                             <xs:enumeration value="Sputnik V"/>
-                            <xs:enumeration value="AstraZeneca, Oxford"/>
+                            <xs:enumeration value="AstraZeneca-Oxford"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>

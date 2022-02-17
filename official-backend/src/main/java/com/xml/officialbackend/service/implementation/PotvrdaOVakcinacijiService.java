@@ -3,7 +3,9 @@ package main.java.com.xml.officialbackend.service.implementation;
 
 import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
+
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
+
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
@@ -28,6 +30,7 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.checkerframework.checker.units.qual.A;
 import main.java.com.xml.officialbackend.service.contract.ITerminService;
+import main.java.com.xml.officialbackend.transformations.HtmlTransformer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,9 +49,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -72,6 +73,9 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     @Autowired
     private IListaCekanjaService listaCekanjaService;
 
+    @Autowired
+    private HtmlTransformer htmlTransformer;
+    
     @Override
     public List<PotvrdaOVakcinaciji> findAll() {
         return null;
@@ -140,6 +144,7 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     }
     
     public ArrayList<RDFNode> searchRDF(String jmbg) throws IOException {
+
         String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/KreiranZa> \"" + jmbg + "\" ;";
 
         ArrayList<RDFNode> nodes = new ArrayList<>();
@@ -165,6 +170,12 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
             potvrde.add(potvrda);
         }
         return potvrde;
+    }
+    
+    @Override
+    public byte[] generatePotvrdaToXHTML(String id) throws Exception {
+    	PotvrdaOVakcinaciji potvrda = findById(id);
+    	return htmlTransformer.generateHTMLtoByteArray(potvrda);
     }
 
 
