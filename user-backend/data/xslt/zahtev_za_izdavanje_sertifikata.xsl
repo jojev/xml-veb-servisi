@@ -143,9 +143,8 @@
             			Разлог за подношење захтева: 
 
             		</div>
-            		<div class="value" id="razlog">
-						<xsl:variable name="vrednost"
-									 select="b:razlog_za_podnosenje"/>
+            		<div class="value">
+						<xsl:value-of select="b:razlog_za_podnosenje"/>
             		</div>
                	</div>
                	
@@ -161,7 +160,6 @@
             	<div class="signature">
             		
             	</div>
-				<script>  document.getElementById("razlog").innerHTML ="{$vrednost}"</script>
             </body>
         </html>
     </xsl:template>

@@ -15,7 +15,7 @@ export class DocumentsTableComponent implements OnInit {
 
   search: string = " ";
 
-  displayedColumns: string[] = ['dokument', 'id', 'prikaz','pdf','html', 'metapodaci'];
+  displayedColumns: string[] = ['dokument', 'id', 'prikaz','preuzmi', 'metapodaci'];
   dataSource: any[] = [];
   all: number = 0;
 
@@ -185,34 +185,34 @@ export class DocumentsTableComponent implements OnInit {
     if (element.dokument === 'Interesovanje') {
       this.searchService.getInteresovanjeXSLFOTransformation(searchDTO).subscribe(
         (result) => {
-          download(result, "interesovanje.pdf", "application/pdf");
+          download(result, "interesovanje.pdf", "text/plain");
 
         }
       )
-    } else if (element.dokument == 'Digitalni zeleni sertifikat') {
+    } else if (element.dokument === 'Digitalni zeleni sertifikat') {
       this.searchService.getDigitalniXSLFOTransformation(searchDTO).subscribe(
         (result) => {
-          download(result, "digitalni.pdf", "application/pdf");
+          download(result, "digitalni.pdf", "text/plain");
         }
       )
-    } else if (element.dokument == 'Obrazac za sprovođenje imunizacije') {
-      this.searchService.getSaglasnostHtmlTransformation(searchDTO).subscribe(
+    } else if (element.dokument === 'Obrazac za sprovođenje imunizacije') {
+      this.searchService.getSaglasnostXSLFOTransformation(searchDTO).subscribe(
         (result) => {
-          download(result, "saglasnost.pdf", "application/pdf");
-        }
-      )
-    }
-    else if (element.dokument == 'Zahtev za izdavanje digitalnog sertifikata') {
-      this.searchService.getZahtevHtmlTransformation(searchDTO).subscribe(
-        (result) => {
-          download(result, "zahtev.pdf", "application/pdf");
+          download(result, "saglasnost.pdf", "text/plain");
         }
       )
     }
-    else if (element.dokument == 'Potvrda o vakcinaciji') {
-      this.searchService.getZahtevHtmlTransformation(searchDTO).subscribe(
+    else if (element.dokument === 'Zahtev za izdavanje digitalnog sertifikata') {
+      this.searchService.getZahtevXSLFOTransformation(searchDTO).subscribe(
         (result) => {
-          download(result, "potvrda.pdf", "application/pdf");
+          download(result, "zahtev.pdf", "text/plain");
+        }
+      )
+    }
+    else if (element.dokument === 'Potvrda o vakcinaciji') {
+      this.searchService.getPotvrdaXSLFOTransformation(searchDTO).subscribe(
+        (result) => {
+          download(result, "potvrda.pdf", "text/plain");
         }
       )
     }
@@ -228,27 +228,27 @@ export class DocumentsTableComponent implements OnInit {
           download(result, "interesovanje.html", "application/html");
         }
       )
-    } else if (element.dokument == 'Obrazac za sprovođenje imunizacije') {
+    } else if (element.dokument === 'Obrazac za sprovođenje imunizacije') {
       this.searchService.getSaglasnostHtmlTransformation(searchDTO).subscribe(
         (result) => {
           download(result, "obrazac.html", "application/html");
         }
       )
     }
-    else if (element.dokument == 'Zahtev za izdavanje digitalnog sertifikata') {
+    else if (element.dokument === 'Zahtev za izdavanje digitalnog sertifikata') {
       this.searchService.getZahtevHtmlTransformation(searchDTO).subscribe(
         (result) => {
           download(result, "zahtev.html", "application/html");
         }
       )
     }
-    else if (element.dokument == 'Potvrda o vakcinaciji') {
+    else if (element.dokument === 'Potvrda o vakcinaciji') {
       this.searchService.getPotvrdaHtmlTransformation(searchDTO).subscribe(
         (result) => {
           download(result, "potvrda.html", "application/html");
         }
       )
-    } else if (element.dokument == 'Digitalni zeleni sertifikat') {
+    } else if (element.dokument === 'Digitalni zeleni sertifikat') {
       this.searchService.getDigitalniHtmlTransformation(searchDTO).subscribe(
         (result) => {
           download(result, "digitalni.html", "application/html");

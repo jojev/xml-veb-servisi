@@ -25,9 +25,9 @@ export class ZahtevService {
   }
 
   sendResponse(reason: any): Observable<any> {
-    const item = localStorage.getItem("user") || "";
-    const decodedItem = JSON.parse(item);
-    this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
+    //const item = localStorage.getItem("user") || "";
+    // const decodedItem = JSON.parse(item);
+    // this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
 
     var xmlDoc = this.parser.parseFromString(o2x(reason), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
