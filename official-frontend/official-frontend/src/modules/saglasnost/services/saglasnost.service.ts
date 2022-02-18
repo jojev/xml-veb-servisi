@@ -18,7 +18,7 @@ export class SaglasnostService {
     var xmlDoc = this.parser.parseFromString(o2x(saglasnost), "text/xml");
     const interesovanjeNode = xmlDoc?.getElementsByTagName("obrazac_za_sprovodjenje_imunizacije")[0]
     interesovanjeNode?.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
-    interesovanjeNode?.setAttribute("xmlns", "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije")
+    // interesovanjeNode?.setAttribute("xmlns", "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije")
     var xmlString = this.serializer.serializeToString(xmlDoc);
     xmlString = xmlString.replace("<podaci_koje_je_popunio_zdravstveni_radnik", '<podaci_koje_je_popunio_zdravstveni_radnik xmlns="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije"');
     console.log(xmlString)
