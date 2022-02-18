@@ -181,6 +181,7 @@ export class DocumentsTableComponent implements OnInit {
 
   downloadPDF(element: any): void {
     let documentId = element.id;
+    console.log(documentId);
     const searchDTO = { searchdto: { search: documentId } };
     if (element.dokument === 'Interesovanje') {
       this.searchService.getInteresovanjeXSLFOTransformation(searchDTO).subscribe(
@@ -196,6 +197,8 @@ export class DocumentsTableComponent implements OnInit {
         }
       )
     } else if (element.dokument == 'Obrazac za sprovođenje imunizacije') {
+      console.log(searchDTO);
+
       this.searchService.getSaglasnostHtmlTransformation(searchDTO).subscribe(
         (result) => {
           download(result, "saglasnost.pdf", "application/pdf");
@@ -203,6 +206,7 @@ export class DocumentsTableComponent implements OnInit {
       )
     }
     else if (element.dokument == 'Zahtev za izdavanje digitalnog sertifikata') {
+      console.log(searchDTO);
       this.searchService.getZahtevHtmlTransformation(searchDTO).subscribe(
         (result) => {
           download(result, "zahtev.pdf", "application/pdf");
@@ -210,6 +214,7 @@ export class DocumentsTableComponent implements OnInit {
       )
     }
     else if (element.dokument == 'Potvrda o vakcinaciji') {
+      console.log(searchDTO);
       this.searchService.getZahtevHtmlTransformation(searchDTO).subscribe(
         (result) => {
           download(result, "potvrda.pdf", "application/pdf");
