@@ -70,6 +70,7 @@ public class SaglasnostController {
         return new ResponseEntity<>(saglasnostService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
 
     }
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     @PostMapping("/search_by_text")
     public ResponseEntity<?> searchByText(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazacZaSprovodjenjeImunizacijes = saglasnostService.searchByText(searchDTO);

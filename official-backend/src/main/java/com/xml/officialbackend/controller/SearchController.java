@@ -110,7 +110,7 @@ public class SearchController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     @PostMapping(value = "/interesovanje/search_by_text")
     public ResponseEntity<?> searchInteresovanjeByTekst(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
         HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
@@ -118,7 +118,7 @@ public class SearchController {
                 httpEntity, InteresovanjeList.class);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     @PostMapping(value = "/zahtev_za_sertifikat/search_by_text")
     public ResponseEntity<?> searchZahtevByText(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
         HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
@@ -141,7 +141,7 @@ public class SearchController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     @PostMapping(value = "/obrazac/search_by_text")
     //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchObrazacByText(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) throws Exception {
