@@ -36,4 +36,19 @@ export class IzvjestajService {
       responseType: 'blob' as 'json'
     })
   }
+
+    getMetadataRDFForIzvestaj(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/izvestaj/metadata/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  
+  getMetadataJsonForIzvestaj(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/izvestaj/metadata-json/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
 }

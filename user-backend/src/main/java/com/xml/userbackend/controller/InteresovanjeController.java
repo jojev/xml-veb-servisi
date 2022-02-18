@@ -37,7 +37,6 @@ public class InteresovanjeController {
        System.out.println("CAOAODKLAKLKJ");
     	InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje, accessToken);
         return new ResponseEntity<>(interesovanjeZaVakcinisanje, HttpStatus.OK);
-    }
     
     @GetMapping("/count")
     public ResponseEntity<CountResponse> findNumberOfZahteva(String accessToken, @RequestParam String startDate, 

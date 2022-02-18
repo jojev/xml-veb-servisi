@@ -123,4 +123,142 @@ export class SearchService {
       responseType: 'test/xml' as 'json'
     })
   }
+  
+  getInteresovanjeXSLFOTransformation(search: any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/xslfo_transformation/interesovanje", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getSaglasnostXSLFOTransformation(search: any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/xslfo_transformation/saglasnost", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getZahtevXSLFOTransformation(search: any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/xslfo_transformation/zahtev", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getPotvrdaXSLFOTransformation(search: any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/xslfo_transformation/potvrda", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getDigitalniXSLFOTransformation(search: any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/xslfo_transformation/digitalni", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataSearch(search: any):Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/search/metadata", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+  getSearchByText(searchDTO: any,path: any): Observable<any> {
+    const item = localStorage.getItem("user") || "";
+    const decodedItem = JSON.parse(item);
+    this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
+    var xmlDoc = this.parser.parseFromString(o2x(searchDTO), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+
+    return this.http.post<any>(`/api/v1/search/${path}/search_by_text`, xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+
+  getMetadataRDFForInteresovanje(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/interesovanje/metadata/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataRDFForSaglasnost(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/saglasnost/metadata/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataRDFForPotvrda(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/potvrda-o-vakcinaciji/metadata/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataRDFForZahtev(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/zahtev_za_sertifikat/metadata/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataRDFForSertifikat(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/digitalni-sertifikat/metadata/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  
+  getMetadataJsonForInteresovanje(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/interesovanje/metadata-json/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataJsonForSaglasnost(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/saglasnost/metadata-json/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataJsonForPotvrda(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/potvrda-o-vakcinaciji/metadata-json/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataJsonForZahtev(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/zahtev_za_sertifikat/metadata-json/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataJsonForSertifikat(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/digitalni-sertifikat/metadata-json/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
 }

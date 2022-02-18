@@ -14,7 +14,7 @@ export class VaccineStatusService {
 
   constructor(public http: HttpClient) { }
 
-    getVaccineTypes(): Observable<any> {
+  getVaccineTypes(): Observable<any> {
     return this.http.get<any>("api/v1/vaccine-status", {
       headers: this.headers,
       responseType: 'test/xml' as 'json'

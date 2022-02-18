@@ -62,8 +62,23 @@ export class MakeIzvestajComponent implements OnInit {
     const searchDTO = { searchdto: {search: this.izvestajId}};
     this.izvjestajService.getPdfTransformation(searchDTO).subscribe(
       (result) => {
-
         download( result, "izvjestaj.pdf", "application/pdf" );
+      }
+    )
+  }
+
+  preuzmiJson() {
+    this.izvjestajService.getMetadataJsonForIzvestaj(this.izvestajId).subscribe(
+      (result) => {
+        download( result, "izvjestaj.json", "text/plain" );
+      }
+    )
+  }
+
+  preuzmiRdf() {
+    this.izvjestajService.getMetadataRDFForIzvestaj(this.izvestajId).subscribe(
+      (result) => {
+        download( result, "izvjestaj.txt", "text/plain" );
       }
     )
   }

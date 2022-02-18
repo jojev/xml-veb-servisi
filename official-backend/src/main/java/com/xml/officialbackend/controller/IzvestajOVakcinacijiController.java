@@ -10,16 +10,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji;
 import main.java.com.xml.officialbackend.reponses.CountResponse;
 import main.java.com.xml.officialbackend.service.contract.IIzvestajService;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping(value="/api/v1/izvestaj", produces={"application/xml"})
@@ -47,6 +45,14 @@ public class IzvestajOVakcinacijiController {
         IzvestajOImunizaciji izvestaj = izvestajService.createReport(startDate, endDate, interesovanjeCnt.getBody().getValue(), zahtevCnt.getBody().getValue());
         return new ResponseEntity<>(izvestaj, HttpStatus.OK);
     }
-	
-	
+
+	@GetMapping("/metadata/{id}")
+	public ResponseEntity<?> getMetadata(@PathVariable String id) throws IOException {
+		return new ResponseEntity<>(izvestajService.readMetadata(id, "N-TRIPLE"), HttpStatus.OK);
+	}
+
+	@GetMapping("/metadata-json/{id}")
+	public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
+		return new ResponseEntity<>(izvestajService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
+	}
 }

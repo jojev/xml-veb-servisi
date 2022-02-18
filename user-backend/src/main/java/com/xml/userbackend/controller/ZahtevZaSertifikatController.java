@@ -41,23 +41,15 @@ public class ZahtevZaSertifikatController {
     @PostMapping("")
     public ResponseEntity<?> create(@RequestBody ZahtevZaIzdavanjeSertifikata zahtev, @RequestHeader("Authorization") String accessToken) throws Exception {
         ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.create(zahtev, accessToken);
-        return new ResponseEntity<>(zahtevZaIzdavanjeSertifikata, HttpStatus.OK);
+        return new ResponseEntity<>(zahtevZaIzdavanjeSertifikata, HttpStatus.CREATED);
     }
     
     @GetMapping("/count")
     public ResponseEntity<CountResponse> findNumberOfZahteva(@RequestParam String startDate, @RequestParam String endDate) throws IOException, ParseException {
-    	System.out.println("U ZAHTEVU SAMMMM");
+
 		return new ResponseEntity<>(new CountResponse(zahtevZaSertifikatService.getNumberOfRequestForDigitalSertificate(startDate, endDate)), HttpStatus.OK);
     }
 
-    /*
-    @PostMapping("/search_by_jmbg")
-  //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
-    public ResponseEntity<?> searchByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
-        ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchByJMBG(searchDTO);
-        ZahtevList list = new ZahtevList(zahtevi);
-        return new ResponseEntity<>(list, HttpStatus.OK);
-    } */
 
     @PostMapping("/odgovor")
     public ResponseEntity<?> getZahtev(@RequestBody RazlogDTO razlogDTO) throws Exception {
@@ -66,7 +58,6 @@ public class ZahtevZaSertifikatController {
     }
 
     @PostMapping("/search_by_metadata")
-    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchByMetadata(@RequestBody MetadataSearchDTO metadataSearchDTO) throws Exception {
         ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchMetadata(metadataSearchDTO);
         ZahtevList list = new ZahtevList(zahtevi);
@@ -89,9 +80,7 @@ public class ZahtevZaSertifikatController {
     }
 
     @GetMapping("/by-jmbg/{jmbg}")
-    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> getLastByJMBG(@RequestBody String jmbg, @RequestHeader("Authorization") String accessToken) throws Exception {
-        System.out.println("LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         String zahtevId = zahtevZaSertifikatService.getByJmbg(jmbg);
         return new ResponseEntity<>(zahtevId, HttpStatus.OK);
     }
@@ -104,5 +93,11 @@ public class ZahtevZaSertifikatController {
     @GetMapping("/metadata-json/{id}")
     public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(zahtevZaSertifikatService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
+    }
+
+    @GetMapping("/{documentId}")
+    public ResponseEntity<?> getById(@PathVariable String documentId, @RequestHeader("Authorization") String accessToken) throws Exception {
+        ZahtevZaIzdavanjeSertifikata zahtev = zahtevZaSertifikatService.findById(documentId);
+        return new ResponseEntity<>(zahtev, HttpStatus.OK);
     }
 }

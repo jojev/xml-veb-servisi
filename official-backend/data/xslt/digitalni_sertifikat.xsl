@@ -81,7 +81,7 @@
                             <xsl:variable name="id"
                                           select="b:digitalni_zeleni_sertifikat/b:podaci_o_sertifikatu/b:broj_sertifikata"/>
                             <xsl:variable name="src"
-                                          select="concat('https://api.qrserver.com/v1/create-qr-code/?data=','',$id)"/>
+                                          select="concat('https://api.qrserver.com/v1/create-qr-code/?data=localhost:4201/prikaz/digitalni_sertifikat/','',$id)"/>
                             <xsl:attribute name="src">
                                 <xsl:value-of select="$src"/>
                             </xsl:attribute>

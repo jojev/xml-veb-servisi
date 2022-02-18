@@ -1,4 +1,4 @@
- <mat-card>
+<mat-card>
     <mat-card class="s">
         <mat-card-content>
             <form [formGroup]="form" (ngSubmit)="submit()">
@@ -31,6 +31,22 @@
               <td mat-cell *matCellDef="let row">
                 <button mat-button class="button-show" (click)="showDocument(row)">Prikazi</button>
             </td>
+            </ng-container>
+
+            <ng-container matColumnDef="preuzmi">
+                <th mat-header-cell *matHeaderCellDef style="text-align:center"> Preuzmi </th>
+                <td mat-cell *matCellDef="let row">
+                  <button mat-button class="button-pdf" (click)="downloadPDF(row)">PDF</button>
+                  <button mat-button class="button-xhtml" (click)="downloadXHTML(row)">XHTML</button>
+              </td>
+              </ng-container>
+
+            <ng-container matColumnDef="metapodaci">
+              <th mat-header-cell *matHeaderCellDef style="text-align:center"> Preuzmi metapodatke </th>
+              <td mat-cell *matCellDef="let row">
+                <button mat-button class="button-pdf" (click)="downloadJsonMetadata(row)">JSON</button>
+                <button mat-button class="button-xhtml" (click)="downloadRdfMetadata(row)">RDF</button>
+              </td>
             </ng-container>
           
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
