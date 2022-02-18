@@ -27,8 +27,30 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sednTermin(String toEmail, Termin termin) {
-    	
+    public void sendTermin(Termin termin) {
+    	try {
+            MimeMessage msg = javaMailSender.createMimeMessage();
+            msg.setSubject("Dodjela termina");
+            MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+            helper.setTo(termin.getEmailPacijenta());
+            helper.setFrom("euprava");
+            helper.setSubject("Termin");
+           
+            Multipart emailContent = new MimeMultipart();
+            MimeBodyPart textBodyPart = new MimeBodyPart();
+            textBodyPart.setText("Pacijent: " + termin.getJmbgPacijenta()+ "\nTermin Vam je dodeljen: " + termin.getDatumVreme().toString()
+            		+ "\nDoza: " + termin.getDoza() + "\nTip vakcine: " + termin.getTipVakcine());
+            emailContent.addBodyPart(textBodyPart);
+
+
+            msg.setContent(emailContent);
+           
+
+            javaMailSender.send(msg);
+
+        } catch (MessagingException ex) {
+            System.out.println("Greška prilikom slanja!");
+        }
     }
     
     public void sendResponse(String toEmail, String path, String htmlPath, String reason) {

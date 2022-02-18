@@ -52,6 +52,8 @@ public class HtmlTransformerController {
     public ResponseEntity<?> getIzvestajTransformation(@RequestBody SearchDTO searchDTO) throws Exception {
         byte[] izvestajStream = izvestajService.generateIzvestajToXHTML(searchDTO.getSearch());
         return new ResponseEntity<>(izvestajStream, HttpStatus.OK);
+        
+	}
 
     @PostMapping("/interesovanje")
     //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")

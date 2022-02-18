@@ -32,16 +32,16 @@ public class InteresovanjeController {
     }
 
 
-    @PostMapping("")
-    public ResponseEntity<?> create(@RequestBody InteresovanjeZaVakcinisanje intereseovanje) throws Exception {
-        InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje);
+    @PostMapping(value = "", consumes = {"application/xml"})
+    public ResponseEntity<?> create(@RequestBody InteresovanjeZaVakcinisanje intereseovanje,  @RequestHeader("Authorization") String accessToken) throws Exception {
+       System.out.println("CAOAODKLAKLKJ");
+    	InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje, accessToken);
         return new ResponseEntity<>(interesovanjeZaVakcinisanje, HttpStatus.OK);
     }
     
     @GetMapping("/count")
     public ResponseEntity<CountResponse> findNumberOfZahteva(String accessToken, @RequestParam String startDate, 
 			@RequestParam String endDate) throws IOException, ParseException {
-    	System.out.println("U INTERESOVANJU SAMMM");
 		return new ResponseEntity<>(new CountResponse(interesovanjeService.getNumberOfInterestedPatients(startDate, endDate)), HttpStatus.OK);
     }
 
@@ -72,6 +72,11 @@ public class InteresovanjeController {
     @GetMapping("/metadata/{id}")
     public ResponseEntity<?> getMetadata(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(interesovanjeService.readMetadata(id, "N-TRIPLE"), HttpStatus.OK);
+    }
+    
+    @PostMapping("/search")
+    public ResponseEntity<?> getInteresovanje(@RequestBody SearchDTO searchDTO) throws Exception {
+        return new ResponseEntity<>(interesovanjeService.getInteresovanjByJmbg(searchDTO.getSearch()), HttpStatus.OK);
     }
 
     @GetMapping("/metadata-json/{id}")

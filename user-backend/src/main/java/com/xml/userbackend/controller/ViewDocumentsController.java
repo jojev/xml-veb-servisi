@@ -84,7 +84,6 @@ public class ViewDocumentsController {
 	@PostMapping("/interesovanje/search_jmbg")
     //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<?> searchInteresovanjeByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
-        System.out.println("LALALALLALALAL");
         ArrayList<InteresovanjeZaVakcinisanje> interesovanjeZaVakcinisanje = interesovanjeService.searchByJMBG(searchDTO.getSearch());
         InteresovanjeList interesovanjeList = new InteresovanjeList(interesovanjeZaVakcinisanje);
         return new ResponseEntity<>(interesovanjeList, HttpStatus.OK);

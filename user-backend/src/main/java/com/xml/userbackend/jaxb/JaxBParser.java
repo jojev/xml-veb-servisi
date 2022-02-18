@@ -67,10 +67,10 @@ public class JaxBParser {
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        File schemaFile = new File(shemaLocationRegistry.get(genericClass));
-        Schema schema = schemaFactory.newSchema(schemaFile);
-        marshaller.setSchema(schema);
+//        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+//        File schemaFile = new File(shemaLocationRegistry.get(genericClass));
+//        Schema schema = schemaFactory.newSchema(schemaFile);
+//        marshaller.setSchema(schema);
 
         OutputStream os = new ByteArrayOutputStream();
         marshaller.marshal(objectToMarshall, os);

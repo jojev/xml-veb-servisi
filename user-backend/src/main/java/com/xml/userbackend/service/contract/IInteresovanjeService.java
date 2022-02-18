@@ -21,7 +21,7 @@ public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisa
 
     RDFNode getInteresovanje(String jmbg) throws IOException;
 
-    InteresovanjeZaVakcinisanje create(InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje) throws Exception;
+    InteresovanjeZaVakcinisanje create(InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje, String accessToken) throws Exception;
 
     ArrayList<RDFNode> searchRDF(String search) throws IOException;
 
@@ -38,6 +38,8 @@ public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisa
     int getNumberOfInterestedPatients(String startDate, String endDate) throws IOException;
 
 	  byte[] generateIntersovanjeToPDF(String id) throws Exception;
+
+	InteresovanjeZaVakcinisanje getInteresovanjByJmbg(String jmbg) throws Exception;
 
 
 }
