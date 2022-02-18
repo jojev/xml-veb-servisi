@@ -41,7 +41,6 @@ public class ListaCekanjaService implements IListaCekanjaService {
         
         baseRepository.save("/db/cekanje", queueName, entity, ListaCekanja.class);
         XMLResource resource = existDbManager.load("/db/cekanje", queueName);
-        System.out.println(resource.getContent().toString());
         return entity;
     }
 
@@ -57,13 +56,15 @@ public class ListaCekanjaService implements IListaCekanjaService {
 
     @Override
     public ListaCekanja addPatientToQueue(ListaCekanja.Stavka stavka) throws Exception {
+    	this.checkIfListaCekanjaExists();
         Calendar calendar = stavka.getPeriodCekanja().toGregorianCalendar();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         formatter.setTimeZone(calendar.getTimeZone());
         String dateString = formatter.format(calendar.getTime());
 
-        String newStavka = String.format("<stavka><period_cekanja>%1$s</period_cekanja><pacijent>%2$s</pacijent><tip_vakcine>%3$s</tip_vakcine><doza>%4$d</doza></stavka>", dateString, stavka.getPacijent(), stavka.getTipVakcine(), stavka.getDoza());
+        String newStavka = String.format("<stavka><period_cekanja>%1$s</period_cekanja><jmbg_pacijenta>%2$s</jmbg_pacijenta><email_pacijenta>%3$s</email_pacijenta><tip_vakcine>%4$s</tip_vakcine><doza>%5$d</doza></stavka>", dateString, stavka.getJmbgPacijenta(), stavka.getEmailPacijenta(), stavka.getTipVakcine(), stavka.getDoza());
 
+        System.out.println(newStavka);
         baseRepository.insertAsLastNode("/db/cekanje","ListaCekanja", "//lista_cekanja", newStavka, "http://www.ftn.uns.ac.rs/lista_cekanja");
         return findById("ListaCekanja") ;
     }
@@ -71,5 +72,16 @@ public class ListaCekanjaService implements IListaCekanjaService {
     @Override
     public void removePatientFromQueue(Integer stavkaIndex) throws Exception {
         baseRepository.removeNode("/db/cekanje", "ListaCekanja", String.format("//lista_cekanja/stavka[%s]", stavkaIndex.toString()), "http://www.ftn.uns.ac.rs/lista_cekanja");
+    }
+    
+    @Override
+    public void checkIfListaCekanjaExists() throws Exception {
+    	try {
+    		this.findById("ListaCekanja");
+    	}
+    	catch (Exception e) {
+    		ListaCekanja lista = new ListaCekanja();
+    		this.create(lista);
+    	}
     }
 }

@@ -64,6 +64,7 @@ public class BaseRepository {
 
     public void insertAsLastNode(String collectionUri, String documentId, String contextPath, String node, String targetNamespace)
             throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    	
         existDbManager.insertAsLastNode(collectionUri, documentId, contextPath, node, targetNamespace);
     }
 

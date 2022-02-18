@@ -190,12 +190,14 @@ public class ExistDbManager {
 
             XUpdateQueryService xupdateService = (XUpdateQueryService) collection.getService("XUpdateQueryService", "1.0");
             xupdateService.setProperty("indent", "yes");
-
+            String query = String.format(XUpdateTemplate.getAppendExpression(targetNamespace), contextPath, node);
+            System.out.println(query);
             xupdateService.updateResource(documentId, String.format(XUpdateTemplate.getAppendExpression(targetNamespace), contextPath, node));
-
+            
         } catch (Exception e) {
             closeConnection(collection, resource);
         }
+        closeConnection(collection, resource);
     }
 
     public void removeNode(String collectionUri, String documentId, String contextPath, String targetNamespace) throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {

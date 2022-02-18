@@ -8,4 +8,5 @@ import java.io.IOException;
 public interface IListaCekanjaService extends IService<ListaCekanja> {
 	ListaCekanja addPatientToQueue(ListaCekanja.Stavka stavka) throws Exception;
 	void removePatientFromQueue(Integer stavkaIndex) throws Exception;
+	void checkIfListaCekanjaExists() throws Exception;
 }

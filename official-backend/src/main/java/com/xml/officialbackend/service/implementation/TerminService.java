@@ -15,6 +15,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
@@ -22,15 +23,20 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.XMLDBException;
+import org.xmldb.api.modules.XMLResource;
 
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
+import main.java.com.xml.officialbackend.jaxb.JaxBParser;
+import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji.RaspodelaProizvodjaca.Vakcina;
 import main.java.com.xml.officialbackend.model.lista_cekanja.ListaCekanja;
 import main.java.com.xml.officialbackend.model.poslednji_termin.PoslednjiTermin;
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
 import main.java.com.xml.officialbackend.model.termin.Termin;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
+import main.java.com.xml.officialbackend.service.EmailService;
 import main.java.com.xml.officialbackend.service.contract.ITerminService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +57,8 @@ import java.util.*;
 public class TerminService implements ITerminService {
     private BaseRepository baseRepository;
 
+    private JaxBParser jaxBParser;
+    
     private ListaCekanjaService listaCekanjaService;
 
     private VaccineStatusService vaccineStatusService;
@@ -59,15 +67,20 @@ public class TerminService implements ITerminService {
     
     private ExistDbManager existDbManager;
 
+    private EmailService emailService;
+    
     @Autowired
     public TerminService(BaseRepository baseRepository, ListaCekanjaService listaCekanjaService,
                          VaccineStatusService vaccineStatusService, PoslednjiTerminService poslednjiTerminService,
-                         ExistDbManager existDbManager) {
+                         ExistDbManager existDbManager, EmailService emailService, JaxBParser jaxBParser) {
         this.baseRepository = baseRepository;
         this.listaCekanjaService = listaCekanjaService;
         this.vaccineStatusService = vaccineStatusService;
         this.poslednjiTerminService = poslednjiTerminService;
         this.existDbManager = existDbManager;
+        this.emailService = emailService;
+        this.jaxBParser = jaxBParser;
+        
     }
 
     @Override
@@ -91,7 +104,14 @@ public class TerminService implements ITerminService {
 
     @Override
     public Termin update(Termin entity, String id) throws Exception {
-        return null;
+    	Termin termin = this.findById(id);
+    	termin.setIspostovan(entity.isIspostovan());
+    	termin.setObradjen(entity.isObradjen());
+    	
+    	baseRepository.update("/db/termini", id, "//*:termin//*:ispostovan", String.valueOf(entity.isIspostovan()), "http://www.ftn.uns.ac.rs/termin");
+    	baseRepository.update("/db/termini", id, "//*:termin/*:obradjen", String.valueOf(entity.isObradjen()), "http://www.ftn.uns.ac.rs/termin");
+
+    	return findById(id);
     }
 
     @Override
@@ -103,11 +123,11 @@ public class TerminService implements ITerminService {
     public void assignToPatient() throws Exception {
         ListaCekanja lista = listaCekanjaService.findById("ListaCekanja");
         List<String> vaccineTypes = new ArrayList<>();
-        vaccineTypes.add("Pfizer");
+        vaccineTypes.add("Pfizer-BioNTech");
         vaccineTypes.add("Moderna");
         vaccineTypes.add("Sputnik V");
         vaccineTypes.add("Sinopharm");
-        vaccineTypes.add("AstraZeneca");
+        vaccineTypes.add("AstraZeneca-Oxford");
 
         for(int i = 0; i < lista.getStavka().size(); i++) {
             ListaCekanja.Stavka stavka = lista.getStavka().get(i);
@@ -141,11 +161,19 @@ public class TerminService implements ITerminService {
         XMLGregorianCalendar now =  DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
         int result = date.toGregorianCalendar().compareTo(now.toGregorianCalendar());
         
-        if(result > 0) {
+        if(result <= 0) {
         	date = now;
         }
         
-        StanjeVakcine stanje = vaccineStatusService.findById(vaccineType);
+        StanjeVakcine stanje = null;
+        try
+        {
+        	stanje = vaccineStatusService.findById(vaccineType);
+        }
+        catch(Exception e) {
+        	return null;
+        }
+        
         if(stanje == null || stanje.getKolicina() < 1) {
         	return null;
         }
@@ -158,7 +186,8 @@ public class TerminService implements ITerminService {
                 if(termin.getBrojTermina() < 128 ) {
                     Termin newTermin = new Termin();
                     newTermin.setTrajanje(BigInteger.valueOf(15));
-                    newTermin.setPacijent(stavka.getPacijent());
+                    newTermin.setEmailPacijenta(stavka.getEmailPacijenta());
+                    newTermin.setJmbgPacijenta(stavka.getJmbgPacijenta());
                     newTermin.setIspostovan(false);
                     newTermin.setDoza(stavka.getDoza());
                     newTermin.setTipVakcine(stavka.getTipVakcine());
@@ -173,7 +202,8 @@ public class TerminService implements ITerminService {
             else {
                 Termin newTermin = new Termin();
                 newTermin.setTrajanje(BigInteger.valueOf(15));
-                newTermin.setPacijent(stavka.getPacijent());
+                newTermin.setEmailPacijenta(stavka.getEmailPacijenta());
+                newTermin.setJmbgPacijenta(stavka.getJmbgPacijenta());
                 newTermin.setIspostovan(false);
                 newTermin.setDoza(stavka.getDoza());
                 newTermin.setTipVakcine(stavka.getTipVakcine());
@@ -192,11 +222,12 @@ public class TerminService implements ITerminService {
     }
 
     @Override
-    public void addTerminOrAddToListaCekanja(String vaccineType, Integer numberOfVaccine, String usernameOfPatient, XMLGregorianCalendar dateOfLastVaccine) throws Exception {
+    public void addTerminOrAddToListaCekanja(String vaccineType, Integer numberOfVaccine, String usernameOfPatient, String emailOFPatient, XMLGregorianCalendar dateOfLastVaccine) throws Exception {
         ListaCekanja.Stavka stavka = new ListaCekanja.Stavka();
-        stavka.setPacijent(usernameOfPatient);
+        stavka.setJmbgPacijenta(usernameOfPatient);
+        stavka.setEmailPacijenta(emailOFPatient);
         stavka.setTipVakcine(vaccineType);
-
+        stavka.setDoza(numberOfVaccine);
         GregorianCalendar calendar = dateOfLastVaccine.toGregorianCalendar();
         if(numberOfVaccine == 2) {
             if(vaccineType.equalsIgnoreCase("AstraZeneca" )) {
@@ -213,9 +244,14 @@ public class TerminService implements ITerminService {
         XMLGregorianCalendar xmlGregorianCalendar =
                 DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
         stavka.setPeriodCekanja(xmlGregorianCalendar);
+        
         Termin termin = findAvailableAppointment(vaccineType, stavka);
+        
         if(termin == null) {
             listaCekanjaService.addPatientToQueue(stavka);
+        }
+        else {
+        	emailService.sendTermin(termin);
         }
     }
 
@@ -289,4 +325,76 @@ public class TerminService implements ITerminService {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
 	}
+
+    @Override
+    public void processTermin(String jmbg,  String tipVakcine, int doza) throws Exception {
+    	List<Resource> resource = this.executeTerminIspostovan(jmbg, tipVakcine, doza);
+    	
+    	for(Resource res : resource) {
+    		Termin termin = jaxBParser.unmarshall(res.getContent().toString(), Termin.class);
+    		termin.setIspostovan(true);
+    		termin.setObradjen(true);
+    		String tokens[] = termin.getAbout().split("/");
+    		String terminId = tokens[tokens.length - 1];
+    		this.update(termin, terminId);
+    		
+    	}
+    }
+    
+    public List<Resource> executeTerminIspostovan(String jmbg, String tipVakcine, int doza) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, XMLDBException {
+    	String xqueryPath = "data/xquery/pretraga_termina_po_jmbg_vakcini_dozi.xqy";
+    	String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+    	
+    	String formattedXQueryExpresion = String.format(xqueryExpression, doza, jmbg, tipVakcine.strip());
+    	System.out.println(formattedXQueryExpresion);
+    	return existDbManager.executeXquery("/db/termini", "", formattedXQueryExpresion);
+    }
+    
+    public List<Resource> executeMissedTerminQuery() throws Exception {
+    	String xqueryPath = "data/xquery/pretraga_po_neispostovanim_terminima.xqy";
+    	String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+    	
+    	GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+
+        XMLGregorianCalendar startDate =  DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+    	
+    	String formattedXQueryExpresion = String.format(xqueryExpression, startDate);
+    	System.out.println(formattedXQueryExpresion);
+    	return existDbManager.executeXquery("/db/termini", "", formattedXQueryExpresion);
+    }
+    
+    @Override
+	public void updateVaccineStatus() throws Exception {
+    	List<Termin> termini = this.findNeobradjeniTermini();
+    	
+    	for(Termin termin : termini) {
+    		try {
+    			StanjeVakcine stanje = vaccineStatusService.findById(termin.getTipVakcine());
+        		stanje.setKolicina(stanje.getKolicina() + 1);
+        		vaccineStatusService.update(stanje, termin.getTipVakcine());
+    		}
+       		catch(Exception e) {
+    			StanjeVakcine vakcine = new StanjeVakcine();
+    			vakcine.setKolicina(1);
+    			vakcine.setVakcina(termin.getTipVakcine());
+        		vaccineStatusService.create(vakcine);
+    		}
+    	}
+	}
+    
+    private List<Termin> findNeobradjeniTermini() throws Exception {
+    	List<Resource> resource = executeMissedTerminQuery();
+    	List<Termin> termini = new ArrayList<Termin>();
+    	
+    	for(Resource res : resource) {
+    		Termin termin = jaxBParser.unmarshall(res.getContent().toString(), Termin.class);
+    		termin.setObradjen(true);
+    		String tokens[] = termin.getAbout().split("/");
+    		String terminId = tokens[tokens.length - 1];
+    		this.update(termin, terminId);
+    	}
+		
+		return termini;
+    }
 }
