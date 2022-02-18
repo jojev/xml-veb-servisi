@@ -32,7 +32,7 @@ public class HtmlTransformer {
 
     private static TransformerFactory transformerFactory;
 
-    //public static final String HTML_FILE = "gen/html/potvrda_o_vakcinaciji.html";
+    //public static final String HTML_FILE = "gen/html/potvrda_o_vakcinaciji1.html";
 
     public static final String INPUT_FILE = "data/documents/potvrda_o_vakcinaciji.xml";
 
