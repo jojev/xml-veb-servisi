@@ -45,7 +45,7 @@ public class XslfoTransformationController {
     }
 	
 	@PostMapping("/potvrda")
-	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN', 'ROLE_ZDRAVSTVENI_RADNIK')")
     public ResponseEntity<?> getInteresovanjeTransformation(@RequestBody SearchDTO searchDTO) throws Exception {
         byte[] potvrdaStream = potvrdaService.generatePotvrdaToPDF(searchDTO.getSearch());
         return new ResponseEntity<>(potvrdaStream, HttpStatus.OK);
@@ -59,7 +59,7 @@ public class XslfoTransformationController {
 	}
 	
 	@PostMapping(value = "/obrazac")
-	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN', 'ROLE_ZDRAVSTVENI_RADNIK')")
 	public ResponseEntity<?> getObrazacTransformation(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
 		HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
 	    ResponseEntity<byte[]> response = restTemplate.exchange("http://localhost:8080/api/v1/xslfo_transformation/obrazac", HttpMethod.POST,

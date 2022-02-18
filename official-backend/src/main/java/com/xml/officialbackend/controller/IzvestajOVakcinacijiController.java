@@ -31,7 +31,7 @@ public class IzvestajOVakcinacijiController {
 	private RestTemplate restTemplate;
 	
 	@GetMapping("")
-	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
 	public ResponseEntity<IzvestajOImunizaciji> searchInteresovanjeByJMBG(@RequestHeader("Authorization") String accessToken, @RequestParam String startDate, 
 			@RequestParam String endDate) throws Exception {
 		HttpHeaders headers = new HttpHeaders();
@@ -49,11 +49,13 @@ public class IzvestajOVakcinacijiController {
     }
 
 	@GetMapping("/metadata/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
 	public ResponseEntity<?> getMetadata(@PathVariable String id) throws IOException {
 		return new ResponseEntity<>(izvestajService.readMetadata(id, "N-TRIPLE"), HttpStatus.OK);
 	}
 
 	@GetMapping("/metadata-json/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
 	public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
 		return new ResponseEntity<>(izvestajService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
 	}

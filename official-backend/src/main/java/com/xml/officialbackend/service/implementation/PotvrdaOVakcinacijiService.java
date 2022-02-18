@@ -261,7 +261,7 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
 
 
     @Override
-    public ArrayList<PotvrdaOVakcinaciji> searchByText(SearchDTO searchDTO) throws XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, JAXBException {
+    public ArrayList<PotvrdaOVakcinaciji> searchByText(SearchDTO searchDTO) throws Exception {
         String xqueryPath = "data/xquery/pretraga_po_tekstu_potvrda.xqy";
         String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
 

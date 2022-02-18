@@ -128,6 +128,8 @@ public class TerminService implements ITerminService {
         vaccineTypes.add("Sputnik V");
         vaccineTypes.add("Sinopharm");
         vaccineTypes.add("AstraZeneca-Oxford");
+        vaccineTypes.add("AstraZeneca");
+
 
         for(int i = 0; i < lista.getStavka().size(); i++) {
             ListaCekanja.Stavka stavka = lista.getStavka().get(i);
@@ -160,7 +162,6 @@ public class TerminService implements ITerminService {
 
         XMLGregorianCalendar now =  DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
         int result = date.toGregorianCalendar().compareTo(now.toGregorianCalendar());
-        System.out.println("TU SAMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
         if(result <= 0) {
         	date = now;
         }
@@ -181,7 +182,6 @@ public class TerminService implements ITerminService {
         while(true) {
         	String findDate = date.getYear() + "-" + date.getMonth() + "-" + date.getDay();
             PoslednjiTermin termin =  poslednjiTerminService.findById(findDate);
-        	System.out.println(findDate + " EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
             if(termin != null) {
                 if(termin.getBrojTermina() < 128 ) {
@@ -211,10 +211,8 @@ public class TerminService implements ITerminService {
                 newTermin.setDoza(stavka.getDoza());
                 newTermin.setTipVakcine(stavka.getTipVakcine());
                 newTermin.setDatumVreme(makeAppointment(0, date));
-            	System.out.println(findDate + " rrrrr");
 
                 Termin savedTermin = this.create(newTermin);
-            	System.out.println(findDate + " EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
                 this.updateVaccineStatusAndLastAppointment(savedTermin, null, stanje, date);
                 
@@ -237,7 +235,7 @@ public class TerminService implements ITerminService {
         
         GregorianCalendar calendar = dateOfLastVaccine.toGregorianCalendar();
         if(numberOfVaccine == 2) {
-            if(vaccineType.equalsIgnoreCase("AstraZeneca" )) {
+            if(vaccineType.equalsIgnoreCase("AstraZeneca" ) || vaccineType.equalsIgnoreCase("AstraZeneca-Oxford" )) {
                 calendar.add(Calendar.MONTH, 2);
             }
             else {
