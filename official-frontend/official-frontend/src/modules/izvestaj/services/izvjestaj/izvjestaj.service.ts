@@ -2,6 +2,8 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+var o2x = require('object-to-xml');
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,10 +15,25 @@ export class IzvjestajService {
   constructor(public http: HttpClient) { }
 
   create(periodOd: any, periodDo: any): Observable<any> {
-    return this.http.get<any>("/api/v1/izvjestaj?startDate=" + periodOd + "&endDate=" + periodDo, {
+    return this.http.get<any>("/api/v1/izvestaj?startDate=" + periodOd + "&endDate=" + periodDo, {
       headers: this.headers,
       responseType: 'test/xml' as 'json'
     })
   }
-  
+  getHtmlTransformation(search:any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<Blob>("/api/v1/html_transformation/izvestaj", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+  getPdfTransformation(search: any): Observable<Blob> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<Blob>("/api/v1/xslfo_transformation/izvestaj", xmlString, {
+      headers: this.headers,
+      responseType: 'blob' as 'json'
+    })
+  }
 }

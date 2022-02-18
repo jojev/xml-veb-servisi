@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import main.java.com.xml.officialbackend.service.implementation.DigitalniSertifikatService;
+import main.java.com.xml.officialbackend.service.implementation.IzvestajService;
 import main.java.com.xml.officialbackend.service.implementation.PotvrdaOVakcinacijiService;
 import main.java.com.xml.officialbackend.dto.SearchDTO;
 
@@ -26,6 +27,9 @@ public class HtmlTransformerController {
 	@Autowired
 	private DigitalniSertifikatService sertifikatService;
 	
+	@Autowired
+	private IzvestajService izvestajService;
+	
 	@PostMapping("/digitalni")
 	//@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<?> getDigitalniTransformation(@RequestBody SearchDTO searchDTO) throws Exception {
@@ -38,5 +42,12 @@ public class HtmlTransformerController {
     public ResponseEntity<?> getInteresovanjeTransformation(@RequestBody SearchDTO searchDTO) throws Exception {
         byte[] potvrdaStream = potvrdaService.generatePotvrdaToXHTML(searchDTO.getSearch());
         return new ResponseEntity<>(potvrdaStream, HttpStatus.OK);
+    }
+	
+	@PostMapping("/izvestaj")
+	//@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+    public ResponseEntity<?> getIzvestajTransformation(@RequestBody SearchDTO searchDTO) throws Exception {
+        byte[] izvestajStream = izvestajService.generateIzvestajToXHTML(searchDTO.getSearch());
+        return new ResponseEntity<>(izvestajStream, HttpStatus.OK);
     }
 }

@@ -18,7 +18,12 @@
       <button class="b" mat-raised-button color="primary" [disabled]="!form.valid">
           Kreiraj
       </button> 
+
+      
   </form>
+  <button (click)="preuzmi()" class="b" mat-raised-button color="primary" [disabled]="!form.valid">
+        Preuzmi
+    </button> 
   </mat-card-content>
 </mat-card>
 <div id="izvestaj"></div>

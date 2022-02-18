@@ -32,12 +32,11 @@ public class IzvestajOVakcinacijiController {
 	private RestTemplate restTemplate;
 	
 	@GetMapping("")
-	public ResponseEntity<byte[]> searchInteresovanjeByJMBG(@RequestHeader("Authorization") String accessToken, @RequestParam String startDate, 
+	public ResponseEntity<IzvestajOImunizaciji> searchInteresovanjeByJMBG(@RequestHeader("Authorization") String accessToken, @RequestParam String startDate, 
 			@RequestParam String endDate) throws Exception {
 		HttpHeaders headers = new HttpHeaders();
 	    headers.add("Authorization", accessToken);
 	    headers.setContentType(MediaType.APPLICATION_XML);
-	    System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 	    HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
 	    
         ResponseEntity<CountResponse> interesovanjeCnt = restTemplate.exchange("http://localhost:8080/api/v1/interesovanje/count?startDate=" + startDate + "&endDate=" + endDate,
@@ -46,8 +45,8 @@ public class IzvestajOVakcinacijiController {
         		HttpMethod.GET, httpEntity, CountResponse.class);
       
         IzvestajOImunizaciji izvestaj = izvestajService.createReport(startDate, endDate, interesovanjeCnt.getBody().getValue(), zahtevCnt.getBody().getValue());
-        String[] tokens = izvestaj.getAbout().split("/");
-        String izvjestajId = izvestaj.getAbout().split("/")[tokens.length - 1];
-        return new ResponseEntity<>(izvestajService.generatePotvrdaToXHTML(izvjestajId), HttpStatus.OK);
+        return new ResponseEntity<>(izvestaj, HttpStatus.OK);
     }
+	
+	
 }

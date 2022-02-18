@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
+import main.java.com.xml.userbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.userbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
@@ -44,6 +45,7 @@ public class XSLFOTransformer {
         shemaLocationRegistry.put(ObrazacZaSprovodjenjeImunizacije.class, "./data/xsl_fo/obrazac_za_sprovodjenje_imunizacije.xsl");
         shemaLocationRegistry.put(ZahtevZaIzdavanjeSertifikata.class, "./data/xsl_fo/zahtev_za_izdavanje_sertifikata.xsl");
         shemaLocationRegistry.put(PotvrdaOVakcinaciji.class, "./data/xsl_fo/potvrda_o_vakcinaciji.xsl");
+        shemaLocationRegistry.put(IzvestajOImunizaciji.class, "./data/xsl_fo/izvestaj_o_imunizaciji.xsl");
     }
     public XSLFOTransformer() throws SAXException, IOException {
 

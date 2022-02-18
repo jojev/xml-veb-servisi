@@ -46,6 +46,7 @@ public class ZahtevZaSertifikatController {
     
     @GetMapping("/count")
     public ResponseEntity<CountResponse> findNumberOfZahteva(@RequestParam String startDate, @RequestParam String endDate) throws IOException, ParseException {
+    	System.out.println("U ZAHTEVU SAMMMM");
 		return new ResponseEntity<>(new CountResponse(zahtevZaSertifikatService.getNumberOfRequestForDigitalSertificate(startDate, endDate)), HttpStatus.OK);
     }
 

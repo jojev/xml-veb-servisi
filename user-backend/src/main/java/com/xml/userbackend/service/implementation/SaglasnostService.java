@@ -190,7 +190,7 @@ public class SaglasnostService implements ISaglasnostService {
         ArrayList<RDFNode> nodes = new ArrayList<>();
         try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
-            if (result.getResult().hasNext()) {
+            while (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
                 nodes.add(row.get(columnName));

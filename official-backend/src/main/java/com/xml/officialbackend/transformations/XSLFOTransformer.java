@@ -15,6 +15,7 @@ import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeZaVakc
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
+import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -41,6 +42,7 @@ public class XSLFOTransformer {
         shemaLocationRegistry.put(ObrazacZaSprovodjenjeImunizacije.class, "./data/xsl-fo/obrazac_za_sprovodjenje_imunizacije.xsl");
         shemaLocationRegistry.put(ZahtevZaIzdavanjeSertifikata.class, "./data/xsl-fo/zahtev_za_izdavanje_sertifikata.xsl");
         shemaLocationRegistry.put(PotvrdaOVakcinaciji.class, "./data/xsl-fo/potvrda_o_vakcinaciji.xsl");
+        shemaLocationRegistry.put(IzvestajOImunizaciji.class, "./data/xsl-fo/izvestaj_o_imunizaciji.xsl");
     }
 
 //    public static final String INPUT_FILE = "data/documents/interesovanje.xml";

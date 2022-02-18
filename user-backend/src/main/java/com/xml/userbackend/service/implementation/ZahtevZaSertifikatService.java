@@ -161,7 +161,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     @Override
     public int getNumberOfRequestForDigitalSertificate(String startDate, String endDate) throws IOException {
         String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/IzdatDatuma> ?date. "
-                + "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>).";
+                + "FILTER ( ?date >= \"" + startDate + "\" && ?date < \"" + endDate + "\").";
 
         try (RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/zahtev_za_sertifikat", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
