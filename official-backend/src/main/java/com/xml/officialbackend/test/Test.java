@@ -48,11 +48,11 @@ public class Test {
     private IVaccineStatusService statusService;
 
     public void test() throws Exception {
-       //this.createPfizer();
-       //this.createAstraZeneca();
-       //this.createModerna();
-       //this.createSinopharm();
-       //this.createSputnikV();
+       this.createPfizer();
+       this.createAstraZeneca();
+       this.createModerna();
+       this.createSinopharm();
+       this.createSputnikV();
     }
 
     public void testWriteToExistDb() throws Exception {

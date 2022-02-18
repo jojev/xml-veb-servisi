@@ -125,9 +125,10 @@ export class SearchService {
   }
   
   getInteresovanjeXSLFOTransformation(search: any): Observable<any> {
+    console.log("tu");
     var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
-    return this.http.post<any>("/api/v1/xslfo_transformation/interesovanje", xmlString, {
+    return this.http.post<Blob>("/api/v1/xslfo_transformation/interesovanje", xmlString, {
       headers: this.headers,
       responseType:  'blob' as 'json'
     })
@@ -136,7 +137,7 @@ export class SearchService {
   getSaglasnostXSLFOTransformation(search: any): Observable<any> {
     var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
-    return this.http.post<any>("/api/v1/xslfo_transformation/saglasnost", xmlString, {
+    return this.http.post<Blob>("/api/v1/xslfo_transformation/saglasnost", xmlString, {
       headers: this.headers,
       responseType: 'blob' as 'json'
     })
@@ -145,7 +146,7 @@ export class SearchService {
   getZahtevXSLFOTransformation(search: any): Observable<any> {
     var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
-    return this.http.post<any>("/api/v1/xslfo_transformation/zahtev", xmlString, {
+    return this.http.post<Blob>("/api/v1/xslfo_transformation/zahtev", xmlString, {
       headers: this.headers,
       responseType: 'blob' as 'json'
     })
@@ -154,7 +155,7 @@ export class SearchService {
   getPotvrdaXSLFOTransformation(search: any): Observable<any> {
     var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
-    return this.http.post<any>("/api/v1/xslfo_transformation/potvrda", xmlString, {
+    return this.http.post<Blob>("/api/v1/xslfo_transformation/potvrda", xmlString, {
       headers: this.headers,
       responseType: 'blob' as 'json'
     })
@@ -163,7 +164,7 @@ export class SearchService {
   getDigitalniXSLFOTransformation(search: any): Observable<any> {
     var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
-    return this.http.post<any>("/api/v1/xslfo_transformation/digitalni", xmlString, {
+    return this.http.post<Blob>("/api/v1/xslfo_transformation/digitalni", xmlString, {
       headers: this.headers,
       responseType:  'blob' as 'json'
     })
