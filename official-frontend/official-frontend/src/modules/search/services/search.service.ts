@@ -123,4 +123,17 @@ export class SearchService {
       responseType: 'test/xml' as 'json'
     })
   }
+
+  getSearchByText(searchDTO: any,path: any): Observable<any> {
+    const item = localStorage.getItem("user") || "";
+    const decodedItem = JSON.parse(item);
+    this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
+    var xmlDoc = this.parser.parseFromString(o2x(searchDTO), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+
+    return this.http.post<any>(`/api/v1/search/${path}/search_by_text`, xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
 }
