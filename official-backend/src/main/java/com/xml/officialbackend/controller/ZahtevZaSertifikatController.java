@@ -6,6 +6,7 @@ import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzda
 import main.java.com.xml.officialbackend.service.contract.IZahtevZaSertifikatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,6 +23,7 @@ public class ZahtevZaSertifikatController {
         this.zahtevZaSertifikatService = zahtevZaSertifikatService;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @PostMapping(value = "/odgovor")
     public ResponseEntity<?> response(@RequestBody RazlogDTO razlogDTO, @RequestHeader("Authorization") String accessToken) throws Exception {
 
@@ -36,6 +38,7 @@ public class ZahtevZaSertifikatController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @GetMapping(value = "/pending")
     public ResponseEntity<?> findPendingZahtevi(@RequestHeader("Authorization") String accessToken) {
 

@@ -25,7 +25,7 @@ public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSe
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchByJMBG(SearchDTO searchDTO) throws Exception;
 
-	  byte[] generateZahtevToXHTML(String id) throws Exception;
+    byte[] generateZahtevToXHTML(String id) throws Exception;
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
 
@@ -33,7 +33,7 @@ public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSe
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> searchByText(String search) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
 
-	byte[] generateZahtevToPDF(String id) throws Exception;
+    byte[] generateZahtevToPDF(String id) throws Exception;
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> findPendingZahtevi() throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
 

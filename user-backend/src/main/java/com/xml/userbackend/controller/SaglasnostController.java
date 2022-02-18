@@ -3,8 +3,6 @@ package main.java.com.xml.userbackend.controller;
 
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.userbackend.dto.SearchDTO;
-import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeList;
-import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacList;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
@@ -15,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -54,6 +51,7 @@ public class SaglasnostController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @PostMapping("/search_by_metadata")
     public ResponseEntity<?> searchByMetadata(@RequestBody MetadataSearchDTO metadataSearchDTO) throws Exception {
         ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazac = saglasnostService.searchMetadata(metadataSearchDTO);
@@ -87,6 +85,7 @@ public class SaglasnostController {
     }
 
 
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @GetMapping("/search_logical")
     public ResponseEntity<?> searchLogical(@RequestParam(name="search") String search) throws Exception {
         ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazacZaSprovodjenjeImunizacijes = saglasnostService.searchMetadataLogical(URLDecoder.decode(search, "UTF-8"));
