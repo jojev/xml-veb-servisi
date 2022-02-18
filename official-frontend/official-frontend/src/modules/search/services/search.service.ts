@@ -129,7 +129,7 @@ export class SearchService {
     var xmlString = this.serializer.serializeToString(xmlDoc);
     return this.http.post<any>("/api/v1/xslfo_transformation/interesovanje", xmlString, {
       headers: this.headers,
-      responseType: 'test/xml' as 'json'
+      responseType:  'blob' as 'json'
     })
   }
 
@@ -138,7 +138,7 @@ export class SearchService {
     var xmlString = this.serializer.serializeToString(xmlDoc);
     return this.http.post<any>("/api/v1/xslfo_transformation/saglasnost", xmlString, {
       headers: this.headers,
-      responseType: 'test/xml' as 'json'
+      responseType: 'blob' as 'json'
     })
   }
 
@@ -147,7 +147,7 @@ export class SearchService {
     var xmlString = this.serializer.serializeToString(xmlDoc);
     return this.http.post<any>("/api/v1/xslfo_transformation/zahtev", xmlString, {
       headers: this.headers,
-      responseType: 'test/xml' as 'json'
+      responseType: 'blob' as 'json'
     })
   }
 
@@ -156,7 +156,7 @@ export class SearchService {
     var xmlString = this.serializer.serializeToString(xmlDoc);
     return this.http.post<any>("/api/v1/xslfo_transformation/potvrda", xmlString, {
       headers: this.headers,
-      responseType: 'test/xml' as 'json'
+      responseType: 'blob' as 'json'
     })
   }
 
@@ -165,7 +165,7 @@ export class SearchService {
     var xmlString = this.serializer.serializeToString(xmlDoc);
     return this.http.post<any>("/api/v1/xslfo_transformation/digitalni", xmlString, {
       headers: this.headers,
-      responseType: 'test/xml' as 'json'
+      responseType:  'blob' as 'json'
     })
   }
 
@@ -191,6 +191,15 @@ export class SearchService {
   }
 
 
+  getMetadataLogicalSearch(search: any):Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/search/logical", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+    
+  }
   getMetadataRDFForInteresovanje(id: any):Observable<any> {
     return this.http.get<any>("/api/v1/interesovanje/metadata/" + id, {
       headers: this.headers,

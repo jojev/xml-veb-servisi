@@ -1,0 +1,110 @@
+<mat-card>
+    <mat-card class="s">
+      <mat-card-content>
+        <form [formGroup]="form">
+          <mat-form-field appearance="fill" class="select">
+            <mat-label>Odaberite tip dokumenta</mat-label>
+            <mat-select required formControlName="opcija">
+              <mat-option *ngFor="let option of options" [value]="option.value">
+                {{option.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.valid"><strong>Obavezno</strong></mat-error>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="form.value['opcija'] === 'interesovanje'" appearance="fill" class="select">
+            <mat-label>Odaberite metapodatak</mat-label>
+            <mat-select required formControlName="metapodatak">
+              <mat-option  *ngFor="let option of interesovanja" [value]="option.value">
+                {{option.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.valid"><strong>Obavezno</strong></mat-error>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="form.value['opcija'] === 'obrazac_za_imunizaciju'" appearance="fill" class="select">
+            <mat-label>Odaberite metapodatak</mat-label>
+            <mat-select required formControlName="metapodatak">
+              <mat-option  *ngFor="let option of obrasci" [value]="option.value">
+                {{option.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.valid"><strong>Obavezno</strong></mat-error>
+          </mat-form-field>
+          <mat-form-field *ngIf="form.value['opcija'] === 'potvrda_o_vakcinaciji'" appearance="fill" class="select">
+            <mat-label>Odaberite metapodatak</mat-label>
+            <mat-select required formControlName="metapodatak">
+              <mat-option  *ngFor="let option of potvrde" [value]="option.value">
+                {{option.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.valid"><strong>Obavezno</strong></mat-error>
+          </mat-form-field>
+          <mat-form-field *ngIf="form.value['opcija'] === 'zahtev_za_sertifikat'" appearance="fill" class="select">
+            <mat-label>Odaberite metapodatak</mat-label>
+            <mat-select required formControlName="metapodatak">
+              <mat-option  *ngFor="let option of zahtevi" [value]="option.value">
+                {{option.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.valid"><strong>Obavezno</strong></mat-error>
+          </mat-form-field>
+          <mat-form-field *ngIf="form.value['opcija'] === 'digitalni_sertifikat'" appearance="fill" class="select">
+            <mat-label>Odaberite metapodatak</mat-label>
+            <mat-select required formControlName="metapodatak">
+              <mat-option  *ngFor="let option of digitalni" [value]="option.value">
+                {{option.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="!form.valid"><strong>Obavezno</strong></mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput placeholder="Znak (=, &lt;, &gt;, &le;, &ge;)" formControlName="znak" required />
+            <mat-error *ngIf="!form.valid">Znak je <strong>obavezan</strong></mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Pretraga" formControlName="meta" required />
+            <mat-error *ngIf="!form.valid">Polje je <strong>obavezan</strong></mat-error>
+          </mat-form-field>
+          <button class="button-or" mat-raised-button color="primary" [disabled]="!form.valid" (click)="submit('||')">
+            OR
+          </button>
+          <button class="button-and" mat-raised-button color="primary" [disabled]="!form.valid" (click)="submit('&&')">
+            AND
+          </button>
+        </form>
+      </mat-card-content>
+      <button class="pretraga" mat-raised-button color="primary" [disabled]="!form.valid" (click)="searchMetadata()">
+        Pretraga
+      </button>
+    </mat-card>
+  
+    <table *ngIf="all !== 0 && dataSource.length !== 0 " mat-table [dataSource]="dataSource"
+      class="mat-elevation-z8" style="width:800px;">
+  
+      <ng-container matColumnDef="dokument">
+        <th mat-header-cell *matHeaderCellDef style="text-align:center"> Dokument </th>
+        <td mat-cell *matCellDef="let element"> {{element.dokument}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef style="text-align:center"> Id dokumenta</th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="prikaz">
+        <th mat-header-cell *matHeaderCellDef style="text-align:center"> Prikaz </th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-button class="button-show">Prikazi</button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  
+  </mat-card>
+  <div id="preview">
+  
+  </div>

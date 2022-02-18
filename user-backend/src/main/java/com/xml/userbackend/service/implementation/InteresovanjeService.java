@@ -195,6 +195,7 @@ public class InteresovanjeService implements IInteresovanjeService {
             while (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
+                System.out.println(columnNames.get(0));
                 nodes.add(row.get(columnName));
             }
 
@@ -310,9 +311,36 @@ public class InteresovanjeService implements IInteresovanjeService {
         return new String(encoded, encoding);
     }
 
+    @Override
+    public ArrayList<InteresovanjeZaVakcinisanje> searchMetadataLogical(String search) throws Exception {
+        ArrayList<RDFNode> nodes = searchMETA(search);
+        ArrayList<InteresovanjeZaVakcinisanje> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            InteresovanjeZaVakcinisanje interesovanje = findById(parts[parts.length - 1]);
+            list.add(interesovanje);
+        }
+        return list;
+    }
+
+    public ArrayList<RDFNode> searchMETA(String sparqlCondition) throws IOException {
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/interesovanje", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+
+        }
+        return nodes;
+    }
+
 	@Override
 	public InteresovanjeZaVakcinisanje create(InteresovanjeZaVakcinisanje entity) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }
