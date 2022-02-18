@@ -38,4 +38,6 @@ public interface ISaglasnostService extends    IService<ObrazacZaSprovodjenjeImu
 
 	byte[] generateSaglasnostToPDF(String id) throws Exception;
 
+    public String findWhoIsReferenced(String documentId);
+
 }

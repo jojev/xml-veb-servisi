@@ -307,5 +307,4 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         String[] documentUri = lastZahtev.split("/");
         return documentUri[documentUri.length - 1];
     }
-
 }

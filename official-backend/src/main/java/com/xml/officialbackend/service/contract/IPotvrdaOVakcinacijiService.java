@@ -27,4 +27,5 @@ public interface IPotvrdaOVakcinacijiService extends IService<PotvrdaOVakcinacij
 
     String readMetadata(String documentId, String format) throws IOException;
 
+    public String findWhoIsReferenced(String documentId);
 }

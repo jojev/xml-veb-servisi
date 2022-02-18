@@ -304,4 +304,23 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
 
     }
 
+    @Override
+    public String findWhoIsReferenced(String documentId) {
+        String sparqlCondition = "\"<http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/" + documentId +">\" \"<http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/Referencira>\" ?s.";
+
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/potvrda_o_vakcinaciji", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while(result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                RDFNode rdfNode = row.get(columnName);
+                return rdfNode.toString();
+            }
+        } catch (IOException e) {
+            return null;
+        }
+        return null;
+    }
+
 }

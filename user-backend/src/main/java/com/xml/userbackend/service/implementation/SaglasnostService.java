@@ -324,4 +324,23 @@ public class SaglasnostService implements ISaglasnostService {
 		return null;
 	}
 
+    @Override
+    public String findWhoIsReferenced(String documentId) {
+        String sparqlCondition = "\"<http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/" + documentId +">\" \"<http://www.ftn.uns.ac.rs/rdf/saglasnosti/predicate/Referencira>\" ?s.";
+
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while(result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                RDFNode rdfNode = row.get(columnName);
+                return rdfNode.toString();
+            }
+        } catch (IOException e) {
+            return null;
+        }
+        return null;
+    }
+
 }

@@ -31,10 +31,13 @@ public class InteresovanjeController {
         this.interesovanjeService = interesovanjeService;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@RequestParam String id) throws Exception {
+        return new ResponseEntity<>(interesovanjeService.findById(id), HttpStatus.OK);
+    }
 
     @PostMapping(value = "", consumes = {"application/xml"})
     public ResponseEntity<?> create(@RequestBody InteresovanjeZaVakcinisanje intereseovanje,  @RequestHeader("Authorization") String accessToken) throws Exception {
-        System.out.println("CAOAODKLAKLKJ");
         InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje, accessToken);
         return new ResponseEntity<>(interesovanjeZaVakcinisanje, HttpStatus.OK);
     }
@@ -82,5 +85,11 @@ public class InteresovanjeController {
     @GetMapping("/metadata-json/{id}")
     public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(interesovanjeService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
+    }
+
+    @GetMapping("/referenced/{documentId}")
+    public ResponseEntity<?> findWhereIsReferenced(@PathVariable String documentId) throws Exception {
+        String zahtev = interesovanjeService.findWhereIsReferenced(documentId);
+        return new ResponseEntity<>(zahtev, HttpStatus.OK);
     }
 }

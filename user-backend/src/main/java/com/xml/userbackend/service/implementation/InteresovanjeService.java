@@ -110,7 +110,6 @@ public class InteresovanjeService implements IInteresovanjeService {
             System.out.println(columnNames.get(0));
             System.out.println(columnNames.size());
             if (result.getResult().hasNext()) {
-                System.out.println("Usao");
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
                 RDFNode rdfNode = row.get(columnName);
@@ -315,4 +314,22 @@ public class InteresovanjeService implements IInteresovanjeService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    @Override
+    public String findWhereIsReferenced(String documentId) {
+        String sparqlCondition = "?person ?predicate\"" + documentId + "\" .";
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while(result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                RDFNode rdfNode = row.get(columnName);
+                return rdfNode.toString();
+            }
+        } catch (IOException e) {
+            return null;
+        }
+        return null;
+    }
 }

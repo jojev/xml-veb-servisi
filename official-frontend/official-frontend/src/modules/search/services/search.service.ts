@@ -16,9 +16,9 @@ export class SearchService {
 
 
   getInteresovanja(searchDTO: any): Observable<any> {
-    const item = localStorage.getItem("user") || "";
-    const decodedItem = JSON.parse(item);
-    this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
+    // const item = localStorage.getItem("user") || "";
+    // const decodedItem = JSON.parse(item);
+    // this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
     var xmlDoc = this.parser.parseFromString(o2x(searchDTO), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
 
@@ -28,9 +28,9 @@ export class SearchService {
     })
   }
   getSaglasnosti(searchDTO: any): Observable<any> {
-    const item = localStorage.getItem("user") || "";
-    const decodedItem = JSON.parse(item);
-    this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
+    // const item = localStorage.getItem("user") || "";
+    // const decodedItem = JSON.parse(item);
+    // this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
     var xmlDoc = this.parser.parseFromString(o2x(searchDTO), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
 
@@ -41,9 +41,9 @@ export class SearchService {
   }
 
   getPotvrde(searchDTO: any): Observable<any> {
-    const item = localStorage.getItem("user") || "";
-    const decodedItem = JSON.parse(item);
-    this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
+    // const item = localStorage.getItem("user") || "";
+    // const decodedItem = JSON.parse(item);
+    // this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
     var xmlDoc = this.parser.parseFromString(o2x(searchDTO), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
 
@@ -54,9 +54,9 @@ export class SearchService {
   }
 
   getZahtevi(searchDTO: any): Observable<any> {
-    const item = localStorage.getItem("user") || "";
-    const decodedItem = JSON.parse(item);
-    this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
+    // const item = localStorage.getItem("user") || "";
+    // const decodedItem = JSON.parse(item);
+    // this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
     var xmlDoc = this.parser.parseFromString(o2x(searchDTO), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
 
@@ -67,9 +67,9 @@ export class SearchService {
   }
 
   getDigitalni(searchDTO: any): Observable<any> {
-    const item = localStorage.getItem("user") || "";
-    const decodedItem = JSON.parse(item);
-    this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
+    // const item = localStorage.getItem("user") || "";
+    // const decodedItem = JSON.parse(item);
+    // this.headers.append("Authorization Bearer", decodedItem.usertokenstate.accessToken)
     var xmlDoc = this.parser.parseFromString(o2x(searchDTO), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
 
@@ -257,6 +257,41 @@ export class SearchService {
 
   getMetadataJsonForSertifikat(id: any):Observable<any> {
     return this.http.get<any>("/api/v1/digitalni-sertifikat/metadata-json/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getWhereInteresovanjeReferenced(id: any): Observable<any> {
+    return this.http.get<any>("/api/v1/interesovanje/referenced/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getWhereSaglasnostReferenced(id: any): Observable<any> {
+    return this.http.get<any>("/api/v1/saglasnost/referenced/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getWhereZahtevReferenced(id: any): Observable<any> {
+    return this.http.get<any>("/api/v1/zahtev_za_sertifikat/referenced/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getWhoReferencedInSaglasnost(id: any): Observable<any> {
+    return this.http.get<any>("/api/v1/saglasnost/referencing/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getWhoReferencedInPotvrda(id: any): Observable<any> {
+    return this.http.get<any>("/api/v1/potvrda-o-vakcinaciji/referencing/" + id, {
       headers: this.headers,
       responseType: 'test/xml' as 'json'
     })

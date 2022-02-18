@@ -6,11 +6,18 @@ import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
+import main.java.com.xml.officialbackend.rdf.FusekiReader;
+import main.java.com.xml.officialbackend.rdf.RDFReadResult;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.IObrazacZaSprovodjenjeImunizacijeService;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 import org.xmldb.api.base.Resource;
@@ -122,6 +129,24 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
             throw new MissingEntityException("Ne postoji saglasnost za unijetog korisnika.");
         }
         return response.getBody();
+    }
+
+    @Override
+    public String findWhereIsReferenced(String documentId) {
+        String sparqlCondition = "?person ?predicate\"" + documentId + "\" .";
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/potvrda_o_vakcinaciji", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while(result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                RDFNode rdfNode = row.get(columnName);
+                return rdfNode.toString();
+            }
+        } catch (IOException e) {
+            return null;
+        }
+        return null;
     }
 
 }

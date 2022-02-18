@@ -6,17 +6,22 @@ import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
+import main.java.com.xml.officialbackend.rdf.FusekiReader;
 import main.java.com.xml.officialbackend.rdf.MetadataExtractor;
+import main.java.com.xml.officialbackend.rdf.RDFReadResult;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.EmailService;
 import main.java.com.xml.officialbackend.service.contract.IDigitalniSertifikatService;
 import main.java.com.xml.officialbackend.service.contract.IObrazacZaSprovodjenjeImunizacijeService;
 import main.java.com.xml.officialbackend.service.contract.IPotvrdaOVakcinacijiService;
 import main.java.com.xml.officialbackend.service.contract.IZahtevZaSertifikatService;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,5 +97,26 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
             digitalniSertifikatService.send(zahtev, obrazac, potvrde, accessToken);
 
         }
+    }
+
+    @Override
+    public String findWhereIsReferenced(String documentId) {
+        String sparqlCondition = "?person ?predicate\"" + documentId + "\" .";
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/digitalni_sertifikat", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            System.out.println(columnNames.get(0));
+            System.out.println(columnNames.size());
+            while(result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                RDFNode rdfNode = row.get(columnName);
+                System.out.println(rdfNode);
+                return rdfNode.toString();
+            }
+        } catch (IOException e) {
+            return null;
+        }
+        return null;
     }
 }

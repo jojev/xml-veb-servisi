@@ -26,4 +26,9 @@ public class DigitalniSertifikatController {
     public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(digitalniSertifikatService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable String id) throws Exception {
+        return new ResponseEntity<>(digitalniSertifikatService.findById(id), HttpStatus.OK);
+    }
 }

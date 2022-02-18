@@ -14,6 +14,6 @@ public interface IObrazacZaSprovodjenjeImunizacijeService extends IService<Obraz
     
     ObrazacZaSprovodjenjeImunizacije findByJMBG(String accessToken, String jmbg) throws Exception;
 
-
+    public String findWhereIsReferenced(String documentId);
 }
 
