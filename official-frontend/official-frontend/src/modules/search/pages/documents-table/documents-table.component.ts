@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as x2js from 'xml2js';
 import { SearchService } from '../../services/search.service';
+import * as download from 'downloadjs';
 @Component({
   selector: 'app-documents-table',
   templateUrl: './documents-table.component.html',
@@ -14,7 +15,7 @@ export class DocumentsTableComponent implements OnInit {
 
   search: string = " ";
 
-  displayedColumns: string[] = ['dokument', 'id', 'prikaz'];
+  displayedColumns: string[] = ['dokument', 'id', 'prikaz', 'preuzmi'];
   dataSource: any[] = [];
   all: number = 0;
 
@@ -121,6 +122,8 @@ export class DocumentsTableComponent implements OnInit {
   }
 
   submit(): void {
+    this.dataSource = [];
+    this.all = 0;
     this.search = this.form.value['jmbg'];
     var obj = {
       searchdto: {
@@ -131,7 +134,6 @@ export class DocumentsTableComponent implements OnInit {
     };
 
     this.searchInteresovanje(obj);
-    this.dataSource = [];
   }
 
   showDocument(element: any): void {
@@ -177,4 +179,79 @@ export class DocumentsTableComponent implements OnInit {
     }
   }
 
+  downloadPDF(element: any): void {
+    let documentId = element.id;
+    const searchDTO = { searchdto: { search: documentId } };
+    if (element.dokument === 'Interesovanje') {
+      this.searchService.getInteresovanjeXSLFOTransformation(searchDTO).subscribe(
+        (result: Blob) => {
+          // console.log(result);
+          //   var FileSaver = require('file-saver');
+          //   var blob = new Blob([result], { type: 'application/pdf' })
+          //   FileSaver.saveAs(blob, "interesovanje.pdf");
+         
+        }
+      )
+    }else if (element.dokument == 'Digitalni zeleni sertifikat') {
+      this.searchService.getDigitalniXSLFOTransformation(searchDTO).subscribe(
+        (result) => {
+          // var FileSaver = require('file-saver');
+          // var blob = new Blob([result], { type: 'application/pdf' })
+          download( result, "digitalni.pdf", "text/plain" );
+      }
+      )
+    }
+
+  }
+
+  downloadXHTML(element: any): void {
+    let documentId = element.id;
+    const searchDTO = { searchdto: { search: documentId } };
+    if (element.dokument === 'Interesovanje') {
+      this.searchService.getInteresovanjeHtmlTransformation(searchDTO).subscribe(
+        (result: Blob) => {
+            var FileSaver = require('file-saver');
+            var blob = new Blob([result], { type: 'application/html' })
+            FileSaver.saveAs(blob, "interesovanje.html");
+        }
+      )
+    }else if (element.dokument == 'Obrazac za sprovođenje imunizacije') {
+      this.searchService.getSaglasnostHtmlTransformation(searchDTO).subscribe(
+        (result: Blob) => {
+          var FileSaver = require('file-saver');
+          var blob = new Blob([result], { type: 'application/html' })
+          FileSaver.saveAs(blob, "obrazac.html");
+      }
+      )
+    }
+    else if (element.dokument == 'Zahtev za izdavanje digitalnog sertifikata') {
+      this.searchService.getZahtevHtmlTransformation(searchDTO).subscribe(
+        (result: Blob) => {
+          var FileSaver = require('file-saver');
+          var blob = new Blob([result], { type: 'application/html' })
+          FileSaver.saveAs(blob, "zahtev.html");
+      }
+      )
+    }
+    else if (element.dokument == 'Potvrda o vakcinaciji') {
+      this.searchService.getPotvrdaHtmlTransformation(searchDTO).subscribe(
+        (result: Blob) => {
+          var FileSaver = require('file-saver');
+          var blob = new Blob([result], { type: 'application/html' })
+          FileSaver.saveAs(blob, "potvrda.html");
+      }
+      )
+    } else if (element.dokument == 'Digitalni zeleni sertifikat') {
+      this.searchService.getDigitalniHtmlTransformation(searchDTO).subscribe(
+        (result: Blob) => {
+          var FileSaver = require('file-saver');
+          var blob = new Blob([result], { type: 'application/html' })
+          FileSaver.saveAs(blob, "digitalni.html");
+      }
+      )
+    }
+
+  }
+
 }
+

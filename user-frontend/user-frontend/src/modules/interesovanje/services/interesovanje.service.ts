@@ -15,6 +15,7 @@ export class InteresovanjeService {
   constructor(public http: HttpClient) { }
 
   create(interesovanje: any):  Observable<any> {
+    
     var xmlDoc = this.parser.parseFromString(o2x(interesovanje), "text/xml");
     const interesovanjeNode = xmlDoc?.getElementsByTagName("interesovanje_za_vakcinisanje")[0]
     interesovanjeNode?.setAttribute("xmlns", "http://www.ftn.uns.ac.rs/interesovanje")
@@ -22,7 +23,7 @@ export class InteresovanjeService {
     interesovanjeNode?.setAttribute("xsi:schemaLocation", "http://www.ftn.uns.ac.rs/interesovanje /xml-veb-servisi/official-backend/data/schemes/interesovanje.xsd")
   
     var xmlString = this.serializer.serializeToString(xmlDoc);
-    
+    console.log(xmlString);
     return this.http.post<any>("/api/v1/interesovanje", xmlString, {
       headers: this.headers,
       responseType: 'test/xml' as 'json'

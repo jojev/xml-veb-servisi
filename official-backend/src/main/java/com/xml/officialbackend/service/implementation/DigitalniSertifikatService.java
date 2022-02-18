@@ -103,10 +103,10 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
         OutputStream outputStream = jaxBParser.marshall(digitalniZeleniSertifikat, DigitalniZeleniSertifikat.class);
         String path = "gen/pdf/" + documentId + ".pdf";
         String htmlPath = "gen/html/" + documentId + ".html";
-       // xslfoTransformer.generatePDF(outputStream.toString(), "data/xsl-fo/digitalni_sertifikat.xsl", path);
-        //htmlTransformer.generateHTML(outputStream.toString(), "data/xslt/digitalni_sertifikat.xsl", htmlPath);
+        xslfoTransformer.generatePDF(outputStream.toString(), "data/xsl-fo/digitalni_sertifikat.xsl", path);
+        htmlTransformer.generateHTML(outputStream.toString(), "data/xslt/digitalni_sertifikat.xsl", htmlPath);
 
-        //emailService.sendResponse(email, path, htmlPath, " ");
+        emailService.sendResponse(email, path, htmlPath, " ");
         XMLResource resource = existDbManager.load("/db/digitalni_sertifikat", documentId);
 
         byte[] out = metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
