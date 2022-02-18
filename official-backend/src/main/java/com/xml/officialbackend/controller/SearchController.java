@@ -52,7 +52,7 @@ public class SearchController {
     public ResponseEntity<?> searchZahtevByJMBG(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
         HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
 
-        ResponseEntity<ZahtevList> response = restTemplate.exchange("http://localhost:8080/api/v1/preview/zahtev_za_sertifikat/search_by_jmbg", HttpMethod.POST,
+        ResponseEntity<ZahtevList> response = restTemplate.exchange("http://localhost:8080/api/v1/preview/zahtev_za_sertifikat/search_jmbg", HttpMethod.POST,
                 httpEntity, ZahtevList.class);
 
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
@@ -74,8 +74,9 @@ public class SearchController {
 
     @PostMapping(value = "/obrazac/search_jmbg")
     public ResponseEntity<?> searchObrazacByJMBG(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) throws Exception {
+        System.out.println(searchDTO.getSearch());
         HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
-        ResponseEntity<ObrazacList> response = restTemplate.exchange("http://localhost:8080/api/v1/review/obrazac/search_by_jmbg", HttpMethod.POST,
+        ResponseEntity<ObrazacList> response = restTemplate.exchange("http://localhost:8080/api/v1/preview/obrazac/search_jmbg", HttpMethod.POST,
                 httpEntity, ObrazacList.class);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
@@ -143,10 +144,12 @@ public class SearchController {
 
 
     @PostMapping(value = "/obrazac/search_by_text")
-    public ResponseEntity<?> searchObrazacByText(@RequestBody SearchDTO searchDTO) throws Exception {
-        ArrayList<ObrazacZaSprovodjenjeImunizacije>  obrazac = obrazacZaSprovodjenjeImunizacijeService.searchByText(searchDTO);
-        ObrazacList list = new ObrazacList(obrazac);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
+    public ResponseEntity<?> searchObrazacByText(@RequestBody SearchDTO searchDTO,@RequestHeader("Authorization") String accessToken) throws Exception {
+        HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
+        ResponseEntity<ObrazacList> response = restTemplate.exchange("http://localhost:8080/api/v1/review/obrazac/search_by_jmbg", HttpMethod.POST,
+                httpEntity, ObrazacList.class);
+        return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
 
 }

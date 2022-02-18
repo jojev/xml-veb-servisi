@@ -71,8 +71,23 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
 
     }
 
+//    @Override
+//    public List<ObrazacZaSprovodjenjeImunizacije> findByJMBG(String token, String jmbg) {
+//        headers.setContentType(MediaType.APPLICATION_XML);
+//        //headers.add("Authorization", token);
+//        HttpEntity<String> request = new HttpEntity<>(String.format(
+//                "<searchdto><search>%s</search></searchdto>",
+//                jmbg), headers);
+//        ResponseEntity<ObrazacList> response;
+//        try {
+//            response = restTemplate.exchange("http://localhost:8080/api/v1/preview/obrazac/search_jmbg", HttpMethod.POST, request, ObrazacList.class);
+//        } catch (Exception e) {
+//            throw new MissingEntityException("Ne postoje saglasnosti sa unetim jmbg.");
+//        }
+//        return response.getBody().getItems();
+//
+//    }
     @Override
-
     public ObrazacZaSprovodjenjeImunizacije findByJMBG(String accessToken, String jmbg) {
         headers.setContentType(MediaType.APPLICATION_XML);
         headers.add("Authorization", accessToken);
@@ -89,33 +104,16 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
 
     }
 
-    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByText(SearchDTO searchDTO) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {
-        String xqueryPath = "data/xquery/pretraga_po_tekstu_obrazac.xqy";
-        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
-
-        String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
-        List<Resource> resources =
-                existDbManager.executeXquery("/db/obrazac_za_sprovodjenje_imunizacije", "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije", formattedXQueryExpresion);
-        ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazacZaSprovodjenjeImunizacijes = new ArrayList<ObrazacZaSprovodjenjeImunizacije>();
-        for (Resource resource : resources) {
-            XMLResource xmlResource = (XMLResource) resource;
-            obrazacZaSprovodjenjeImunizacijes.add((ObrazacZaSprovodjenjeImunizacije) jaxBParser.unmarshall(xmlResource, ObrazacZaSprovodjenjeImunizacije.class));
-        }
-        return obrazacZaSprovodjenjeImunizacijes;
-    }
-
-    public static String readFile(String path, Charset encoding) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded, encoding);
-    }
 
 
+    
     @Override
     public ObrazacZaSprovodjenjeImunizacije update(String jmbg,
-                                                   PodaciKojeJePopunioZdravstveniRadnik podaci) throws Exception {
+                                                   PodaciKojeJePopunioZdravstveniRadnik podaci,String token) throws Exception {
         String content = jaxBParser.marshallWithoutSchema(podaci).toString();
         content = content.replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "");
         headers.setContentType(MediaType.APPLICATION_XML);
+        headers.add("Authorization", token);
         HttpEntity<String> request = new HttpEntity<>(content, headers);
         ResponseEntity<ObrazacZaSprovodjenjeImunizacije> response;
         try {

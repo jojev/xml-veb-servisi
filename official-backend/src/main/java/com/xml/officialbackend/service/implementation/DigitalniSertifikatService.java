@@ -89,7 +89,7 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
 
     @Override
     public DigitalniZeleniSertifikat findById(String id) throws Exception {
-        return null;
+        return baseRepository.findById("/db/digitalni_sertifikat", id, DigitalniZeleniSertifikat.class);
     }
 
     @Override
@@ -99,32 +99,14 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
 
     @Override
     public DigitalniZeleniSertifikat create(DigitalniZeleniSertifikat digitalniZeleniSertifikat, String documentId, String email, String accessToken) throws Exception {
-
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Authorization", accessToken);
-//        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
-//        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/by-jmbg/" +
-//                digitalniZeleniSertifikat.getLicniPodaci().getJmbg().getValue(), HttpMethod.GET, httpEntity, String.class);
-//
-//        String zahtevId = response.getBody();
-//
-//        if (zahtevId == "") {
-//            throw new BadLogicException("Da bi se kreirao digitalni sertifikat korisnik mora da podnese zahtev.");
-//        }
-
-//        digitalniZeleniSertifikat.setZahtevZaSertifikatRef(new DigitalniZeleniSertifikat.ZahtevZaSertifikatRef());
-//        digitalniZeleniSertifikat.getZahtevZaSertifikatRef().setProperty("pred:Referencira");
-//        digitalniZeleniSertifikat.getZahtevZaSertifikatRef().setDatatype("xs:string");
-//        digitalniZeleniSertifikat.getZahtevZaSertifikatRef().setValue(zahtevId);
-
         baseRepository.save("db/digitalni_sertifikat", documentId, digitalniZeleniSertifikat, DigitalniZeleniSertifikat.class);
         OutputStream outputStream = jaxBParser.marshall(digitalniZeleniSertifikat, DigitalniZeleniSertifikat.class);
         String path = "gen/pdf/" + documentId + ".pdf";
         String htmlPath = "gen/html/" + documentId + ".html";
-        xslfoTransformer.generatePDF(outputStream.toString(), "data/xsl-fo/digitalni_sertifikat.xsl", path);
-        htmlTransformer.generateHTML(outputStream.toString(), "data/xslt/digitalni_sertifikat.xsl", htmlPath);
+       // xslfoTransformer.generatePDF(outputStream.toString(), "data/xsl-fo/digitalni_sertifikat.xsl", path);
+        //htmlTransformer.generateHTML(outputStream.toString(), "data/xslt/digitalni_sertifikat.xsl", htmlPath);
 
-        emailService.sendResponse(email, path, htmlPath, " ");
+        //emailService.sendResponse(email, path, htmlPath, " ");
         XMLResource resource = existDbManager.load("/db/digitalni_sertifikat", documentId);
 
         byte[] out = metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
@@ -378,6 +360,12 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     public byte[] generateDigitalniToXHTML(String id) throws Exception {
     	DigitalniZeleniSertifikat sertifikat = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(sertifikat);
+    }
+    
+    @Override
+    public byte[] generateDigitalniToPDF(String id) throws Exception {
+    	DigitalniZeleniSertifikat sertifikat = findById(id);
+    	return xslfoTransformer.generatePDFtoByteArray(sertifikat);
     }
 
 }

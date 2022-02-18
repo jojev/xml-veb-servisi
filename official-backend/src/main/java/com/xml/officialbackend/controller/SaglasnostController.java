@@ -5,6 +5,7 @@ import main.java.com.xml.officialbackend.service.contract.IObrazacZaSprovodjenje
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,10 +16,11 @@ public class SaglasnostController {
     private IObrazacZaSprovodjenjeImunizacijeService saglasnostService;
 
 
+    @PreAuthorize("hasAnyRole('ROLE_ZDRAVSTVENI_RADNIK')")
     @PutMapping("/{jmbg}")
     public ResponseEntity<?> updateSaglanost(@RequestBody PodaciKojeJePopunioZdravstveniRadnik podaciKojeJePopunioZdravstveniRadnik,
-                                             @PathVariable String jmbg
+                                             @PathVariable String jmbg,@RequestHeader("Authorization") String accessToken
     ) throws Exception {
-        return new ResponseEntity<>(saglasnostService.update(jmbg, podaciKojeJePopunioZdravstveniRadnik), HttpStatus.OK);
+        return new ResponseEntity<>(saglasnostService.update(jmbg, podaciKojeJePopunioZdravstveniRadnik,accessToken), HttpStatus.OK);
     }
 }

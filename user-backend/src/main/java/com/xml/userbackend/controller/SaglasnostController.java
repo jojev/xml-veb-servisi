@@ -10,6 +10,7 @@ import main.java.com.xml.userbackend.service.contract.ISaglasnostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -23,12 +24,12 @@ public class SaglasnostController {
     @Autowired
     private ISaglasnostService saglasnostService;
 
-
+    @PreAuthorize("hasAnyRole('ROLE_GRADJANIN')")
     @PostMapping("")
     public ResponseEntity<?> createSaglasnost(@RequestBody ObrazacZaSprovodjenjeImunizacije saglasnost) throws Exception {
         return new ResponseEntity<>(saglasnostService.create(saglasnost), HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasAnyRole('ROLE_ZDRAVSTVENI_RADNIK')")
     @PutMapping("/{jmbg}")
     public ResponseEntity<?> updateSaglanost(@RequestBody PodaciKojeJePopunioZdravstveniRadnik podaciKojeJePopunioZdravstveniRadnik,
                                              @PathVariable String jmbg

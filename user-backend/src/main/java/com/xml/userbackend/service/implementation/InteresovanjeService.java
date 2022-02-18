@@ -166,6 +166,12 @@ public class InteresovanjeService implements IInteresovanjeService {
     	InteresovanjeZaVakcinisanje interesovanje = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(interesovanje);
     }
+    
+    @Override
+    public byte[] generateIntersovanjeToPDF(String id) throws Exception {
+    	InteresovanjeZaVakcinisanje interesovanje = findById(id);
+    	return xslfoTransformer.generatePDFtoByteArray(interesovanje);
+    }
 
     @Override
 
@@ -220,7 +226,7 @@ public class InteresovanjeService implements IInteresovanjeService {
     @Override
     public int getNumberOfInterestedPatients(String startDate, String endDate) throws IOException {
     	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreiran> ?date. "
-				+ "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>)." ;
+				+ "FILTER ( ?date >= \"" + startDate + "\" && ?date < \"" + endDate + "\")." ;
         try(RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/interesovanje", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
             if(result.getResult().hasNext()) {
