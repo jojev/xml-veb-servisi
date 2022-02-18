@@ -51,4 +51,16 @@ public class SaglasnostController {
                         HttpMethod.GET,  httpEntity,String.class, id);
         return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable String id, @RequestHeader("Authorization") String accessToken) throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", accessToken);
+        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> responseEntity =
+
+                restTemplate.exchange("http://localhost:8080/api/v1/saglasnost/{id}",
+                        HttpMethod.GET,  httpEntity,String.class, id);
+        return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
+    }
 }

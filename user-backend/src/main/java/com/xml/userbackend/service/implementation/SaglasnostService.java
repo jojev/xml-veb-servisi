@@ -12,6 +12,7 @@ import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.Doza;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
+import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
 import main.java.com.xml.userbackend.rdf.MetadataExtractor;
@@ -323,5 +324,31 @@ public class SaglasnostService implements ISaglasnostService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    @Override
+    public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchMetadataLogical(String search) throws Exception {
+        ArrayList<RDFNode> nodes = searchMETA(search);
+        ArrayList<ObrazacZaSprovodjenjeImunizacije> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            ObrazacZaSprovodjenjeImunizacije zahtev = findById(parts[parts.length - 1]);
+            list.add(zahtev);
+        }
+        return list;
+    }
+
+    public ArrayList<RDFNode> searchMETA(String sparqlCondition) throws IOException {
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+
+        }
+        return nodes;
+    }
 
 }

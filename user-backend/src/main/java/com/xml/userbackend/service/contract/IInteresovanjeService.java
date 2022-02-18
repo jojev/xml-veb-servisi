@@ -1,8 +1,8 @@
 package main.java.com.xml.userbackend.service.contract;
 
 
-
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
+
 import java.io.IOException;
 import java.util.Date;
 
@@ -28,7 +28,7 @@ public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisa
     ArrayList<InteresovanjeZaVakcinisanje> searchByJMBG(String search) throws Exception;
 
 
-	  byte[] generateIntersovanjeToXHTML(String id) throws Exception;
+    byte[] generateIntersovanjeToXHTML(String id) throws Exception;
 
 
     ArrayList<InteresovanjeZaVakcinisanje> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
@@ -37,7 +37,9 @@ public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisa
 
     int getNumberOfInterestedPatients(String startDate, String endDate) throws IOException;
 
-	  byte[] generateIntersovanjeToPDF(String id) throws Exception;
+    byte[] generateIntersovanjeToPDF(String id) throws Exception;
+
+    ArrayList<InteresovanjeZaVakcinisanje> searchMetadataLogical(String search) throws Exception;
 
 	InteresovanjeZaVakcinisanje getInteresovanjByJmbg(String jmbg) throws Exception;
 

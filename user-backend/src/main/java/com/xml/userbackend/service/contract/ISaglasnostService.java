@@ -1,33 +1,27 @@
 package main.java.com.xml.userbackend.service.contract;
 
-import java.util.ArrayList;
-
-import main.java.com.xml.userbackend.dto.SearchDTO;
-
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
-
+import main.java.com.xml.userbackend.dto.SearchDTO;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
 import org.apache.jena.rdf.model.RDFNode;
 import org.xml.sax.SAXException;
 import org.xmldb.api.base.XMLDBException;
 
-import java.util.ArrayList;
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public interface ISaglasnostService extends    IService<ObrazacZaSprovodjenjeImunizacije>{
+public interface ISaglasnostService extends IService<ObrazacZaSprovodjenjeImunizacije> {
     ObrazacZaSprovodjenjeImunizacije update(String jmbg,
                                             PodaciKojeJePopunioZdravstveniRadnik podaciKojeJePopunioZdravstveniRadnik) throws Exception;
 
-    public RDFNode getSaglasnostIdFromJMBG(String jmbg) throws IOException;
-  
-	  byte[] generateSaglasnostToXHTML(String id) throws Exception;
+    RDFNode getSaglasnostIdFromJMBG(String jmbg) throws IOException;
 
-	  ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(SearchDTO searchDTO) throws Exception;
+    byte[] generateSaglasnostToXHTML(String id) throws Exception;
 
-    //ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(String jmbg) throws Exception;
+    ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByJMBG(SearchDTO searchDTO) throws Exception;
 
     ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByText(SearchDTO searchDTO) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
 
@@ -35,7 +29,8 @@ public interface ISaglasnostService extends    IService<ObrazacZaSprovodjenjeImu
 
     String getByDopunjenDatuma(XMLGregorianCalendar calendar) throws IOException;
 
+    byte[] generateSaglasnostToPDF(String id) throws Exception;
 
-	byte[] generateSaglasnostToPDF(String id) throws Exception;
+    ArrayList<ObrazacZaSprovodjenjeImunizacije> searchMetadataLogical(String search) throws Exception;
 
 }
