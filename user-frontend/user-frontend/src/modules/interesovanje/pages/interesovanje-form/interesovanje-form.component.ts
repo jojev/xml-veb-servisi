@@ -20,7 +20,7 @@ export class InteresovanjeFormComponent implements OnInit {
     { value: 'Strani drzavljanin bez boravka u RS', viewValue: 'Strani državljanin bez boravka u RS' },
   ];
   vaccines: any[] = [
-    { value: 'Pfizer-BioNtech' },
+    { value: 'Pfizer-BioNTech' },
     { value: 'Sputnik V' },
     { value: 'Sinopharm' },
     { value: 'AstraZeneca' },

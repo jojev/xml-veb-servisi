@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as x2js from 'xml2js';
-import { saveAs } from 'file-saver';
 import { SearchService } from '../../services/search.service';
+import * as download from 'downloadjs';
 @Component({
   selector: 'app-documents-table',
   templateUrl: './documents-table.component.html',
@@ -122,6 +122,8 @@ export class DocumentsTableComponent implements OnInit {
   }
 
   submit(): void {
+    this.dataSource = [];
+    this.all = 0;
     this.search = this.form.value['jmbg'];
     var obj = {
       searchdto: {
@@ -132,7 +134,6 @@ export class DocumentsTableComponent implements OnInit {
     };
 
     this.searchInteresovanje(obj);
-    this.dataSource = [];
   }
 
   showDocument(element: any): void {
@@ -179,7 +180,28 @@ export class DocumentsTableComponent implements OnInit {
   }
 
   downloadPDF(element: any): void {
-  
+    let documentId = element.id;
+    const searchDTO = { searchdto: { search: documentId } };
+    if (element.dokument === 'Interesovanje') {
+      this.searchService.getInteresovanjeXSLFOTransformation(searchDTO).subscribe(
+        (result: Blob) => {
+          // console.log(result);
+          //   var FileSaver = require('file-saver');
+          //   var blob = new Blob([result], { type: 'application/pdf' })
+          //   FileSaver.saveAs(blob, "interesovanje.pdf");
+         
+        }
+      )
+    }else if (element.dokument == 'Digitalni zeleni sertifikat') {
+      this.searchService.getDigitalniXSLFOTransformation(searchDTO).subscribe(
+        (result) => {
+          // var FileSaver = require('file-saver');
+          // var blob = new Blob([result], { type: 'application/pdf' })
+          download( result, "digitalni.pdf", "text/plain" );
+      }
+      )
+    }
+
   }
 
   downloadXHTML(element: any): void {

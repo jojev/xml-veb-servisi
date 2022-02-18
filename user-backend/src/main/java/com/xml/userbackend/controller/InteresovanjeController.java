@@ -35,7 +35,7 @@ public class InteresovanjeController {
     @PostMapping("")
     public ResponseEntity<?> create(@RequestBody InteresovanjeZaVakcinisanje intereseovanje) throws Exception {
         InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje);
-        return new ResponseEntity<>(interesovanjeZaVakcinisanje, HttpStatus.OK);
+        return new ResponseEntity<>(interesovanjeZaVakcinisanje, HttpStatus.CREATED);
     }
     
     @GetMapping("/count")

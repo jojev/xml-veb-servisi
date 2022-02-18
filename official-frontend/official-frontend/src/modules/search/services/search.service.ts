@@ -123,4 +123,58 @@ export class SearchService {
       responseType: 'test/xml' as 'json'
     })
   }
+
+  getInteresovanjeXSLFOTransformation(search: any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/xslfo_transformation/interesovanje", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getSaglasnostXSLFOTransformation(search: any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/xslfo_transformation/saglasnost", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getZahtevXSLFOTransformation(search: any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/xslfo_transformation/zahtev", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getPotvrdaXSLFOTransformation(search: any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/xslfo_transformation/potvrda", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getDigitalniXSLFOTransformation(search: any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/xslfo_transformation/digitalni", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataSearch(search: any):Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/search/metadata", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
 }
