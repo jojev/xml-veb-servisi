@@ -197,7 +197,7 @@
                                 <xsl:variable name="id"
                                               select="b:sifra_potvrde_vakcinacije"/>
                                 <xsl:variable name="src"
-                                              select="concat('https://api.qrserver.com/v1/create-qr-code/?data=','',$id)"/>
+                                              select="concat('https://api.qrserver.com/v1/create-qr-code/?data=localhost:4201/prikaz/potvrda_o_vakcinaciji/','',$id)"/>
                                 <xsl:attribute name="src">
                                     <xsl:value-of select="$src"/>
                                 </xsl:attribute>

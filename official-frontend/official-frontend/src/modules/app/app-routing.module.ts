@@ -63,6 +63,16 @@ const routes: Routes = [
     ],
   },
   {
+    path: "prikaz",
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("./../prikaz/prikaz.module").then((m) => m.PrikazModule),
+      },
+    ],
+  },
+  {
     path: "potvrda",
     children: [
       {
