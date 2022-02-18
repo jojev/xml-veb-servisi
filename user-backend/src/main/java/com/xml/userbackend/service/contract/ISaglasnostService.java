@@ -8,6 +8,7 @@ import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
+import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import org.apache.jena.rdf.model.RDFNode;
 import org.xml.sax.SAXException;
 import org.xmldb.api.base.XMLDBException;
@@ -37,5 +38,7 @@ public interface ISaglasnostService extends    IService<ObrazacZaSprovodjenjeImu
 
 
 	byte[] generateSaglasnostToPDF(String id) throws Exception;
+
+    ArrayList<ObrazacZaSprovodjenjeImunizacije> searchMetadataLogical(String search) throws Exception;
 
 }

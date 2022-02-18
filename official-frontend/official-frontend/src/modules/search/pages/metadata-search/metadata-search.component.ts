@@ -41,7 +41,6 @@ export class MetadataSearchComponent implements OnInit {
       (result) => {
         this.parser.parseString(result, (err: any, res: any) => {
           result = res;
-          console.log(result);
           if (result.interesovanjeList) {
             for (var i = 0; i < result.interesovanjeList.interesovanje_za_vakcinisanje.length; i++) {
               const id = result.interesovanjeList.interesovanje_za_vakcinisanje[i].$.about.split('/')[5];

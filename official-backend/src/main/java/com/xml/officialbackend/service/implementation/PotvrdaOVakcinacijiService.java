@@ -6,6 +6,7 @@ import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
+import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.Doza;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.rdf.FusekiReader;
@@ -277,6 +278,32 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
         }
         return list;
 
+    }
+
+    @Override
+    public ArrayList<PotvrdaOVakcinaciji> searchMetadataLogical(MetadataSearchDTO searchDTO) throws Exception {
+        ArrayList<RDFNode> nodes = searchMETA(searchDTO.getSearch());
+        ArrayList<PotvrdaOVakcinaciji> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            PotvrdaOVakcinaciji potvrda = findById(parts[parts.length - 1]);
+            list.add(potvrda);
+        }
+        return list;
+    }
+
+    public ArrayList<RDFNode> searchMETA(String sparqlCondition) throws IOException {
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/potvrda_o_vakcinaciji", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+
+        }
+        return nodes;
     }
 
 }

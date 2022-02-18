@@ -3,6 +3,7 @@ package main.java.com.xml.userbackend.controller;
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.text.ParseException;
 
 
@@ -99,5 +100,12 @@ public class ZahtevZaSertifikatController {
     public ResponseEntity<?> getById(@PathVariable String documentId, @RequestHeader("Authorization") String accessToken) throws Exception {
         ZahtevZaIzdavanjeSertifikata zahtev = zahtevZaSertifikatService.findById(documentId);
         return new ResponseEntity<>(zahtev, HttpStatus.OK);
+    }
+
+    @GetMapping("/search_logical")
+    public ResponseEntity<?> searchLogical(@RequestParam(name="search") String search) throws Exception {
+        ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchMetadataLogical(URLDecoder.decode(search, "UTF-8"));
+        ZahtevList list = new ZahtevList(zahtevi);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

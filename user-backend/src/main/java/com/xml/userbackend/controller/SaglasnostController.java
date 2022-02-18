@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 @RestController
@@ -83,5 +84,13 @@ public class SaglasnostController {
     public ResponseEntity<?> findByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
         ObrazacZaSprovodjenjeImunizacije obrazac = saglasnostService.searchByJMBG(searchDTO).get(0);
         return new ResponseEntity<>(obrazac, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/search_logical")
+    public ResponseEntity<?> searchLogical(@RequestParam(name="search") String search) throws Exception {
+        ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazacZaSprovodjenjeImunizacijes = saglasnostService.searchMetadataLogical(URLDecoder.decode(search, "UTF-8"));
+        ObrazacList obrazacList = new ObrazacList(obrazacZaSprovodjenjeImunizacijes);
+        return new ResponseEntity<>(obrazacList, HttpStatus.OK);
     }
 }

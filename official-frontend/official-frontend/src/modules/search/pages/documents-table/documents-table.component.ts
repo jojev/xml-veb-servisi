@@ -184,21 +184,36 @@ export class DocumentsTableComponent implements OnInit {
     const searchDTO = { searchdto: { search: documentId } };
     if (element.dokument === 'Interesovanje') {
       this.searchService.getInteresovanjeXSLFOTransformation(searchDTO).subscribe(
-        (result: Blob) => {
-          // console.log(result);
-          //   var FileSaver = require('file-saver');
-          //   var blob = new Blob([result], { type: 'application/pdf' })
-          //   FileSaver.saveAs(blob, "interesovanje.pdf");
-         
+        (result) => {
+          download(result, "interesovanje.pdf", "application/pdf");
+
         }
       )
-    }else if (element.dokument == 'Digitalni zeleni sertifikat') {
+    } else if (element.dokument == 'Digitalni zeleni sertifikat') {
       this.searchService.getDigitalniXSLFOTransformation(searchDTO).subscribe(
         (result) => {
-          // var FileSaver = require('file-saver');
-          // var blob = new Blob([result], { type: 'application/pdf' })
-          download( result, "digitalni.pdf", "text/plain" );
-      }
+          download(result, "digitalni.pdf", "application/pdf");
+        }
+      )
+    } else if (element.dokument == 'Obrazac za sprovođenje imunizacije') {
+      this.searchService.getSaglasnostHtmlTransformation(searchDTO).subscribe(
+        (result) => {
+          download(result, "saglasnost.pdf", "application/pdf");
+        }
+      )
+    }
+    else if (element.dokument == 'Zahtev za izdavanje digitalnog sertifikata') {
+      this.searchService.getZahtevHtmlTransformation(searchDTO).subscribe(
+        (result) => {
+          download(result, "zahtev.pdf", "application/pdf");
+        }
+      )
+    }
+    else if (element.dokument == 'Potvrda o vakcinaciji') {
+      this.searchService.getZahtevHtmlTransformation(searchDTO).subscribe(
+        (result) => {
+          download(result, "potvrda.pdf", "application/pdf");
+        }
       )
     }
 
@@ -210,18 +225,18 @@ export class DocumentsTableComponent implements OnInit {
     if (element.dokument === 'Interesovanje') {
       this.searchService.getInteresovanjeHtmlTransformation(searchDTO).subscribe(
         (result: Blob) => {
-            var FileSaver = require('file-saver');
-            var blob = new Blob([result], { type: 'application/html' })
-            FileSaver.saveAs(blob, "interesovanje.html");
+          var FileSaver = require('file-saver');
+          var blob = new Blob([result], { type: 'application/html' })
+          FileSaver.saveAs(blob, "interesovanje.html");
         }
       )
-    }else if (element.dokument == 'Obrazac za sprovođenje imunizacije') {
+    } else if (element.dokument == 'Obrazac za sprovođenje imunizacije') {
       this.searchService.getSaglasnostHtmlTransformation(searchDTO).subscribe(
         (result: Blob) => {
           var FileSaver = require('file-saver');
           var blob = new Blob([result], { type: 'application/html' })
           FileSaver.saveAs(blob, "obrazac.html");
-      }
+        }
       )
     }
     else if (element.dokument == 'Zahtev za izdavanje digitalnog sertifikata') {
@@ -230,7 +245,7 @@ export class DocumentsTableComponent implements OnInit {
           var FileSaver = require('file-saver');
           var blob = new Blob([result], { type: 'application/html' })
           FileSaver.saveAs(blob, "zahtev.html");
-      }
+        }
       )
     }
     else if (element.dokument == 'Potvrda o vakcinaciji') {
@@ -239,7 +254,7 @@ export class DocumentsTableComponent implements OnInit {
           var FileSaver = require('file-saver');
           var blob = new Blob([result], { type: 'application/html' })
           FileSaver.saveAs(blob, "potvrda.html");
-      }
+        }
       )
     } else if (element.dokument == 'Digitalni zeleni sertifikat') {
       this.searchService.getDigitalniHtmlTransformation(searchDTO).subscribe(
@@ -247,7 +262,7 @@ export class DocumentsTableComponent implements OnInit {
           var FileSaver = require('file-saver');
           var blob = new Blob([result], { type: 'application/html' })
           FileSaver.saveAs(blob, "digitalni.html");
-      }
+        }
       )
     }
 

@@ -36,4 +36,6 @@ public interface IZahtevZaSertifikatService extends IService<ZahtevZaIzdavanjeSe
 	byte[] generateZahtevToPDF(String id) throws Exception;
 
     ArrayList<ZahtevZaIzdavanjeSertifikata> findPendingZahtevi() throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
+
+    ArrayList<ZahtevZaIzdavanjeSertifikata> searchMetadataLogical(String search) throws Exception;
 }

@@ -9,12 +9,12 @@ mat-card {
   }
 
   .s {
-      max-width: 200px;
-      max-height: 80px;
+      max-width: 800px;
+      max-height: 400px;
   }
 
   .button-show {
-    width: 150px;
+    width: 100px;
     margin-right: 10px;
     background-color: #008CBA;
     border: none;
@@ -26,7 +26,7 @@ mat-card {
     border-radius: 2px;
 }
 
-.button-pdf {
+.button-or {
     width: 80px;
     margin-right: 10px;
     margin-bottom: 10px;
@@ -40,7 +40,7 @@ mat-card {
     border-radius: 2px;
 }
 
-.button-xhtml {
+.button-and {
     width: 80px;
     margin-right: 10px;
     margin-bottom: 10px;
@@ -52,5 +52,21 @@ mat-card {
     display: inline-block;
     font-size: 16px;
     border-radius: 2px;
+}
+
+.pretraga {
+    width: 150px;
+    height: 30px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-color: #32a89e;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 2px;
+    
 }
   

@@ -2,8 +2,12 @@ package main.java.com.xml.userbackend.controller;
 
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.ParseException;
 
+import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevList;
+import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,5 +81,12 @@ public class InteresovanjeController {
     @GetMapping("/metadata-json/{id}")
     public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(interesovanjeService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
+    }
+
+    @GetMapping("/search_logical")
+    public ResponseEntity<?> searchLogical(@RequestParam(name="search") String search) throws Exception {
+        ArrayList<InteresovanjeZaVakcinisanje> interesovanja = interesovanjeService.searchMetadataLogical(URLDecoder.decode(search, "UTF-8"));
+        InteresovanjeList list = new InteresovanjeList(interesovanja);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

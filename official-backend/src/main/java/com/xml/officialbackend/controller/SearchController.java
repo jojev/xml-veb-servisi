@@ -16,13 +16,12 @@ import main.java.com.xml.officialbackend.service.contract.IObrazacZaSprovodjenje
 import main.java.com.xml.officialbackend.service.contract.IPotvrdaOVakcinacijiService;
 import main.java.com.xml.officialbackend.service.contract.ISearchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 @RestController
@@ -150,6 +149,44 @@ public class SearchController {
         ResponseEntity<ObrazacList> response = restTemplate.exchange("http://localhost:8080/api/v1/saglasnost/search_by_text", HttpMethod.POST,
                 httpEntity, ObrazacList.class);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/logical")
+    public ResponseEntity<?> searchMetadataLogical(@RequestBody MetadataSearchDTO metadataSearchDTO, @RequestHeader("Authorization") String accessToken) throws Exception {
+
+        if (metadataSearchDTO.getCollection().equals("digitalni_sertifikat")) {
+            ArrayList<DigitalniZeleniSertifikat> digitalniZeleniSertifikati = digitalniSertifikatService.searchMetadataLogical(metadataSearchDTO);
+            DigitalniSertifikatList list = new DigitalniSertifikatList(digitalniZeleniSertifikati);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else if (metadataSearchDTO.getCollection().equals("potvrda_o_vakcinaciji")) {
+            ArrayList<PotvrdaOVakcinaciji> potvrde = potvrdaOVakcinacijiService.searchMetadataLogical(metadataSearchDTO);
+            PotvrdaOVakcinacijiList list = new PotvrdaOVakcinacijiList(potvrde);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } else if (metadataSearchDTO.getCollection().equals("obrazac_za_imunizaciju")) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", accessToken);
+            HttpEntity<String> httpEntity = new HttpEntity<>(headers);
+            ResponseEntity<ObrazacList> response = restTemplate.exchange("http://localhost:8080/api/v1/saglasnost/search_logical?search="+URLEncoder.encode(metadataSearchDTO.getSearch()), HttpMethod.GET,
+                    httpEntity, ObrazacList.class);
+            return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+        } else if (metadataSearchDTO.getCollection().equals("zahtev_za_sertifikat")) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", accessToken);
+            HttpEntity<String> httpEntity = new HttpEntity<>(headers);
+            ResponseEntity<ZahtevList> response = restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/search_logical?search="+URLEncoder.encode(metadataSearchDTO.getSearch()), HttpMethod.GET,
+                    httpEntity, ZahtevList.class);
+            return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+        } else if (metadataSearchDTO.getCollection().equals("interesovanje")) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", accessToken);
+            HttpEntity<String> httpEntity = new HttpEntity<>(headers);
+            ResponseEntity<InteresovanjeList> response = restTemplate.exchange("http://localhost:8080/api/v1/interesovanje/search_logical?search="+URLEncoder.encode(metadataSearchDTO.getSearch()), HttpMethod.GET,
+                    httpEntity, InteresovanjeList.class);
+            return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
