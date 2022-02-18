@@ -62,6 +62,16 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: "potvrda",
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("./../potvrda/potvrda.module").then((m) => m.PotvrdaModule),
+      },
+    ],
+  },
 ];
 
 @NgModule({
