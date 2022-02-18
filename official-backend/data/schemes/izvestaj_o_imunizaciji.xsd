@@ -68,13 +68,15 @@
                                     <xs:sequence>
                                         <xs:element name="redni_broj">
                                             <xs:simpleType>
-                                                <xs:restriction base="xs:positiveInteger">
+                                                <xs:restriction base="xs:integer">
+                                                    <xs:minInclusive value="1"/>
                                                 </xs:restriction>
                                             </xs:simpleType>
                                         </xs:element>
                                         <xs:element name="kolicina">
                                             <xs:simpleType>
-                                                <xs:restriction base="xs:positiveInteger">
+                                                <xs:restriction base="xs:integer">
+                                                    <xs:minInclusive value="0"/>
                                                 </xs:restriction>
                                             </xs:simpleType>
                                         </xs:element>

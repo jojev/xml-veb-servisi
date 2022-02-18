@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <obrazac_za_sprovodjenje_imunizacije
     xmlns="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije
     ../schemes/obrazac_za_sprovodjenje_imunizacije.xsd"
     xmlns:pred="http://www.ftn.uns.ac.rs/rdf/obrazac_za_sprovodjenje_imunizacije/predicate/"
-    about="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/1"
-    typeof="pred:IdentifikatorDokumenta"
-    referencira="http://www.ftn.uns.ac.rs/interesovanje/1">
+    about="http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/"
+    typeof="pred:IdentifikatorDokumenta">
     <podaci_koje_je_popunio_pacijent>
         <licni_podaci>
                 <drzavljanstvo>Republike Srbije</drzavljanstvo>
-                <jmbg property="pred:Kreirao">1234567891234</jmbg>
+                <jmbg property="pred:Kreirao">2412998125026</jmbg>
             <prezime>Filipovic</prezime>
             <ime>Dragana</ime>
             <ime_roditelja>Slobodan</ime_roditelja>
@@ -34,20 +32,4 @@
         <zeljena_vakcina property="pred:ZeljenaVakcina">Pfizer, BioNTech</zeljena_vakcina>
         <datum property="pred:KreiranDatuma">2021-06-11</datum>
     </podaci_koje_je_popunio_pacijent>
-    <podaci_koje_je_popunio_zdravstveni_radnik>
-        <zdravstvena_ustanova>Dom zdravlja Novi Sad</zdravstvena_ustanova>
-        <vakcinacijski_punkt>Promenada</vakcinacijski_punkt>
-        <podaci_o_lekaru>Pera Peric 06532984920</podaci_o_lekaru>
-        <doze>
-            <doza>
-                <vakcina>Pfizer, BioNTech</vakcina>
-                <datum_davanja_vakcine property="pred:VakcinisanDatuma">2021-06-11</datum_davanja_vakcine>
-                <nacin_davanja_vakcine>IM</nacin_davanja_vakcine>
-                <ekstremitet>DR</ekstremitet>
-                <serija_vakcine>FC3098</serija_vakcine>
-                <proizvodjac>BioNTech</proizvodjac>
-                <nezeljena_reakcija>mucnina</nezeljena_reakcija>
-            </doza>
-        </doze>
-    </podaci_koje_je_popunio_zdravstveni_radnik>
 </obrazac_za_sprovodjenje_imunizacije>
