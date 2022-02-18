@@ -15,14 +15,42 @@ mat-card {
 
   .button-show {
     width: 150px;
-  margin-right: 10px;
-  background-color: #008CBA;
-  border: none;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 2px;
+    margin-right: 10px;
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 2px;
+}
+
+.button-pdf {
+    width: 80px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-color: yellowgreen;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 2px;
+}
+
+.button-xhtml {
+    width: 80px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-color: #fcba03;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 2px;
 }
   
