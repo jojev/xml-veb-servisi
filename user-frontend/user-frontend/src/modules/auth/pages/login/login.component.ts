@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
         ...this.form.value
       }
     }
+    const that_ = this;
     this.authService.login(auth).subscribe(
       (result) => {
         this.parser.parseString(result, function(err: any,res: any){
@@ -39,6 +40,10 @@ export class LoginComponent implements OnInit {
           const jwt: JwtHelperService = new JwtHelperService();
           const role = jwt.decodeToken(jwtUser).role;
           const username = jwt.decodeToken(jwtUser).username;
+          if(role !== 'ROLE_GRADJANIN') {
+            that_.notificationService.error("Pogrešni kredencijali.");
+            return;
+          }
           localStorage.setItem("user", jwtUser);
           localStorage.setItem("username", username);
           localStorage.setItem("role", role);

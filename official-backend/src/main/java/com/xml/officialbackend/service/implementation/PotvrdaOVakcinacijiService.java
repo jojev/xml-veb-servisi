@@ -157,7 +157,7 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
             return FusekiReader.readMetadata("/potvrda_o_vakcinaciji", sparqlCondition, format);
         }
         catch (Exception e) {
-            throw new MissingEntityException("Ne postoji saglasnost sa tim id.");
+            throw new MissingEntityException("Ne postoji potvrda sa tim id.");
         }
     }
 
