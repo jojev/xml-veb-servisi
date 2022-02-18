@@ -29,7 +29,7 @@ import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevList;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 
 @RestController
-@RequestMapping(value = "/api/v1/preview", produces = {"application/xml"})
+@RequestMapping(value = "/api/v1/preview", produces = {"application/xml"}, consumes = {"application/xml"})
 public class ViewDocumentsController {
 	
 	@Autowired
@@ -84,6 +84,7 @@ public class ViewDocumentsController {
 	@PostMapping("/interesovanje/search_jmbg")
     //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<?> searchInteresovanjeByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
+        System.out.println("LALALALLALALAL");
         ArrayList<InteresovanjeZaVakcinisanje> interesovanjeZaVakcinisanje = interesovanjeService.searchByJMBG(searchDTO.getSearch());
         InteresovanjeList interesovanjeList = new InteresovanjeList(interesovanjeZaVakcinisanje);
         return new ResponseEntity<>(interesovanjeList, HttpStatus.OK);

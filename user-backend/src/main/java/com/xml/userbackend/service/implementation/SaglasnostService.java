@@ -20,6 +20,7 @@ import main.java.com.xml.userbackend.rdf.RDFReadResult;
 import main.java.com.xml.userbackend.repository.BaseRepository;
 import main.java.com.xml.userbackend.service.contract.ISaglasnostService;
 import main.java.com.xml.userbackend.transformations.HtmlTransformer;
+import main.java.com.xml.userbackend.transformations.XSLFOTransformer;
 
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
@@ -53,18 +54,23 @@ public class SaglasnostService implements ISaglasnostService {
     private InteresovanjeService interesovanjeService;
 
     private HtmlTransformer htmlTransformer;
+    
+    private XSLFOTransformer xslfoTransformer;
 
     private JaxBParser jaxBParser;
 
     public SaglasnostService(ExistDbManager existDbManager,BaseRepository baseRepository, HtmlTransformer htmlTransformer, 
                              MetadataExtractor metadataExtractor, InteresovanjeService interesovanjeService,
-                             JaxBParser jaxBParser) {
+
+                             JaxBParser jaxBParser, XSLFOTransformer xslfoTransformer){
+                          
         this.baseRepository = baseRepository;
         this.existDbManager = existDbManager;
         this.metadataExtractor = metadataExtractor;
         this.htmlTransformer = htmlTransformer;
         this.interesovanjeService = interesovanjeService;
-        this.jaxBParser = jaxBParser;
+        this.jaxBParser =  jaxBParser;
+        this.xslfoTransformer = xslfoTransformer;
     }
 
     @Override
@@ -124,6 +130,17 @@ public class SaglasnostService implements ISaglasnostService {
     @Override
     public void delete(String id) throws Exception {
 
+    }
+
+    @Override
+    public String readMetadata(String documentId, String format) throws IOException {
+        String sparqlCondition = "<http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije/" + documentId + "> ?d ?s .";
+        try {
+            return FusekiReader.readMetadata("/saglasnosti", sparqlCondition, format);
+        }
+        catch (Exception e) {
+            throw new MissingEntityException("Ne postoji saglasnost sa tim id.");
+        }
     }
 
     @Override
@@ -188,7 +205,7 @@ public class SaglasnostService implements ISaglasnostService {
         ArrayList<RDFNode> nodes = new ArrayList<>();
         try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
-            if (result.getResult().hasNext()) {
+            while (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
                 nodes.add(row.get(columnName));
@@ -275,6 +292,12 @@ public class SaglasnostService implements ISaglasnostService {
     	return htmlTransformer.generateHTMLtoByteArray(saglasnost);
     }
         
+    @Override
+    public byte[] generateSaglasnostToPDF(String id) throws Exception {
+    	ObrazacZaSprovodjenjeImunizacije saglasnost = findById(id);
+    	return xslfoTransformer.generatePDFtoByteArray(saglasnost);
+    }
+        
 
 
     public List<RDFNode> getAllSaglanostFromJMBG(String jmbg) throws IOException {
@@ -293,5 +316,11 @@ public class SaglasnostService implements ISaglasnostService {
             return nodes;
         }
     }
+
+	@Override
+	public String getByDopunjenDatuma(XMLGregorianCalendar calendar) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

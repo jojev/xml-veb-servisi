@@ -3,6 +3,7 @@ package main.java.com.xml.userbackend.service.implementation;
 
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 
+import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
@@ -34,7 +35,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -166,6 +166,12 @@ public class InteresovanjeService implements IInteresovanjeService {
     	InteresovanjeZaVakcinisanje interesovanje = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(interesovanje);
     }
+    
+    @Override
+    public byte[] generateIntersovanjeToPDF(String id) throws Exception {
+    	InteresovanjeZaVakcinisanje interesovanje = findById(id);
+    	return xslfoTransformer.generatePDFtoByteArray(interesovanje);
+    }
 
     @Override
 
@@ -220,7 +226,7 @@ public class InteresovanjeService implements IInteresovanjeService {
     @Override
     public int getNumberOfInterestedPatients(String startDate, String endDate) throws IOException {
     	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/interesovanje/predicate/Kreiran> ?date. "
-				+ "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>)." ;
+				+ "FILTER ( ?date >= \"" + startDate + "\" && ?date < \"" + endDate + "\")." ;
         try(RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/interesovanje", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
             if(result.getResult().hasNext()) {
@@ -232,6 +238,18 @@ public class InteresovanjeService implements IInteresovanjeService {
         }
         
         return 0;
+    }
+
+    @Override
+    public String readMetadata(String documentId, String format) throws IOException {
+        String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/interesovanje/" + documentId + "> ?d ?s .";
+        try {
+            return FusekiReader.readMetadata("/interesovanje", sparqlCondition, format);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new MissingEntityException("Ne postoji interesovanje sa tim id.");
+        }
     }
 
     public static String readFile(String path, Charset encoding) throws IOException {

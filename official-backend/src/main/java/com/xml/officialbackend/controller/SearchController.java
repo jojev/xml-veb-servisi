@@ -52,7 +52,7 @@ public class SearchController {
     public ResponseEntity<?> searchZahtevByJMBG(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
         HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
 
-        ResponseEntity<ZahtevList> response = restTemplate.exchange("http://localhost:8080/api/v1/preview/zahtev_za_sertifikat/search_by_jmbg", HttpMethod.POST,
+        ResponseEntity<ZahtevList> response = restTemplate.exchange("http://localhost:8080/api/v1/preview/zahtev_za_sertifikat/search_jmbg", HttpMethod.POST,
                 httpEntity, ZahtevList.class);
 
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
@@ -74,8 +74,9 @@ public class SearchController {
 
     @PostMapping(value = "/obrazac/search_jmbg")
     public ResponseEntity<?> searchObrazacByJMBG(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) throws Exception {
+        System.out.println(searchDTO.getSearch());
         HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
-        ResponseEntity<ObrazacList> response = restTemplate.exchange("http://localhost:8080/api/v1/review/obrazac/search_by_jmbg", HttpMethod.POST,
+        ResponseEntity<ObrazacList> response = restTemplate.exchange("http://localhost:8080/api/v1/preview/obrazac/search_jmbg", HttpMethod.POST,
                 httpEntity, ObrazacList.class);
         return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
     }
@@ -120,7 +121,6 @@ public class SearchController {
     }
 
     @PostMapping(value = "/zahtev_za_sertifikat/search_by_text")
-    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchZahtevByText(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
         HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
         ResponseEntity<ZahtevZaIzdavanjeSertifikata> response = restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/search_by_text", HttpMethod.POST,
@@ -129,7 +129,6 @@ public class SearchController {
     }
 
     @PostMapping(value = "/digitalni_sertifikat/search_by_text")
-    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchSertifikatByText(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<DigitalniZeleniSertifikat> digitalniZeleniSertifikati = digitalniSertifikatService.searchByText(searchDTO);
         DigitalniSertifikatList list = new DigitalniSertifikatList(digitalniZeleniSertifikati);
@@ -137,7 +136,6 @@ public class SearchController {
     }
 
     @PostMapping(value = "/potvrda_o_vakcinaciji/search_by_text")
-    //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchPotvrdaByText(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<PotvrdaOVakcinaciji> potvrde = potvrdaOVakcinacijiService.searchByText(searchDTO);
         PotvrdaOVakcinacijiList list = new PotvrdaOVakcinacijiList(potvrde);

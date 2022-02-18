@@ -1,18 +1,11 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
 
-import main.java.com.xml.officialbackend.dto.SearchDTO;
-import main.java.com.xml.officialbackend.existdb.ExistDbManager;
-
-import main.java.com.xml.officialbackend.jaxb.JaxBParser;
-import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
-import main.java.com.xml.officialbackend.model.korisnik.Korisnik;
-import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
-import main.java.com.xml.officialbackend.model.lista_cekanja.ListaCekanja;
-
 import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
-
-
+import main.java.com.xml.officialbackend.dto.SearchDTO;
+import main.java.com.xml.officialbackend.exception.MissingEntityException;
+import main.java.com.xml.officialbackend.existdb.ExistDbManager;
+import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.rdf.FusekiReader;
 import main.java.com.xml.officialbackend.rdf.FusekiWriter;
@@ -22,6 +15,7 @@ import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.IListaCekanjaService;
 import main.java.com.xml.officialbackend.service.contract.IPotvrdaOVakcinacijiService;
 import main.java.com.xml.officialbackend.service.contract.ITerminService;
+import main.java.com.xml.officialbackend.transformations.HtmlTransformer;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 
@@ -30,9 +24,13 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.checkerframework.checker.units.qual.A;
 import main.java.com.xml.officialbackend.service.contract.ITerminService;
 import main.java.com.xml.officialbackend.transformations.HtmlTransformer;
+import main.java.com.xml.officialbackend.transformations.XSLFOTransformer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
@@ -44,14 +42,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import java.time.LocalDate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -81,6 +75,9 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
 
     @Autowired
     private HtmlTransformer htmlTransformer;
+    
+    @Autowired
+    private XSLFOTransformer xslfoTransformer;
     
     @Override
     public List<PotvrdaOVakcinaciji> findAll() {
@@ -125,17 +122,27 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
         entity.getSaglasnostRef().setValue(node);
 
         baseRepository.save("/db/potvrda_o_vakcinaciji", potvrdaOVakcinicijiId, entity, PotvrdaOVakcinaciji.class);
-
         XMLResource resource = existDbManager.load("/db/potvrda_o_vakcinaciji", potvrdaOVakcinicijiId);
         byte[] out =  metadataExtractor.extractMetadataFromXmlContent(resource.getContent().toString());
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "potvrda_o_vakcinaciji");
 
         int numberOfVaccine = entity.getPodaciOVakcinaciji().getDoze().getDoza().size();
 
-        terminService.addTerminOrAddToListaCekanja(entity.getPodaciOVakcinaciji().getNazivVakcine().trim(), numberOfVaccine + 1,
-                entity.getLicniPodaci().getJmbg().getValue(), entity.getPodaciOVakcinaciji().getDoze().getDoza().get(numberOfVaccine - 1).getDatumDavanja());
+       // terminService.addTerminOrAddToListaCekanja(entity.getPodaciOVakcinaciji().getNazivVakcine().trim(), numberOfVaccine + 1,
+       //         entity.getLicniPodaci().getJmbg().getValue(), entity.getPodaciOVakcinaciji().getDoze().getDoza().get(numberOfVaccine - 1).getDatumDavanja());
 
         return entity;
+    }
+
+    @Override
+    public String readMetadata(String documentId, String format) throws IOException {
+        String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/" + documentId + "> ?d ?s .";
+        try {
+            return FusekiReader.readMetadata("/potvrda_o_vakcinaciji", sparqlCondition, format);
+        }
+        catch (Exception e) {
+            throw new MissingEntityException("Ne postoji saglasnost sa tim id.");
+        }
     }
 
     @Override
@@ -150,23 +157,23 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
 
 
     
-   public int getNumberOfVaccinated(LocalDate startDate, LocalDate endDate) throws IOException {
-   	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/Izdat> ?date. "
-				+ "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>)." ;
-
-       try(RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/potvrdaOVakcinaciji", sparqlCondition);) {
-           List<String> columnNames = result.getResult().getResultVars();
-
-           if(result.getResult().hasNext()) {
-               QuerySolution row = result.getResult().nextSolution();
-               String columnName = columnNames.get(0);
-               RDFNode rdfNode = row.get(columnName);
-               System.out.println(rdfNode.asLiteral().getInt());
-               return rdfNode.asLiteral().getInt();
-           }
-       }
-		return 0;
-   }
+//   public int getNumberOfVaccinated(LocalDate startDate, LocalDate endDate) throws IOException {
+//   	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/Izdat> ?date. "
+//				+ "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>)." ;
+//
+//       try(RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/potvrdaOVakcinaciji", sparqlCondition);) {
+//           List<String> columnNames = result.getResult().getResultVars();
+//
+//           if(result.getResult().hasNext()) {
+//               QuerySolution row = result.getResult().nextSolution();
+//               String columnName = columnNames.get(0);
+//               RDFNode rdfNode = row.get(columnName);
+//               System.out.println(rdfNode.asLiteral().getInt());
+//               return rdfNode.asLiteral().getInt();
+//           }
+//       }
+//		return 0;
+//   }
     
     public ArrayList<RDFNode> searchRDF(String jmbg) throws IOException {
 
@@ -201,6 +208,12 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     public byte[] generatePotvrdaToXHTML(String id) throws Exception {
     	PotvrdaOVakcinaciji potvrda = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(potvrda);
+    }
+
+    @Override
+    public byte[] generatePotvrdaToPDF(String id) throws Exception {
+    	PotvrdaOVakcinaciji potvrda = findById(id);
+    	return xslfoTransformer.generatePDFtoByteArray(potvrda);
     }
 
 

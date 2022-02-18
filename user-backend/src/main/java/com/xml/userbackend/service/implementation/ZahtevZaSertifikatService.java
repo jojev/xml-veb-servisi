@@ -2,7 +2,9 @@ package main.java.com.xml.userbackend.service.implementation;
 
 
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
+import main.java.com.xml.userbackend.dto.RazlogDTO;
 import main.java.com.xml.userbackend.dto.SearchDTO;
+import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 
@@ -28,9 +30,6 @@ import main.java.com.xml.userbackend.transformations.XSLFOTransformer;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
@@ -47,7 +46,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,6 +59,8 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     private MetadataExtractor metadataExtractor;
     
     private HtmlTransformer htmlTransformer;
+    
+    private XSLFOTransformer xslfoTransformer;
 
     private JaxBParser jaxBParser;
     
@@ -69,11 +69,14 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     private IInteresovanjeService interesovanjeService;
 
     private RestTemplate restTemplate;
-
+    
     @Autowired
-    public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser, HtmlTransformer htmlTransformer,
+    public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser, HtmlTransformer htmlTransformer, XSLFOTransformer xslfoTransformer,
+    
+    
                                      ExistDbManager existDbManager, MetadataExtractor metadataExtractor,
                                      EmailService emailService, IInteresovanjeService interesovanjeService, RestTemplate restTemplate) {
+
 
 
         this.baseRepository = baseRepository;
@@ -83,6 +86,8 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         this.emailService = emailService;
         this.interesovanjeService = interesovanjeService;
         this.jaxBParser = jaxBParser;
+        this.xslfoTransformer = xslfoTransformer;
+
         this.restTemplate = restTemplate;
 
 
@@ -114,6 +119,18 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     }
 
     @Override
+    public String readMetadata(String documentId, String format) throws IOException {
+        String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/" + documentId + "> ?d ?s .";
+        try {
+            return FusekiReader.readMetadata("/zahtev_za_sertifikat", sparqlCondition, format);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new MissingEntityException("Ne postoji zahtev za sertifikat sa tim id.");
+        }
+    }
+
+    @Override
     public ZahtevZaIzdavanjeSertifikata create(ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata, String accessToken) throws Exception {
         String documentId = UUID.randomUUID().toString();
         zahtevZaIzdavanjeSertifikata.setAbout("http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/" + documentId);
@@ -135,23 +152,37 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "zahtev_za_sertifikat");
         return zahtevZaIzdavanjeSertifikata;
     }
-    
+
+    @Override
+    public ZahtevZaIzdavanjeSertifikata setOdgovor(RazlogDTO razlogDTO) throws Exception {
+        String odgovor = "odobren";
+        if (!razlogDTO.getOdobren()) {
+            odgovor = "odbijen";
+        }
+
+        baseRepository.update("/db/zahtev_za_sertifikat", razlogDTO.getZahtev(), "/zahtev_za_izdavanje_sertifikata/odgovor", odgovor,
+                "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat");
+
+        return findById(razlogDTO.getZahtev());
+
+    }
+
     @Override
     public int getNumberOfRequestForDigitalSertificate(String startDate, String endDate) throws IOException {
-    	String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/IzdatDatuma> ?date. "
-				+ "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>)." ;
+        String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/IzdatDatuma> ?date. "
+                + "FILTER ( ?date >= \"" + startDate + "\" && ?date < \"" + endDate + "\").";
 
-        try(RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/zahtev_za_sertifikat", sparqlCondition);) {
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/zahtev_za_sertifikat", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
-            
-            if(result.getResult().hasNext()) {
+
+            if (result.getResult().hasNext()) {
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
                 RDFNode rdfNode = row.get(columnName);
                 return rdfNode.asLiteral().getInt();
             }
         }
-		return 0;
+        return 0;
     }
 
     @Override
@@ -212,6 +243,12 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     	ZahtevZaIzdavanjeSertifikata zahtev = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(zahtev);
     }
+    
+    @Override
+    public byte[] generateZahtevToPDF(String id) throws Exception {
+    	ZahtevZaIzdavanjeSertifikata zahtev = findById(id);
+    	return xslfoTransformer.generatePDFtoByteArray(zahtev);
+    }
 
 
     @Override
@@ -222,13 +259,13 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         String formattedXQueryExpresion = String.format(xqueryExpression, search);
         System.out.println(formattedXQueryExpresion);
         List<Resource> resources =
-                existDbManager.executeXquery("/db/zahtev_za_sertifikat", "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat",formattedXQueryExpresion);
-        ArrayList<ZahtevZaIzdavanjeSertifikata> interesovanjeZaVakcinisanjes =  new ArrayList<ZahtevZaIzdavanjeSertifikata>();
-        for(Resource resource:resources){
-            XMLResource xmlResource  = (XMLResource) resource;
-            interesovanjeZaVakcinisanjes.add((ZahtevZaIzdavanjeSertifikata) jaxBParser.unmarshall(xmlResource,ZahtevZaIzdavanjeSertifikata.class));
+                existDbManager.executeXquery("/db/zahtev_za_sertifikat", "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat", formattedXQueryExpresion);
+        ArrayList<ZahtevZaIzdavanjeSertifikata> interesovanjeZaVakcinisanjes = new ArrayList<ZahtevZaIzdavanjeSertifikata>();
+        for (Resource resource : resources) {
+            XMLResource xmlResource = (XMLResource) resource;
+            interesovanjeZaVakcinisanjes.add((ZahtevZaIzdavanjeSertifikata) jaxBParser.unmarshall(xmlResource, ZahtevZaIzdavanjeSertifikata.class));
         }
-        return  interesovanjeZaVakcinisanjes;
+        return interesovanjeZaVakcinisanjes;
     }
 
     public static String readFile(String path, Charset encoding) throws IOException {
@@ -238,6 +275,21 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
 
 
     @Override
+    public ArrayList<ZahtevZaIzdavanjeSertifikata> findPendingZahtevi() throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {
+        String xqueryPath = "data/xquery/neodobreni_zahtevi.xqy";
+        String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
+
+        String formattedXQueryExpresion = String.format(xqueryExpression, "ceka odgovor");
+        List<Resource> resources =
+                existDbManager.executeXquery("/db/zahtev_za_sertifikat", "http://www.ftn.uns.ac.rs/zahtev_za_sertifikat", formattedXQueryExpresion);
+        ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = new ArrayList<>();
+        for (Resource resource : resources) {
+            XMLResource xmlResource = (XMLResource) resource;
+            zahtevi.add((ZahtevZaIzdavanjeSertifikata) jaxBParser.unmarshall(xmlResource, ZahtevZaIzdavanjeSertifikata.class));
+        }
+        return zahtevi;
+    }
+
     public String getByJmbg(String jmbg) throws IOException {
         String sparqlCondition = "?document <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/PodneoJmbg> \"" + jmbg + "\" ;";
 
@@ -255,4 +307,5 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         String[] documentUri = lastZahtev.split("/");
         return documentUri[documentUri.length - 1];
     }
+
 }

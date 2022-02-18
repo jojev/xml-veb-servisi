@@ -8,4 +8,8 @@ public interface IIzvestajService extends IService<IzvestajOImunizaciji> {
 	IzvestajOImunizaciji createReport(String startDate, String endDate, int interesovanjeCnt, int zahtevCnt)
 			throws Exception;
 
+	byte[] generateIzvestajToXHTML(String id) throws Exception;
+
+	byte[] generateIzestajToPDF(String id) throws Exception;
+
 }

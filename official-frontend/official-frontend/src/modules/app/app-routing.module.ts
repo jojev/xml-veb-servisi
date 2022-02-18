@@ -13,6 +13,16 @@ const routes: Routes = [
     ],
   },
   {
+    path: "izvestaj",
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("./../izvestaj/izvestaj.module").then((m) => m.IzvestajModule),
+      }
+    ]
+  },
+  {
     path: "saglasnost",
       children: [
         {
@@ -29,6 +39,26 @@ const routes: Routes = [
         path: "",
         loadChildren: () =>
           import("./../vaccine-status/vaccine-status.module").then((m) => m.VaccineStatusModule),
+      },
+    ],
+  },
+  {
+    path: "zahtev",
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("./../zahtev/zahtev.module").then((m) => m.ZahtevModule),
+      },
+    ],
+  },
+  {
+    path: "search",
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("./../search/search.module").then((m) => m.SearchModule),
       },
     ],
   },

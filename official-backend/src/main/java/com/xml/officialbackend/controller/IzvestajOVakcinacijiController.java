@@ -37,7 +37,6 @@ public class IzvestajOVakcinacijiController {
 		HttpHeaders headers = new HttpHeaders();
 	    headers.add("Authorization", accessToken);
 	    headers.setContentType(MediaType.APPLICATION_XML);
-	    
 	    HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
 	    
         ResponseEntity<CountResponse> interesovanjeCnt = restTemplate.exchange("http://localhost:8080/api/v1/interesovanje/count?startDate=" + startDate + "&endDate=" + endDate,
@@ -48,4 +47,6 @@ public class IzvestajOVakcinacijiController {
         IzvestajOImunizaciji izvestaj = izvestajService.createReport(startDate, endDate, interesovanjeCnt.getBody().getValue(), zahtevCnt.getBody().getValue());
         return new ResponseEntity<>(izvestaj, HttpStatus.OK);
     }
+	
+	
 }

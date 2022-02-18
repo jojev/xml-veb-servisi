@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.ParseException;
 
 
+import main.java.com.xml.userbackend.dto.RazlogDTO;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,7 @@ public class ZahtevZaSertifikatController {
     
     @GetMapping("/count")
     public ResponseEntity<CountResponse> findNumberOfZahteva(@RequestParam String startDate, @RequestParam String endDate) throws IOException, ParseException {
+    	System.out.println("U ZAHTEVU SAMMMM");
 		return new ResponseEntity<>(new CountResponse(zahtevZaSertifikatService.getNumberOfRequestForDigitalSertificate(startDate, endDate)), HttpStatus.OK);
     }
 
@@ -57,9 +59,9 @@ public class ZahtevZaSertifikatController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     } */
 
-    @GetMapping("/{documentId}")
-    public ResponseEntity<?> getZahtev(@PathVariable String documentId) throws Exception {
-        ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.findById(documentId);
+    @PostMapping("/odgovor")
+    public ResponseEntity<?> getZahtev(@RequestBody RazlogDTO razlogDTO) throws Exception {
+        ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.setOdgovor(razlogDTO);
         return new ResponseEntity<>(zahtevZaIzdavanjeSertifikata, HttpStatus.OK);
     }
 
@@ -78,10 +80,29 @@ public class ZahtevZaSertifikatController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @PostMapping("/by_jmbg/{jmbg}")
+
+    @GetMapping("/pending")
+    public ResponseEntity<?> getPendingZahtevi() throws Exception {
+        ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.findPendingZahtevi();
+        ZahtevList list = new ZahtevList(zahtevi);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-jmbg/{jmbg}")
     //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> getLastByJMBG(@RequestBody String jmbg, @RequestHeader("Authorization") String accessToken) throws Exception {
+        System.out.println("LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         String zahtevId = zahtevZaSertifikatService.getByJmbg(jmbg);
         return new ResponseEntity<>(zahtevId, HttpStatus.OK);
+    }
+
+    @GetMapping("/metadata/{id}")
+    public ResponseEntity<?> getMetadata(@PathVariable String id) throws IOException {
+        return new ResponseEntity<>(zahtevZaSertifikatService.readMetadata(id, "N-TRIPLE"), HttpStatus.OK);
+    }
+
+    @GetMapping("/metadata-json/{id}")
+    public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
+        return new ResponseEntity<>(zahtevZaSertifikatService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
     }
 }

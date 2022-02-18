@@ -4,7 +4,6 @@ import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
-import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacList;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
@@ -72,25 +71,42 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
 
     }
 
+//    @Override
+//    public List<ObrazacZaSprovodjenjeImunizacije> findByJMBG(String token, String jmbg) {
+//        headers.setContentType(MediaType.APPLICATION_XML);
+//        //headers.add("Authorization", token);
+//        HttpEntity<String> request = new HttpEntity<>(String.format(
+//                "<searchdto><search>%s</search></searchdto>",
+//                jmbg), headers);
+//        ResponseEntity<ObrazacList> response;
+//        try {
+//            response = restTemplate.exchange("http://localhost:8080/api/v1/preview/obrazac/search_jmbg", HttpMethod.POST, request, ObrazacList.class);
+//        } catch (Exception e) {
+//            throw new MissingEntityException("Ne postoje saglasnosti sa unetim jmbg.");
+//        }
+//        return response.getBody().getItems();
+//
+//    }
     @Override
-
-    public ArrayList<ObrazacZaSprovodjenjeImunizacije> findByJMBG(String jmbg) {
+    public ObrazacZaSprovodjenjeImunizacije findByJMBG(String accessToken, String jmbg) {
         headers.setContentType(MediaType.APPLICATION_XML);
+        headers.add("Authorization", accessToken);
         HttpEntity<String> request = new HttpEntity<>(String.format(
                 "<searchdto><search>%s</search></searchdto>",
-                jmbg, headers));
-        ResponseEntity<ObrazacList> response;
+                jmbg), headers);
+        ResponseEntity<ObrazacZaSprovodjenjeImunizacije> response;
         try {
-            response = restTemplate.exchange("http://localhost:8080/api/v1/saglasnost/search_by_jmbg", HttpMethod.POST, request, ObrazacList.class);
+            response = restTemplate.exchange("http://localhost:8080/api/v1/saglasnost/find_one_jmbg", HttpMethod.POST, request, ObrazacZaSprovodjenjeImunizacije.class);
         } catch (Exception e) {
             throw new MissingEntityException("Ne postoje saglasnosti sa unetim jmbg.");
         }
-        return (ArrayList<ObrazacZaSprovodjenjeImunizacije>) response.getBody().getItems();
+        return response.getBody();
 
     }
 
 
 
+    
     @Override
     public ObrazacZaSprovodjenjeImunizacije update(String jmbg,
                                                    PodaciKojeJePopunioZdravstveniRadnik podaci,String token) throws Exception {

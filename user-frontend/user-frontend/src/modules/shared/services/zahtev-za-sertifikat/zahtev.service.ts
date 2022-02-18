@@ -32,4 +32,12 @@ export class ZahtevService {
       responseType: 'test/xml' as 'json'
     })
   }
+  getPdfTransformation(search: any): Observable<any> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<any>("/api/v1/xslfo_transformation/zahtev", xmlString, {
+      headers: this.headers,
+      responseType: 'blob' as 'json'
+    })
+  }
 }
