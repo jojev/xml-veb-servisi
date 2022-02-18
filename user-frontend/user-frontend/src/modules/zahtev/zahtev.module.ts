@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     MatInputModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    RichTextEditorAllModule
   ]
 })
 export class ZahtevModule { }
