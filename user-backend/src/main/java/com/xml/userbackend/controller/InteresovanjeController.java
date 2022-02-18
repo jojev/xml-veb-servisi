@@ -7,6 +7,7 @@ import java.text.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import main.java.com.xml.userbackend.dto.SearchDTO;
@@ -33,12 +34,14 @@ public class InteresovanjeController {
 
 
     @PostMapping(value = "", consumes = {"application/xml"})
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<?> create(@RequestBody InteresovanjeZaVakcinisanje intereseovanje,  @RequestHeader("Authorization") String accessToken) throws Exception {
-       System.out.println("CAOAODKLAKLKJ");
     	InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje, accessToken);
         return new ResponseEntity<>(interesovanjeZaVakcinisanje, HttpStatus.OK);
+    }
     
     @GetMapping("/count")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<CountResponse> findNumberOfZahteva(String accessToken, @RequestParam String startDate, 
 			@RequestParam String endDate) throws IOException, ParseException {
 		return new ResponseEntity<>(new CountResponse(interesovanjeService.getNumberOfInterestedPatients(startDate, endDate)), HttpStatus.OK);

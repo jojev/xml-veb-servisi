@@ -56,8 +56,16 @@ export class MakeIzvestajComponent implements OnInit {
       }
     )
   }
-
-  preuzmi() {
+  preuzmiHtml() {
+    console.log(this.izvestajId);
+    const searchDTO = { searchdto: {search: this.izvestajId}};
+    this.izvjestajService.getHtmlTransformation(searchDTO).subscribe(
+      (result) => {
+        download( result, "izvjestaj.html", "text/plain" );
+      }
+    )
+  }
+  preuzmiPdf() {
     console.log(this.izvestajId);
     const searchDTO = { searchdto: {search: this.izvestajId}};
     this.izvjestajService.getPdfTransformation(searchDTO).subscribe(
