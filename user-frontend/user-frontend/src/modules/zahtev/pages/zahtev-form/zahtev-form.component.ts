@@ -18,6 +18,10 @@ export class ZahtevFormComponent implements OnInit {
     { value: 'Zenski', viewValue: 'Žensko' },
   ];
 
+  public tools: object = {
+    items: [
+        'Bold', 'Italic', 'Underline']
+};
   constructor(private notificationService: NotificationService, private zahtevService: ZahtevService) {
     this.form = new FormGroup({
       jmbg: new FormControl('', [Validators.required, Validators.pattern('[0-9 ]{13}')]),

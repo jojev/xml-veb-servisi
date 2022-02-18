@@ -30,13 +30,18 @@
                 <input matInput placeholder="Broj pasoša" formControlName="brPasosa" required />
                 <mat-error *ngIf="!form.valid">Broj pasoša je <strong>obavezan</strong></mat-error>
             </mat-form-field>
-            <mat-form-field class="example-full-width" appearance="fill">
-                <textarea matInput placeholder="Razlog za podnošenje zahteva" formControlName="razlog"
+            <!-- <mat-form-field class="example-full-width" appearance="fill">
+                 <textarea matInput placeholder="Razlog za podnošenje zahteva" formControlName="razlog"
                     required></textarea>
-            </mat-form-field>
-            <button class="b" mat-raised-button color="primary" [disabled]="!form.valid">
+                     
+            </mat-form-field> -->
+            <mat-label>Razlog za podnošenje zahteva </mat-label>
+            <ejs-richtexteditor [toolbarSettings]='tools' formControlName="razlog"  required></ejs-richtexteditor>
+            <button class="b" mat-raised-button color="primary" [disabled]="!form.valid" ejs-button>
                 Kreiraj
             </button>
         </form>
     </mat-card-content>
+
+    
 </mat-card>
