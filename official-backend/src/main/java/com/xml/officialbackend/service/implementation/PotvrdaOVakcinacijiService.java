@@ -6,6 +6,7 @@ import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
+import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.Doza;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.rdf.FusekiReader;
 import main.java.com.xml.officialbackend.rdf.FusekiWriter;
@@ -31,16 +32,17 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
@@ -92,10 +94,24 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
         entity.getLicniPodaci().getJmbg().setDatatype("xs:string");
         entity.getDatumIzdavanjaPotvrde().setProperty("pred:Izdat");
         entity.getDatumIzdavanjaPotvrde().setDatatype("xs:string");
+        entity.setQrKod(new PotvrdaOVakcinaciji.QrKod());
         entity.getQrKod().setProperty("pred:Linkuje");
         entity.getQrKod().setDatatype("xs:string");
         entity.getOtherAttributes().put(QName.valueOf("xmlns:pred"), "http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/predicate/");
         entity.getOtherAttributes().put(QName.valueOf("xmlns:xs"), "http://www.w3.org/2001/XMLSchema#");
+        entity.getPodaciOVakcinaciji().setZdravstvenaUstanova("Dom zdravlja Novi Sad");
+
+        String lUUID = String.format("%040d", new BigInteger(UUID.randomUUID().toString().replace("-", ""), 16));
+        String documentId = lUUID.substring(0, 7) + "-" + lUUID.substring(7, 14);
+        entity.setSifraPotvrdeVakcinacije(documentId);
+
+        GregorianCalendar c = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+        XMLGregorianCalendar date = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+        entity.getDatumIzdavanjaPotvrde().setValue(date);
+
+        for(int i = 0; i < entity.getPodaciOVakcinaciji().getDoze().getDoza().size(); i++) {
+            entity.getPodaciOVakcinaciji().getDoze().getDoza().get(i).setRedniBroj(i+1);
+        }
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", accessToken);
