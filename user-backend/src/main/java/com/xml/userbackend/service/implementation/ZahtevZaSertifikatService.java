@@ -4,6 +4,7 @@ package main.java.com.xml.userbackend.service.implementation;
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.userbackend.dto.RazlogDTO;
 import main.java.com.xml.userbackend.dto.SearchDTO;
+import main.java.com.xml.userbackend.exception.MissingEntityException;
 import main.java.com.xml.userbackend.existdb.ExistDbManager;
 import main.java.com.xml.userbackend.jaxb.JaxBParser;
 
@@ -29,9 +30,6 @@ import main.java.com.xml.userbackend.transformations.XSLFOTransformer;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.rdf.model.RDFNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
@@ -48,7 +46,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -119,6 +116,18 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     @Override
     public void delete(String id) {
 
+    }
+
+    @Override
+    public String readMetadata(String documentId, String format) throws IOException {
+        String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/" + documentId + "> ?d ?s .";
+        try {
+            return FusekiReader.readMetadata("/zahtev_za_sertifikat", sparqlCondition, format);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new MissingEntityException("Ne postoji zahtev za sertifikat sa tim id.");
+        }
     }
 
     @Override

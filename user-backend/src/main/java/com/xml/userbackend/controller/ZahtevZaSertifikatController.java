@@ -95,4 +95,14 @@ public class ZahtevZaSertifikatController {
         String zahtevId = zahtevZaSertifikatService.getByJmbg(jmbg);
         return new ResponseEntity<>(zahtevId, HttpStatus.OK);
     }
+
+    @GetMapping("/metadata/{id}")
+    public ResponseEntity<?> getMetadata(@PathVariable String id) throws IOException {
+        return new ResponseEntity<>(zahtevZaSertifikatService.readMetadata(id, "N-TRIPLE"), HttpStatus.OK);
+    }
+
+    @GetMapping("/metadata-json/{id}")
+    public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
+        return new ResponseEntity<>(zahtevZaSertifikatService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
+    }
 }

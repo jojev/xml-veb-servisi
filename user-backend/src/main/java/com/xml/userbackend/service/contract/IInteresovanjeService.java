@@ -15,6 +15,7 @@ import org.xmldb.api.base.XMLDBException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisanje> {
 
@@ -36,7 +37,7 @@ public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisa
 
     int getNumberOfInterestedPatients(String startDate, String endDate) throws IOException;
 
-	byte[] generateIntersovanjeToPDF(String id) throws Exception;
+	  byte[] generateIntersovanjeToPDF(String id) throws Exception;
 
 
 }

@@ -21,9 +21,10 @@ public interface IPotvrdaOVakcinacijiService extends IService<PotvrdaOVakcinacij
 
     ArrayList<PotvrdaOVakcinaciji> searchMetadata(MetadataSearchDTO metadataSearchDTO) throws Exception;
 
-	byte[] generatePotvrdaToPDF(String id) throws Exception;
+	  byte[] generatePotvrdaToPDF(String id) throws Exception;
 
     PotvrdaOVakcinaciji create(PotvrdaOVakcinaciji entity, String accessToken) throws Exception;
 
+    String readMetadata(String documentId, String format) throws IOException;
 
 }

@@ -3,6 +3,7 @@ package main.java.com.xml.officialbackend.service.implementation;
 
 import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.officialbackend.dto.SearchDTO;
+import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
@@ -131,6 +132,17 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
        //         entity.getLicniPodaci().getJmbg().getValue(), entity.getPodaciOVakcinaciji().getDoze().getDoza().get(numberOfVaccine - 1).getDatumDavanja());
 
         return entity;
+    }
+
+    @Override
+    public String readMetadata(String documentId, String format) throws IOException {
+        String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/" + documentId + "> ?d ?s .";
+        try {
+            return FusekiReader.readMetadata("/potvrda_o_vakcinaciji", sparqlCondition, format);
+        }
+        catch (Exception e) {
+            throw new MissingEntityException("Ne postoji saglasnost sa tim id.");
+        }
     }
 
     @Override

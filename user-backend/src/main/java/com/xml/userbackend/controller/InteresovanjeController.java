@@ -7,12 +7,7 @@ import java.text.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import main.java.com.xml.userbackend.dto.SearchDTO;
 import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeList;
@@ -20,6 +15,7 @@ import main.java.com.xml.userbackend.model.interesovanje.InteresovanjeZaVakcinis
 import main.java.com.xml.userbackend.service.contract.IInteresovanjeService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.com.xml.userbackend.responses.CountResponse;
 
@@ -73,4 +69,13 @@ public class InteresovanjeController {
         return new ResponseEntity<>(interesovanjeList, HttpStatus.OK);
     }
 
+    @GetMapping("/metadata/{id}")
+    public ResponseEntity<?> getMetadata(@PathVariable String id) throws IOException {
+        return new ResponseEntity<>(interesovanjeService.readMetadata(id, "N-TRIPLE"), HttpStatus.OK);
+    }
+
+    @GetMapping("/metadata-json/{id}")
+    public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
+        return new ResponseEntity<>(interesovanjeService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
+    }
 }

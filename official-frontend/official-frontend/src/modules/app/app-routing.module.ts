@@ -52,6 +52,16 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: "search",
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("./../search/search.module").then((m) => m.SearchModule),
+      },
+    ],
+  },
 ];
 
 @NgModule({

@@ -3,6 +3,7 @@ package main.java.com.xml.officialbackend.service.implementation;
 import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
 import main.java.com.xml.officialbackend.dto.SearchDTO;
 import main.java.com.xml.officialbackend.exception.BadLogicException;
+import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.*;
@@ -88,7 +89,7 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
 
     @Override
     public DigitalniZeleniSertifikat findById(String id) throws Exception {
-        return null;
+        return baseRepository.findById("/db/digitalni_sertifikat", id, DigitalniZeleniSertifikat.class);
     }
 
     @Override
@@ -98,24 +99,6 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
 
     @Override
     public DigitalniZeleniSertifikat create(DigitalniZeleniSertifikat digitalniZeleniSertifikat, String documentId, String email, String accessToken) throws Exception {
-
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Authorization", accessToken);
-//        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
-//        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/by-jmbg/" +
-//                digitalniZeleniSertifikat.getLicniPodaci().getJmbg().getValue(), HttpMethod.GET, httpEntity, String.class);
-//
-//        String zahtevId = response.getBody();
-//
-//        if (zahtevId == "") {
-//            throw new BadLogicException("Da bi se kreirao digitalni sertifikat korisnik mora da podnese zahtev.");
-//        }
-
-//        digitalniZeleniSertifikat.setZahtevZaSertifikatRef(new DigitalniZeleniSertifikat.ZahtevZaSertifikatRef());
-//        digitalniZeleniSertifikat.getZahtevZaSertifikatRef().setProperty("pred:Referencira");
-//        digitalniZeleniSertifikat.getZahtevZaSertifikatRef().setDatatype("xs:string");
-//        digitalniZeleniSertifikat.getZahtevZaSertifikatRef().setValue(zahtevId);
-
         baseRepository.save("db/digitalni_sertifikat", documentId, digitalniZeleniSertifikat, DigitalniZeleniSertifikat.class);
         OutputStream outputStream = jaxBParser.marshall(digitalniZeleniSertifikat, DigitalniZeleniSertifikat.class);
         String path = "gen/pdf/" + documentId + ".pdf";
@@ -139,6 +122,17 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     @Override
     public void delete(String id) throws Exception {
 
+    }
+
+    @Override
+    public String readMetadata(String documentId, String format) throws IOException {
+        String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/digitalni_sertifikat/" + documentId + "> ?d ?s .";
+        try {
+            return FusekiReader.readMetadata("/digitalni_sertifikat", sparqlCondition, format);
+        }
+        catch (Exception e) {
+            throw new MissingEntityException("Ne postoji saglasnost sa tim id.");
+        }
     }
 
     @Override
