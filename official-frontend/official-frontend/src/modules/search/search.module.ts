@@ -10,11 +10,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
+import { TextSearchComponent } from './pages/text-search/text-search.component';
 
 
 @NgModule({
   declarations: [
-    DocumentsTableComponent
+    DocumentsTableComponent,
+    TextSearchComponent
   ],
   imports: [
     CommonModule,

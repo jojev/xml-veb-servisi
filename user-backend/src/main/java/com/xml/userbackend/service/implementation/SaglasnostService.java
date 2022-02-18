@@ -12,7 +12,6 @@ import main.java.com.xml.userbackend.jaxb.JaxBParser;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.Doza;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
 import main.java.com.xml.userbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
-import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import main.java.com.xml.userbackend.rdf.FusekiReader;
 import main.java.com.xml.userbackend.rdf.FusekiWriter;
 import main.java.com.xml.userbackend.rdf.MetadataExtractor;
@@ -215,11 +214,13 @@ public class SaglasnostService implements ISaglasnostService {
         return nodes;
     }
 
+    @Override
     public ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByText(SearchDTO searchDTO) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {
         String xqueryPath = "data/xquery/pretraga_po_tekstu_obrazac.xqy";
         String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
 
         String formattedXQueryExpresion = String.format(xqueryExpression, searchDTO.getSearch());
+        System.out.println(formattedXQueryExpresion);
         List<Resource> resources =
                 existDbManager.executeXquery("/db/saglasnost", "http://www.ftn.uns.ac.rs/obrazac_za_sprovodjenje_imunizacije", formattedXQueryExpresion);
         ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazacZaSprovodjenjeImunizacijes = new ArrayList<ObrazacZaSprovodjenjeImunizacije>();

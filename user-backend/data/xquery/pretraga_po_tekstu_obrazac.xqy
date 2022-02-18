@@ -1,5 +1,5 @@
 xquery version "3.1";
-for $document in collection('/db/obrazac_za_sprovodjenje_imunizacije')
+for $document in collection('/db/saglasnost')
     where fn:contains($document//*:drzavljanstvo/text(),"%1$s") or  fn:contains($document//*:jmbg/text(),"%1$s")
     or fn:contains($document//*:prezime/text(),"%1$s") or fn:contains($document//*:ime/text(),"%1$s")
      or fn:contains($document//*:ime_roditelja/text(),"%1$s")
