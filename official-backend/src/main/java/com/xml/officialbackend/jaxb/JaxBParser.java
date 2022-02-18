@@ -52,13 +52,13 @@ public class JaxBParser {
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         File schemaFile = new File(shemaLocationRegistry.get(genericClass));
         Schema schema = schemaFactory.newSchema(schemaFile);
-
         unmarshaller.setSchema(schema);
         unmarshaller.setEventHandler(new ShemaValidationHandler());
         try {
             return (T) unmarshaller.unmarshal(new StringReader(resource.getContent().toString()));
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new MissingEntityException("The entity with given id does not exist in the system.");
         }
     }

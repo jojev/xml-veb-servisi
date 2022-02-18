@@ -117,14 +117,14 @@ public class Doza {
 
     /**
      * Sets the value of the redniBroj property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link BigInteger }
      *     
      */
-    public void setRedniBroj(BigInteger value) {
-        this.redniBroj = value;
+    public void setRedniBroj(int value) {
+        this.redniBroj = BigInteger.valueOf(value);
     }
 
 }
