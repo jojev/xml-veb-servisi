@@ -54,6 +54,7 @@ public class ZahtevZaSertifikatController {
     }
 
     @GetMapping("/metadata/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> getMetadata(@PathVariable String id, @RequestHeader("Authorization") String accessToken) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", accessToken);
@@ -66,6 +67,7 @@ public class ZahtevZaSertifikatController {
     }
 
     @GetMapping("/metadata-json/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> getMetadataJson(@PathVariable String id, @RequestHeader("Authorization") String accessToken) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", accessToken);

@@ -41,29 +41,29 @@ public class InteresovanjeController {
 
 
 
-    @PreAuthorize("hasAnyRole('ROLE_GRADJANIN')")
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('ROLE_GRADJANIN')")
     public ResponseEntity<?> create(@RequestBody InteresovanjeZaVakcinisanje intereseovanje) throws Exception {
         InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje);
         return new ResponseEntity<>(interesovanjeZaVakcinisanje, HttpStatus.CREATED);
 
     }
     @PostMapping(value = "", consumes = {"application/xml"})
-	  @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_GRADJANIN')")
     public ResponseEntity<?> create(@RequestBody InteresovanjeZaVakcinisanje intereseovanje,  @RequestHeader("Authorization") String accessToken) throws Exception {
     	InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje, accessToken);
         return new ResponseEntity<>(interesovanjeZaVakcinisanje, HttpStatus.OK);
     }
     
     @GetMapping("/count")
-	  @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<CountResponse> findNumberOfZahteva(String accessToken, @RequestParam String startDate, 
 			@RequestParam String endDate) throws IOException, ParseException {
 		return new ResponseEntity<>(new CountResponse(interesovanjeService.getNumberOfInterestedPatients(startDate, endDate)), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @PostMapping("/search_by_metadata")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchByMetadata(@RequestBody MetadataSearchDTO metadataSearchDTO) throws Exception {
         ArrayList<InteresovanjeZaVakcinisanje> interesovanja = interesovanjeService.searchMetadata(metadataSearchDTO);
         InteresovanjeList list = new InteresovanjeList(interesovanja);
@@ -71,6 +71,7 @@ public class InteresovanjeController {
 
     }
     @PostMapping("/search_by_text")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchByText(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<InteresovanjeZaVakcinisanje> interesovanjeZaVakcinisanje = interesovanjeService.searchByText(searchDTO.getSearch());
         InteresovanjeList interesovanjeList = new InteresovanjeList(interesovanjeZaVakcinisanje);
@@ -78,22 +79,25 @@ public class InteresovanjeController {
     }
 
     @GetMapping("/metadata/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN', 'ROLE_ZDRAVSTVENI_RADNIK')")
     public ResponseEntity<?> getMetadata(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(interesovanjeService.readMetadata(id, "N-TRIPLE"), HttpStatus.OK);
     }
     
     @PostMapping("/search")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN', 'ROLE_ZDRAVSTVENI_RADNIK')")
     public ResponseEntity<?> getInteresovanje(@RequestBody SearchDTO searchDTO) throws Exception {
         return new ResponseEntity<>(interesovanjeService.getInteresovanjByJmbg(searchDTO.getSearch()), HttpStatus.OK);
     }
 
     @GetMapping("/metadata-json/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(interesovanjeService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @GetMapping("/search_logical")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchLogical(@RequestParam(name="search") String search) throws Exception {
         ArrayList<InteresovanjeZaVakcinisanje> interesovanja = interesovanjeService.searchMetadataLogical(URLDecoder.decode(search, "UTF-8"));
         InteresovanjeList list = new InteresovanjeList(interesovanja);

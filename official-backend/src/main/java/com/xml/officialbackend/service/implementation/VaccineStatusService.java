@@ -26,7 +26,7 @@ public class VaccineStatusService implements IVaccineStatusService {
     }
 
     @Override
-    public List<StanjeVakcine> findAll() throws JAXBException, XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SAXException {
+    public List<StanjeVakcine> findAll() throws Exception {
         List<StanjeVakcine> allDocuments = baseRepository.loadAllDocumentsFromCollection("/db/stanjeVakcine", "http://www.ftn.uns.ac.rs/stanjeVakcine",
                 "for $n in fn:collection('/db/stanjeVakcine')" +
                         "return $n", StanjeVakcine.class);

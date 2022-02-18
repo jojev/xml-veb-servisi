@@ -7,6 +7,7 @@ import main.java.com.xml.officialbackend.service.implementation.VaccineStatusSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class VaccineStatusController {
     private TerminService terminService;
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     private ResponseEntity<?> createVaccineStatus(@RequestBody StanjeVakcine vaccineStatus) throws Exception {
     	StanjeVakcine stanje = vaccineStatusService.create(vaccineStatus);
     	terminService.assignToPatient();
@@ -28,6 +30,7 @@ public class VaccineStatusController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     private ResponseEntity<?> updateVaccineStatus(@RequestBody StanjeVakcine vaccineStatus, @PathVariable String id) throws Exception {
     	StanjeVakcine stanje = vaccineStatusService.update(vaccineStatus, id);
     	terminService.assignToPatient();
@@ -35,6 +38,7 @@ public class VaccineStatusController {
     }
 
     @GetMapping("")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     private ResponseEntity<StanjeVakcineList> getAllVaccineStatus() throws Exception {
         List<StanjeVakcine> stanjeVakcineList = vaccineStatusService.findAll();
         StanjeVakcineList list = new StanjeVakcineList(stanjeVakcineList);
