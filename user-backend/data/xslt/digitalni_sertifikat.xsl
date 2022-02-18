@@ -53,7 +53,7 @@
                 <div class="div-between">
                     <div class="div-start" style="width:200px; text-align: center;">
                         <div style="display:block;">
-                            <img src="../../images/rs.png" alt=""/>
+                            <img src="https://www.srbija.gov.rs/img/logo_60x120-2.png" alt=""/>
                             <p>РЕПУБЛИКА СРБИЈА
                                 REPUBLIC OF SERBIA
                             </p>
@@ -329,7 +329,7 @@
                 </div>
                 <div class="div-between">
                     <div style="float:left; width:270px; text-align: center;margin-top:20px;">
-                        <img style="float:left;" src="../../images/izjzs.gif" alt=""/>
+                        <img style="float:left;" src="https://euprava.gov.rs/media/logos/Batut.gif" alt=""/>
                         <div class="div-start">
                             <p style=" float: left; width:250px; font-size:medium;text-align:left;margin-left:10px;margin-top:0px;">
                                 <b>Сертификат издаје:</b>
@@ -341,7 +341,7 @@
                     </div>
                     <div style="float:right; width:280px; text-align: center;margin-top:20px;">
                         <b>Дигитални потпис / Digitally signed by:</b>
-                        <img style="float:left;" src="../../images/rs.png" alt=""/>
+                        <img style="float:left;" src="https://www.srbija.gov.rs/img/logo_60x120-2.png" alt=""/>
                         <div class="div-start" style="margin-top:5px;">
                             <p style=" float: left; width:250px; font-size:medium;text-align:left;margin-left:10px;margin-top:0px;">
                                 РЕПУБЛИКА СРБИЈА Влада Републике Србије Канцеларија за информационе технологије и

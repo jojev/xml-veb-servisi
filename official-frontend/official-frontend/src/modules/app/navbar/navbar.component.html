@@ -1,12 +1,12 @@
 <mat-toolbar color="primary">
     <span>Vakcinacija protiv COVID-a</span>
-        <a mat-button routerLink="/izvestaj">Izvjestaj</a> 
-        <a mat-button routerLink="/saglasnost/form">Kreiraj obrazac o saglasnosti</a>
-        <a mat-button routerLink="/vaccine-status">Stanje vakcina</a>
-        <a mat-button routerLink="/zahtev/table">Zahtevi</a>
-        <a mat-button routerLink="/search/documents">Pretraga dokumenata</a>
-        <a mat-button routerLink="/search/text-search">Pretraga po tekstu</a>
-        <a mat-button routerLink="/search/metadata">Pretraga po meta podacima</a>
-        <a mat-button routerLink="/potvrda">Kreiranje potvrde</a>
+        <a mat-button *ngIf="role === 'ROLE_SLUZBENIK'" routerLink="/izvestaj">Izvjestaj</a> 
+        <a mat-button *ngIf="role === 'ROLE_ZDRAVSTVENI_RADNIK'" routerLink="/saglasnost/form">Ažuriranje obrazac o saglasnosti</a>
+        <a mat-button *ngIf="role === 'ROLE_SLUZBENIK'" routerLink="/vaccine-status">Stanje vakcina</a>
+        <a mat-button *ngIf="role === 'ROLE_SLUZBENIK'" routerLink="/zahtev/table">Zahtevi</a>
+        <a mat-button *ngIf="role === 'ROLE_SLUZBENIK'" routerLink="/search/documents">Pretraga dokumenata</a>
+        <a mat-button *ngIf="role === 'ROLE_SLUZBENIK'" routerLink="/search/text-search">Pretraga po tekstu</a>
+        <a mat-button *ngIf="role === 'ROLE_SLUZBENIK'" routerLink="/search/metadata">Pretraga po meta podacima</a>
+        <a mat-button *ngIf="role === 'ROLE_ZDRAVSTVENI_RADNIK'" routerLink="/potvrda">Kreiranje potvrde</a>
         <a mat-button (click)="logout()">Odjava</a>
 </mat-toolbar>

@@ -109,7 +109,7 @@
                     <div class="column1">
                         <div class="row">
                             <div class="column2">
-                                <img src="../../images/izjzs.gif" alt="Girl in a jacket" height="150em" width="130em"/>
+                                <img src="https://euprava.gov.rs/media/logos/Batut.gif" alt="Girl in a jacket" height="150em" width="130em"/>
                             </div>
                             <div class="column3" id="institut">
                                 <p>ИНСТИТУТ ЗА ЈАВНО ЗДРАВЉЕ СРБИЈЕ "Др Милан Јовановић Батут"</p>
