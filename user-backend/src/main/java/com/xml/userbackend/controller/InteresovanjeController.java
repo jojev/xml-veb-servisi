@@ -34,10 +34,11 @@ public class InteresovanjeController {
 
     @PostMapping(value = "", consumes = {"application/xml"})
     public ResponseEntity<?> create(@RequestBody InteresovanjeZaVakcinisanje intereseovanje,  @RequestHeader("Authorization") String accessToken) throws Exception {
-       System.out.println("CAOAODKLAKLKJ");
-    	InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje, accessToken);
+        System.out.println("CAOAODKLAKLKJ");
+        InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje, accessToken);
         return new ResponseEntity<>(interesovanjeZaVakcinisanje, HttpStatus.OK);
-    
+    }
+
     @GetMapping("/count")
     public ResponseEntity<CountResponse> findNumberOfZahteva(String accessToken, @RequestParam String startDate, 
 			@RequestParam String endDate) throws IOException, ParseException {
