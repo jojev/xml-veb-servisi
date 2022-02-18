@@ -1,26 +1,32 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { RootLayoutComponent } from './root-layout/root-layout.component';
 const routes: Routes = [
   {
-    path: "auth",
-      children: [
-        {
-          path: "",
-          loadChildren: () =>
-            import("./../auth/auth.module").then((m) => m.AuthModule),
-        },
-      ],
-  },
-  {
-    path: "user",
-      children: [
-        {
-          path: "",
-          loadChildren: () =>
-            import("./../user/user.module").then((m) => m.UserModule),
-        },
-      ],
+    path: "",
+    component: RootLayoutComponent,
+    children:[
+      {
+        path: "saglasnost",
+        loadChildren: () =>
+          import("./../saglasnost/saglasnost.module").then((m) => m.SaglasnostModule),
+      },
+      {
+        path: "user",
+        loadChildren: () =>
+          import("./../user/user.module").then((m) => m.UserModule),
+      },
+      {
+        path: "interesovanje",
+        loadChildren: () =>
+          import("./../interesovanje/interesovanje.module").then((m) => m.InteresovanjeModule),
+      },
+      {
+        path: "zahtev",
+        loadChildren: () =>
+          import("./../zahtev/zahtev.module").then((m) => m.ZahtevModule),
+      },
+    ]
   },
   {
     path: "saglasnost",
@@ -33,25 +39,16 @@ const routes: Routes = [
       ],
   },
   {
-    path: "interesovanje",
+    path: "auth",
       children: [
         {
           path: "",
           loadChildren: () =>
-            import("./../interesovanje/interesovanje.module").then((m) => m.InteresovanjeModule),
+            import("./../auth/auth.module").then((m) => m.AuthModule),
         },
       ],
   },
-  {
-    path: "zahtev",
-      children: [
-        {
-          path: "",
-          loadChildren: () =>
-            import("./../zahtev/zahtev.module").then((m) => m.ZahtevModule),
-        },
-      ],
-  }
+  
 ];
 
 @NgModule({

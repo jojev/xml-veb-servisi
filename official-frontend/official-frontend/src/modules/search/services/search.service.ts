@@ -190,10 +190,82 @@ export class SearchService {
     })
   }
 
+
   getMetadataLogicalSearch(search: any):Observable<any> {
     var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
     var xmlString = this.serializer.serializeToString(xmlDoc);
     return this.http.post<any>("/api/v1/search/logical", xmlString, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+    
+  }
+  getMetadataRDFForInteresovanje(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/interesovanje/metadata/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataRDFForSaglasnost(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/saglasnost/metadata/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataRDFForPotvrda(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/potvrda-o-vakcinaciji/metadata/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataRDFForZahtev(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/zahtev_za_sertifikat/metadata/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataRDFForSertifikat(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/digitalni-sertifikat/metadata/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  
+  getMetadataJsonForInteresovanje(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/interesovanje/metadata-json/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataJsonForSaglasnost(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/saglasnost/metadata-json/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataJsonForPotvrda(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/potvrda-o-vakcinaciji/metadata-json/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataJsonForZahtev(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/zahtev_za_sertifikat/metadata-json/" + id, {
+      headers: this.headers,
+      responseType: 'test/xml' as 'json'
+    })
+  }
+
+  getMetadataJsonForSertifikat(id: any):Observable<any> {
+    return this.http.get<any>("/api/v1/digitalni-sertifikat/metadata-json/" + id, {
       headers: this.headers,
       responseType: 'test/xml' as 'json'
     })

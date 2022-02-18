@@ -7,7 +7,13 @@ import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.existdb.ExistDbManager;
 import main.java.com.xml.officialbackend.jaxb.JaxBParser;
 import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
+
+import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeList;
+import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
+import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
+
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.Doza;
+
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.rdf.FusekiReader;
 import main.java.com.xml.officialbackend.rdf.FusekiWriter;
@@ -27,6 +33,7 @@ import org.checkerframework.checker.units.qual.A;
 import main.java.com.xml.officialbackend.service.contract.ITerminService;
 import main.java.com.xml.officialbackend.transformations.HtmlTransformer;
 import main.java.com.xml.officialbackend.transformations.XSLFOTransformer;
+import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinacijiList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -81,6 +88,12 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
     
     @Autowired
     private XSLFOTransformer xslfoTransformer;
+    
+    @Autowired
+    private SearchService searchService;
+    
+    @Autowired
+    private ObrazacZaSprovodjenjeImunizacijeService saglasnostService;
     
     @Override
     public List<PotvrdaOVakcinaciji> findAll() {
@@ -144,13 +157,25 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
         FusekiWriter.saveRDF(new ByteArrayInputStream(out), "potvrda_o_vakcinaciji");
 
         int numberOfVaccine = entity.getPodaciOVakcinaciji().getDoze().getDoza().size();
+        String userEmail = this.findEmailViaInteresovanje(entity.getLicniPodaci().getJmbg().getValue(), accessToken);
+        
+        terminService.addTerminOrAddToListaCekanja(entity.getPodaciOVakcinaciji().getNazivVakcine().trim(), numberOfVaccine + 1,
+                entity.getLicniPodaci().getJmbg().getValue(), userEmail ,entity.getPodaciOVakcinaciji().getDoze().getDoza().get(numberOfVaccine - 1).getDatumDavanja());
 
-       // terminService.addTerminOrAddToListaCekanja(entity.getPodaciOVakcinaciji().getNazivVakcine().trim(), numberOfVaccine + 1,
-       //         entity.getLicniPodaci().getJmbg().getValue(), entity.getPodaciOVakcinaciji().getDoze().getDoza().get(numberOfVaccine - 1).getDatumDavanja());
-
+        terminService.processTermin(entity.getLicniPodaci().getJmbg().getValue(), entity.getPodaciOVakcinaciji().getNazivVakcine(), entity.getPodaciOVakcinaciji().getDoze().getDoza().size());
+        
         return entity;
     }
 
+    private String findEmailViaInteresovanje(String jmbg, String accessToken) {
+    	SearchDTO searchDTO = new SearchDTO();
+    	searchDTO.setSearch(jmbg);
+    	HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
+        ResponseEntity<InteresovanjeZaVakcinisanje> response = restTemplate.exchange("http://localhost:8080/api/v1/interesovanje/search", HttpMethod.POST,
+                httpEntity, InteresovanjeZaVakcinisanje.class);
+        return response.getBody().getLicniPodaci().getAdresaElektronskePoste();
+    }
+    
     @Override
     public String readMetadata(String documentId, String format) throws IOException {
         String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/potvrda_o_vakcinaciji/" + documentId + "> ?d ?s .";
@@ -158,7 +183,7 @@ public class PotvrdaOVakcinacijiService implements IPotvrdaOVakcinacijiService {
             return FusekiReader.readMetadata("/potvrda_o_vakcinaciji", sparqlCondition, format);
         }
         catch (Exception e) {
-            throw new MissingEntityException("Ne postoji saglasnost sa tim id.");
+            throw new MissingEntityException("Ne postoji potvrda sa tim id.");
         }
     }
 

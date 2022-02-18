@@ -131,7 +131,7 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
             return FusekiReader.readMetadata("/digitalni_sertifikat", sparqlCondition, format);
         }
         catch (Exception e) {
-            throw new MissingEntityException("Ne postoji saglasnost sa tim id.");
+            throw new MissingEntityException("Ne postoji sertifikat sa tim id.");
         }
     }
 

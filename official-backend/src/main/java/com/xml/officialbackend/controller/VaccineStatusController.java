@@ -2,6 +2,7 @@ package main.java.com.xml.officialbackend.controller;
 
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcineList;
+import main.java.com.xml.officialbackend.service.implementation.TerminService;
 import main.java.com.xml.officialbackend.service.implementation.VaccineStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,15 +16,22 @@ import java.util.List;
 public class VaccineStatusController {
     @Autowired
     private VaccineStatusService vaccineStatusService;
+    
+    @Autowired
+    private TerminService terminService;
 
     @PostMapping("")
     private ResponseEntity<?> createVaccineStatus(@RequestBody StanjeVakcine vaccineStatus) throws Exception {
-        return new ResponseEntity<>(vaccineStatusService.create(vaccineStatus), HttpStatus.CREATED);
+    	StanjeVakcine stanje = vaccineStatusService.create(vaccineStatus);
+    	terminService.assignToPatient();
+        return new ResponseEntity<>(stanje, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     private ResponseEntity<?> updateVaccineStatus(@RequestBody StanjeVakcine vaccineStatus, @PathVariable String id) throws Exception {
-        return new ResponseEntity<>(vaccineStatusService.update(vaccineStatus, id), HttpStatus.OK);
+    	StanjeVakcine stanje = vaccineStatusService.update(vaccineStatus, id);
+    	terminService.assignToPatient();
+        return new ResponseEntity<>(stanje, HttpStatus.OK);
     }
 
     @GetMapping("")
