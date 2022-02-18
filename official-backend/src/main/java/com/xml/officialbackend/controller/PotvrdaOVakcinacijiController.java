@@ -45,4 +45,15 @@ public class PotvrdaOVakcinacijiController {
     public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(potvrdaOVakcinacijiService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable String id) throws Exception {
+        return new ResponseEntity<>(potvrdaOVakcinacijiService.findById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/referencing/{documentId}")
+    public ResponseEntity<?> findWhoIsReferenced(@PathVariable String documentId) throws Exception {
+        String zahtev = potvrdaOVakcinacijiService.findWhoIsReferenced(documentId);
+        return new ResponseEntity<>(zahtev.split("/")[zahtev.split("/").length-1], HttpStatus.OK);
+    }
 }

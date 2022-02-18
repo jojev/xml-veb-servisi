@@ -342,4 +342,23 @@ public class InteresovanjeService implements IInteresovanjeService {
 		return null;
 	}
 
+
+    @Override
+    public String findWhereIsReferenced(String documentId) {
+        String sparqlCondition = "?person ?predicate\"" + documentId + "\" .";
+
+        try(RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/saglasnosti", sparqlCondition);) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while(result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                RDFNode rdfNode = row.get(columnName);
+                return rdfNode.toString();
+            }
+        } catch (IOException e) {
+            return null;
+        }
+        return null;
+    }
+
 }

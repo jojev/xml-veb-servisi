@@ -33,4 +33,6 @@ public interface ISaglasnostService extends IService<ObrazacZaSprovodjenjeImuniz
 
     ArrayList<ObrazacZaSprovodjenjeImunizacije> searchMetadataLogical(String search) throws Exception;
 
+    public String findWhoIsReferenced(String documentId);
+
 }

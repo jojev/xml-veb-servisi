@@ -3,6 +3,7 @@ package main.java.com.xml.officialbackend.controller;
 import main.java.com.xml.officialbackend.dto.RazlogDTO;
 import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevList;
 import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
+import main.java.com.xml.officialbackend.service.contract.IDigitalniSertifikatService;
 import main.java.com.xml.officialbackend.service.contract.IZahtevZaSertifikatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -77,5 +78,11 @@ public class ZahtevZaSertifikatController {
                 restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/metadata-json/{id}",
                         HttpMethod.GET,  httpEntity,String.class, id);
         return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
+    }
+
+    @GetMapping("/referenced/{documentId}")
+    public ResponseEntity<?> findWhereIsReferenced(@PathVariable String documentId) throws Exception {
+        String zahtev = zahtevZaSertifikatService.findWhereIsReferenced(documentId);
+        return new ResponseEntity<>(zahtev.split("/")[zahtev.split("/").length-1], HttpStatus.OK);
     }
 }

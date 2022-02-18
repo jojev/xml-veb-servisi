@@ -39,6 +39,10 @@ public class InteresovanjeController {
         this.interesovanjeService = interesovanjeService;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@RequestParam String id) throws Exception {
+        return new ResponseEntity<>(interesovanjeService.findById(id), HttpStatus.OK);
+    }
 
 
     @PostMapping("")
@@ -51,7 +55,8 @@ public class InteresovanjeController {
     @PostMapping(value = "", consumes = {"application/xml"})
 	@PreAuthorize("hasAnyRole('ROLE_GRADJANIN')")
     public ResponseEntity<?> create(@RequestBody InteresovanjeZaVakcinisanje intereseovanje,  @RequestHeader("Authorization") String accessToken) throws Exception {
-    	InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje, accessToken);
+        InteresovanjeZaVakcinisanje interesovanjeZaVakcinisanje = interesovanjeService.create(intereseovanje, accessToken);
+
         return new ResponseEntity<>(interesovanjeZaVakcinisanje, HttpStatus.OK);
     }
     
@@ -97,6 +102,11 @@ public class InteresovanjeController {
         return new ResponseEntity<>(interesovanjeService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
     }
 
+    @GetMapping("/referenced/{documentId}")
+    public ResponseEntity<?> findWhereIsReferenced(@PathVariable String documentId) throws Exception {
+        String zahtev = interesovanjeService.findWhereIsReferenced(documentId);
+        return new ResponseEntity<>(zahtev, HttpStatus.OK);
+}
     @GetMapping("/search_logical")
 	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchLogical(@RequestParam(name="search") String search) throws Exception {

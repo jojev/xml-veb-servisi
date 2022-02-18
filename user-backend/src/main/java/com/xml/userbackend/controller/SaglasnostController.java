@@ -29,6 +29,12 @@ public class SaglasnostController {
     public ResponseEntity<?> createSaglasnost(@RequestBody ObrazacZaSprovodjenjeImunizacije saglasnost) throws Exception {
         return new ResponseEntity<>(saglasnostService.create(saglasnost), HttpStatus.CREATED);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@RequestParam String id) throws Exception {
+        return new ResponseEntity<>(saglasnostService.findById(id), HttpStatus.OK);
+    }
+
     @PreAuthorize("hasAnyRole('ROLE_ZDRAVSTVENI_RADNIK')")
     @PutMapping("/{jmbg}")
     public ResponseEntity<?> updateSaglanost(@RequestBody PodaciKojeJePopunioZdravstveniRadnik podaciKojeJePopunioZdravstveniRadnik,
@@ -89,6 +95,11 @@ public class SaglasnostController {
         return new ResponseEntity<>(obrazac, HttpStatus.OK);
     }
 
+
+    @GetMapping("/referencing/{documentId}")
+    public ResponseEntity<?> findWhoIsReferenced(@PathVariable String documentId) throws Exception {
+        return new ResponseEntity<>(saglasnostService.findWhoIsReferenced(documentId), HttpStatus.OK);
+}
 
     @GetMapping("/search_logical")
     @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")

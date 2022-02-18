@@ -43,5 +43,5 @@ public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisa
 
 	InteresovanjeZaVakcinisanje getInteresovanjByJmbg(String jmbg) throws Exception;
 
-
+    public String findWhereIsReferenced(String documentId);
 }

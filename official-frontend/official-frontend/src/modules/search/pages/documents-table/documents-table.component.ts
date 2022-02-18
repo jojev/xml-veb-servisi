@@ -19,6 +19,9 @@ export class DocumentsTableComponent implements OnInit {
   dataSource: any[] = [];
   all: number = 0;
 
+  referenced: any = { id: ""};
+  referencing: any = { id: ""};
+
   form: FormGroup;
   constructor(private searchService: SearchService) {
     this.form = new FormGroup({
@@ -146,11 +149,31 @@ export class DocumentsTableComponent implements OnInit {
           (document.getElementById("preview") as any).innerHTML = result;
         }
       )
+      this.searchService.getWhereInteresovanjeReferenced(element.id).subscribe(
+        (result) => {
+            var object = { dokument: 'Obrazac za sprovođenje imunizacije', id: result };
+            this.referenced = object;
+        },
+        (error) => {
+
+        }
+      )
     } else if (element.dokument == 'Obrazac za sprovođenje imunizacije') {
       this.searchService.getSaglasnostHtmlTransformation(searchDTO).subscribe(
         (result) => {
 
           (document.getElementById("preview") as any).innerHTML = result;
+        }
+      )
+      this.searchService.getWhereSaglasnostReferenced(element.id).subscribe(
+        (result) => {
+            console.log(result)
+            var object = { dokument: 'Potvrda o vakcinaciji', id: result };
+            this.referenced = object;
+            console.log(object)
+        },
+        (error) => {
+
         }
       )
     }
@@ -161,6 +184,17 @@ export class DocumentsTableComponent implements OnInit {
           (document.getElementById("preview") as any).innerHTML = result;
         }
       )
+      this.searchService.getWhereZahtevReferenced(element.id).subscribe(
+        (result) => {
+            console.log(result)
+            var object = { dokument: 'Digitalni zeleni sertifikat', id: result };
+            this.referenced = object;
+            console.log(object)
+        },
+        (error) => {
+
+        }
+      )
     }
     else if (element.dokument == 'Potvrda o vakcinaciji') {
       this.searchService.getPotvrdaHtmlTransformation(searchDTO).subscribe(
@@ -169,6 +203,7 @@ export class DocumentsTableComponent implements OnInit {
           (document.getElementById("preview") as any).innerHTML = result;
         }
       )
+      this.referenced = {dokument: '', id: ''};
     } else if (element.dokument == 'Digitalni zeleni sertifikat') {
       this.searchService.getDigitalniHtmlTransformation(searchDTO).subscribe(
         (result) => {

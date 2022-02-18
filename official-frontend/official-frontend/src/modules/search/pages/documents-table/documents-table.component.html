@@ -57,3 +57,11 @@
 <div id="preview">
 
 </div>
+<div *ngIf="referencing.id != ''">
+  <label>Referencira dokument:</label>
+  <button mat-raised-button color="primary" (click)="showDocument(referencing)">{{referencing.id}}</button>
+</div>
+<div *ngIf="referenced.id != ''">
+  <label>Referenciran u dokumentu:</label>
+  <button mat-raised-button color="primary" (click)="showDocument(referenced)">{{referenced.id}}</button>
+</div>

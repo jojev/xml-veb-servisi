@@ -64,4 +64,23 @@ public class SaglasnostController {
                         HttpMethod.GET,  httpEntity,String.class, id);
         return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
     }
+
+    @GetMapping("/referenced/{documentId}")
+    public ResponseEntity<?> findWhereIsReferenced(@PathVariable String documentId) throws Exception {
+        String zahtev = saglasnostService.findWhereIsReferenced(documentId);
+        return new ResponseEntity<>(zahtev.split("/")[zahtev.split("/").length-1], HttpStatus.OK);
+    }
+
+    @GetMapping("/referencing/{documentId}")
+    public ResponseEntity<?> findWhoIsReferenced(@PathVariable String documentId, @RequestHeader("Authorization") String accessToken) throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", accessToken);
+        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> responseEntity =
+
+                restTemplate.exchange("http://localhost:8080/api/v1/saglasnost/referencing/{id}",
+                        HttpMethod.GET,  httpEntity,String.class, documentId);
+        String zahtev = responseEntity.getBody();
+        return new ResponseEntity<>(zahtev.split("/")[zahtev.split("/").length-1], HttpStatus.OK);
+    }
 }

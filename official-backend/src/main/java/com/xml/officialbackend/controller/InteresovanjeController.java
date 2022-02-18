@@ -53,4 +53,16 @@ public class InteresovanjeController {
                         HttpMethod.GET,  httpEntity,String.class, id);
         return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
     }
+
+    @GetMapping("/referenced/{documentId}")
+    public ResponseEntity<?> findWhereIsReferenced(@PathVariable String documentId, @RequestHeader("Authorization") String accessToken) throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", accessToken);
+        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> responseEntity =
+
+                restTemplate.exchange("http://localhost:8080/api/v1/interesovanje/referenced/{documentId}",
+                        HttpMethod.GET,  httpEntity,String.class, documentId);
+        return new ResponseEntity<>(responseEntity.getBody().split("/")[responseEntity.getBody().split("/").length-1], HttpStatus.OK);
+    }
 }
