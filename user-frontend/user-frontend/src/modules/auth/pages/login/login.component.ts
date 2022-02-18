@@ -4,6 +4,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from '../../services/auth/auth.service';
 import * as x2js from 'xml2js';
 import { NotificationService } from 'src/modules/shared/services/notification/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit {
   parser = new x2js.Parser();
 
   constructor(private authService: AuthService,
-    private notificationService: NotificationService) { 
+    private notificationService: NotificationService, private router: Router) { 
     this.form = new FormGroup({
       username: new FormControl(null, Validators.required),
       password: new FormControl('', Validators.required),
@@ -48,6 +49,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem("username", username);
           localStorage.setItem("role", role);
         });
+        this.router.navigate(["/user/review"]);
       },
       (error) => {
         if(error.status === 401) {

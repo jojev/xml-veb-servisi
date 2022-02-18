@@ -46,6 +46,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/interesovanje/count").permitAll()
                 .antMatchers("/api/v1/zahtev_za_sertifikat/count").permitAll()
                 .antMatchers("/api/v1/izvestaj/**").permitAll()
+                .antMatchers("/api/v1/preview/**").permitAll()
                 .anyRequest().authenticated();
     }
 

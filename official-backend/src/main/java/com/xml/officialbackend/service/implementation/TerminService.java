@@ -345,7 +345,7 @@ public class TerminService implements ITerminService {
     	String xqueryPath = "data/xquery/pretraga_termina_po_jmbg_vakcini_dozi.xqy";
     	String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
     	
-    	String formattedXQueryExpresion = String.format(xqueryExpression, doza, jmbg, tipVakcine.strip());
+    	String formattedXQueryExpresion = String.format(xqueryExpression, doza, jmbg, tipVakcine.trim());
     	System.out.println(formattedXQueryExpresion);
     	return existDbManager.executeXquery("/db/termini", "", formattedXQueryExpresion);
     }
