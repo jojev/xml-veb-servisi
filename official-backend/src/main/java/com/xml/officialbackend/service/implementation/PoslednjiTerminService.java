@@ -28,7 +28,7 @@ public class PoslednjiTerminService implements IPoslednjiTermin {
     	try {
     		return baseRepository.findById("/db/poslednji_termin", id, PoslednjiTermin.class);
     	}
-    	catch(MissingEntityException e) {
+    	catch(MissingEntityException|NullPointerException e) {
     		return null;
     	}
         
