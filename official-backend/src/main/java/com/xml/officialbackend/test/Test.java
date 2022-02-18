@@ -105,7 +105,7 @@ public class Test {
     private void createAstraZeneca() throws Exception {
     	StanjeVakcine stanje = new StanjeVakcine();
     	stanje.setKolicina(10);
-    	stanje.setVakcina("AstraZeneca-Oxford");
+    	stanje.setVakcina("AstraZeneca");
     	statusService.create(stanje);
     }
     private void createSinopharm() throws Exception {
