@@ -29,8 +29,11 @@ public class ZahtevZaSertifikatController {
         headers.add("Authorization", accessToken);
         HttpEntity<?> httpEntity = new HttpEntity<>(razlogDTO,headers);
         ResponseEntity<ZahtevZaIzdavanjeSertifikata> responseEntity =
-                restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/odgovor",
-                        HttpMethod.POST, httpEntity, ZahtevZaIzdavanjeSertifikata.class);
+
+                restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/{documentId}",
+                        HttpMethod.GET,  httpEntity,ZahtevZaIzdavanjeSertifikata.class, razlogDTO.getZahtev());
+        System.out.println(responseEntity.getBody().getAbout());
+
         zahtevZaSertifikatService.response(razlogDTO, responseEntity.getBody(), accessToken);
         return new ResponseEntity<>(HttpStatus.OK);
     }

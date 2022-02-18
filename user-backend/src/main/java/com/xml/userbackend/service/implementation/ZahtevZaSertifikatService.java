@@ -59,6 +59,8 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     private MetadataExtractor metadataExtractor;
     
     private HtmlTransformer htmlTransformer;
+    
+    private XSLFOTransformer xslfoTransformer;
 
     private JaxBParser jaxBParser;
     
@@ -67,9 +69,11 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     private IInteresovanjeService interesovanjeService;
 
     private RestTemplate restTemplate;
-
+    
     @Autowired
-    public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser, HtmlTransformer htmlTransformer,
+    public ZahtevZaSertifikatService(BaseRepository baseRepository, JaxBParser jaxBParser, HtmlTransformer htmlTransformer, XSLFOTransformer xslfoTransformer,
+    
+    
                                      ExistDbManager existDbManager, MetadataExtractor metadataExtractor,
                                      EmailService emailService, IInteresovanjeService interesovanjeService, RestTemplate restTemplate) {
 
@@ -82,6 +86,8 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         this.emailService = emailService;
         this.interesovanjeService = interesovanjeService;
         this.jaxBParser = jaxBParser;
+        this.xslfoTransformer = xslfoTransformer;
+
         this.restTemplate = restTemplate;
 
 
@@ -164,7 +170,7 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     @Override
     public int getNumberOfRequestForDigitalSertificate(String startDate, String endDate) throws IOException {
         String sparqlCondition = "?s <http://www.ftn.uns.ac.rs/rdf/zahtev_za_sertifikat/predicate/IzdatDatuma> ?date. "
-                + "FILTER ( ?date >= \"" + startDate + "\"^^<http://www.w3.org/2001/XMLSchema#date> && ?date < \"" + endDate + "\"^^<http://www.w3.org/2001/XMLSchema#date>).";
+                + "FILTER ( ?date >= \"" + startDate + "\" && ?date < \"" + endDate + "\").";
 
         try (RDFReadResult result = FusekiReader.readRDFWithSparqlCountQuery("/zahtev_za_sertifikat", sparqlCondition);) {
             List<String> columnNames = result.getResult().getResultVars();
@@ -236,6 +242,12 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
     public byte[] generateZahtevToXHTML(String id) throws Exception {
     	ZahtevZaIzdavanjeSertifikata zahtev = findById(id);
     	return htmlTransformer.generateHTMLtoByteArray(zahtev);
+    }
+    
+    @Override
+    public byte[] generateZahtevToPDF(String id) throws Exception {
+    	ZahtevZaIzdavanjeSertifikata zahtev = findById(id);
+    	return xslfoTransformer.generatePDFtoByteArray(zahtev);
     }
 
 

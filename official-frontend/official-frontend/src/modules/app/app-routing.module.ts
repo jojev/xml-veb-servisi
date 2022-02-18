@@ -13,6 +13,16 @@ const routes: Routes = [
     ],
   },
   {
+    path: "izvestaj",
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("./../izvestaj/izvestaj.module").then((m) => m.IzvestajModule),
+      }
+    ]
+  },
+  {
     path: "saglasnost",
       children: [
         {

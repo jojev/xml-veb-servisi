@@ -33,6 +33,15 @@ export class InteresovanjeService {
       responseType: 'test/xml' as 'json'
     })
   }
+
+  getPdfTransformation(search: any): Observable<Blob> {
+    var xmlDoc = this.parser.parseFromString(o2x(search), "text/xml");
+    var xmlString = this.serializer.serializeToString(xmlDoc);
+    return this.http.post<Blob>("/api/v1/xslfo_transformation/interesovanje", xmlString, {
+      headers: this.headers,
+      responseType: 'blob' as 'json'
+    })
+  }
   
 }
 

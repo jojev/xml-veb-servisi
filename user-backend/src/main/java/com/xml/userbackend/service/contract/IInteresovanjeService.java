@@ -36,4 +36,8 @@ public interface IInteresovanjeService extends IService<InteresovanjeZaVakcinisa
     ArrayList<InteresovanjeZaVakcinisanje> searchByText(String search) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
 
     int getNumberOfInterestedPatients(String startDate, String endDate) throws IOException;
+
+	  byte[] generateIntersovanjeToPDF(String id) throws Exception;
+
+
 }

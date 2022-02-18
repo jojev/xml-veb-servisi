@@ -29,7 +29,7 @@ import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevList;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 
 @RestController
-@RequestMapping(value = "/api/v1/preview", produces = {"application/xml"})
+@RequestMapping(value = "/api/v1/preview", produces = {"application/xml"}, consumes = {"application/xml"})
 public class ViewDocumentsController {
 	
 	@Autowired

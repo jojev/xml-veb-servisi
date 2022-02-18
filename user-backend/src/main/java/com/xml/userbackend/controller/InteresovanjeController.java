@@ -41,6 +41,7 @@ public class InteresovanjeController {
     @GetMapping("/count")
     public ResponseEntity<CountResponse> findNumberOfZahteva(String accessToken, @RequestParam String startDate, 
 			@RequestParam String endDate) throws IOException, ParseException {
+    	System.out.println("U INTERESOVANJU SAMMM");
 		return new ResponseEntity<>(new CountResponse(interesovanjeService.getNumberOfInterestedPatients(startDate, endDate)), HttpStatus.OK);
     }
 

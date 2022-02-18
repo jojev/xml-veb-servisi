@@ -13,13 +13,16 @@ import javax.xml.bind.JAXBException;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface IObrazacZaSprovodjenjeImunizacijeService extends IService<ObrazacZaSprovodjenjeImunizacije>{
 
     ObrazacZaSprovodjenjeImunizacije update(String jmbg,
                                             PodaciKojeJePopunioZdravstveniRadnik podaci) throws Exception;
-  
+ 
+   
     ObrazacZaSprovodjenjeImunizacije findByJMBG(String accessToken, String jmbg) throws Exception;
+
 
     ArrayList<ObrazacZaSprovodjenjeImunizacije> searchByText(SearchDTO searchDTO) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException;
 

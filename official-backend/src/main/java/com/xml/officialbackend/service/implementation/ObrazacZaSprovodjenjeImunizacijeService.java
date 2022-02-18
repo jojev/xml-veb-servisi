@@ -71,8 +71,23 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
 
     }
 
+//    @Override
+//    public List<ObrazacZaSprovodjenjeImunizacije> findByJMBG(String token, String jmbg) {
+//        headers.setContentType(MediaType.APPLICATION_XML);
+//        //headers.add("Authorization", token);
+//        HttpEntity<String> request = new HttpEntity<>(String.format(
+//                "<searchdto><search>%s</search></searchdto>",
+//                jmbg), headers);
+//        ResponseEntity<ObrazacList> response;
+//        try {
+//            response = restTemplate.exchange("http://localhost:8080/api/v1/preview/obrazac/search_jmbg", HttpMethod.POST, request, ObrazacList.class);
+//        } catch (Exception e) {
+//            throw new MissingEntityException("Ne postoje saglasnosti sa unetim jmbg.");
+//        }
+//        return response.getBody().getItems();
+//
+//    }
     @Override
-
     public ObrazacZaSprovodjenjeImunizacije findByJMBG(String accessToken, String jmbg) {
         headers.setContentType(MediaType.APPLICATION_XML);
         headers.add("Authorization", accessToken);
@@ -109,7 +124,7 @@ public class ObrazacZaSprovodjenjeImunizacijeService implements IObrazacZaSprovo
         return new String(encoded, encoding);
     }
 
-
+    
     @Override
     public ObrazacZaSprovodjenjeImunizacije update(String jmbg,
                                                    PodaciKojeJePopunioZdravstveniRadnik podaci) throws Exception {

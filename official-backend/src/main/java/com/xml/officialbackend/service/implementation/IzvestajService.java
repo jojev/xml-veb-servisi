@@ -26,10 +26,13 @@ import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOI
 import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji.RaspodelaPoDozama.Doza;
 import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji.RaspodelaProizvodjaca;
 import main.java.com.xml.officialbackend.model.izvestaj_o_imunizaciji.IzvestajOImunizaciji.RaspodelaProizvodjaca.Vakcina;
+import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 import main.java.com.xml.officialbackend.rdf.FusekiWriter;
 import main.java.com.xml.officialbackend.rdf.MetadataExtractor;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.IIzvestajService;
+import main.java.com.xml.officialbackend.transformations.HtmlTransformer;
+import main.java.com.xml.officialbackend.transformations.XSLFOTransformer;
 
 @Service
 public class IzvestajService implements IIzvestajService{
@@ -41,14 +44,20 @@ public class IzvestajService implements IIzvestajService{
     private ExistDbManager existDbManager;
 
 	private TerminService terminService;
+   
+    private HtmlTransformer htmlTransformer;
+    
+    private XSLFOTransformer xslfoTransformer;
 	
 	@Autowired
 	public IzvestajService(BaseRepository baseRepository, ExistDbManager existDbManager, MetadataExtractor metadataExctractor,
-			TerminService terminService) {
+			TerminService terminService, HtmlTransformer htmlTransformer, XSLFOTransformer xslfoTransformer) {
 		this.baseRepository = baseRepository;
 		this.metadataExctractor = metadataExctractor;
 		this.existDbManager = existDbManager;
 		this.terminService = terminService;
+		this.htmlTransformer = htmlTransformer;
+		this.xslfoTransformer = xslfoTransformer;
 	}
 	
 	
@@ -129,17 +138,54 @@ public class IzvestajService implements IIzvestajService{
 		izvestaj.setDatumIzdavanja(datum);
 		
 		List<Doza> doze = findDosages(vaccinesByDosage);
+		if(doze.size() < 1) {
+			Doza doza = new Doza();
+			doza.setKolicina(BigInteger.valueOf(0));
+			doza.setRedniBroj(BigInteger.valueOf(1));
+			doze.add(doza);
+			Doza doza1 = new Doza();
+			doza1.setKolicina(BigInteger.valueOf(0));
+			doza1.setRedniBroj(BigInteger.valueOf(2));
+			doze.add(doza1);
+			Doza doza2 = new Doza();
+			doza2.setKolicina(BigInteger.valueOf(0));
+			doza2.setRedniBroj(BigInteger.valueOf(3));
+			doze.add(doza2);
+			
+		}
 		RaspodelaPoDozama raspodelaPoDozama = new RaspodelaPoDozama();
 		raspodelaPoDozama.getDoza().addAll(doze);
 		izvestaj.setRaspodelaPoDozama(raspodelaPoDozama);
 		
 		List<Vakcina> vakcine = findManufacturers(vaccinesByManufacturer);
+		if(vakcine.size() < 1) {
+			Vakcina vakcina1 = new Vakcina();
+			vakcina1.setTip("Pfizer-BioNTech");
+			vakcina1.setValue(BigInteger.valueOf(0));
+			vakcine.add(vakcina1);
+			Vakcina vakcina2 = new Vakcina();
+			vakcina2.setTip("Sinopharm");
+			vakcina2.setValue(BigInteger.valueOf(0));
+			vakcine.add(vakcina2);
+			Vakcina vakcina3 = new Vakcina();
+			vakcina3.setTip("Moderna");
+			vakcina3.setValue(BigInteger.valueOf(0));
+			vakcine.add(vakcina3);
+			Vakcina vakcina4 = new Vakcina();
+			vakcina4.setTip("Sputnik V");
+			vakcina4.setValue(BigInteger.valueOf(0));
+			vakcine.add(vakcina4);
+			Vakcina vakcina5 = new Vakcina();
+			vakcina5.setTip("AstraZenec");
+			vakcina5.setValue(BigInteger.valueOf(0));
+			vakcine.add(vakcina5);
+		}
 		RaspodelaProizvodjaca raspodelaProizvodjaca = new RaspodelaProizvodjaca();
 		raspodelaProizvodjaca.getVakcina().addAll(vakcine);
 		izvestaj.setRaspodelaProizvodjaca(raspodelaProizvodjaca);
 		
-		create(izvestaj);
-		return izvestaj;
+		return create(izvestaj);
+		
 	}
 	
 	private List<Doza> findDosages(List<Resource> resource) throws Exception {
@@ -182,4 +228,17 @@ public class IzvestajService implements IIzvestajService{
 		
 		return totalVaccines;
 	}
+	
+	 @Override
+	 public byte[] generateIzvestajToXHTML(String id) throws Exception {
+		 IzvestajOImunizaciji izvestaj = findById(id);
+	     return htmlTransformer.generateHTMLtoByteArray(izvestaj);
+	 }
+	 
+	 @Override
+	 public byte[] generateIzestajToPDF(String id) throws Exception {
+		 IzvestajOImunizaciji izvestaj = findById(id);
+	     return xslfoTransformer.generatePDFtoByteArray(izvestaj);
+	 }
+
 }
