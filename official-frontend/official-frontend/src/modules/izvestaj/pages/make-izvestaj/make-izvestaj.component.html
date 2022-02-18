@@ -21,8 +21,11 @@
 
       
   </form>
-  <button (click)="preuzmi()" class="b" mat-raised-button color="primary" [disabled]="!form.valid">
-        Preuzmi
+  <button (click)="preuzmiHtml()" class="b" mat-raised-button color="primary" [disabled]="!form.valid">
+    Preuzmi html
+</button> 
+  <button (click)="preuzmiPdf()" class="b" mat-raised-button color="primary" [disabled]="!form.valid">
+        Preuzmi pdf
     </button> 
       <button (click)="preuzmiRdf()" class="b" mat-raised-button color="primary" [disabled]="!form.valid">
         Preuzmi rdf

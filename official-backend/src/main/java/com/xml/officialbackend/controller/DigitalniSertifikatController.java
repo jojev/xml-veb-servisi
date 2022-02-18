@@ -4,6 +4,7 @@ import main.java.com.xml.officialbackend.service.contract.IDigitalniSertifikatSe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +19,13 @@ public class DigitalniSertifikatController {
     private IDigitalniSertifikatService digitalniSertifikatService;
 
     @GetMapping("/metadata/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> getMetadata(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(digitalniSertifikatService.readMetadata(id, "N-TRIPLE"), HttpStatus.OK);
     }
 
     @GetMapping("/metadata-json/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(digitalniSertifikatService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
     }

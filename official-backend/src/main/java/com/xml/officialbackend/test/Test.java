@@ -1,45 +1,28 @@
 package main.java.com.xml.officialbackend.test;
 
-import main.java.com.xml.officialbackend.existdb.ExistDbManager;
-import main.java.com.xml.officialbackend.jaxb.JaxBParser;
-import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
-import main.java.com.xml.officialbackend.model.interesovanje.InteresovanjeZaVakcinisanje;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
-import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.ObrazacZaSprovodjenjeImunizacije;
-import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.Doza;
-import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.Jmbg;
-import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.Osoba;
-import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
-
-import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji.DatumIzdavanjaPotvrde;
-import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.Vakcinacija;
-import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.Vakcinacija.Doze;
-
-import main.java.com.xml.officialbackend.rdf.FusekiReader;
-import main.java.com.xml.officialbackend.rdf.MetadataExtractor;
-import main.java.com.xml.officialbackend.rdf.RDFReadResult;
-import main.java.com.xml.officialbackend.rdf.FusekiWriter;
-import main.java.com.xml.officialbackend.repository.BaseRepository;
-import main.java.com.xml.officialbackend.service.contract.IDigitalniSertifikatService;
-import main.java.com.xml.officialbackend.service.contract.IPotvrdaOVakcinacijiService;
-import main.java.com.xml.officialbackend.service.contract.IZahtevZaSertifikatService;
+import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.jena.query.ResultSetFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xmldb.api.modules.XMLResource;
 
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.transform.TransformerException;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-
-import java.io.OutputStream;
-import java.math.BigInteger;
-
-import java.nio.charset.StandardCharsets;
+import main.java.com.xml.officialbackend.existdb.ExistDbManager;
+import main.java.com.xml.officialbackend.jaxb.JaxBParser;
+import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
+import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
+import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
+import main.java.com.xml.officialbackend.rdf.FusekiWriter;
+import main.java.com.xml.officialbackend.rdf.MetadataExtractor;
+import main.java.com.xml.officialbackend.repository.BaseRepository;
+import main.java.com.xml.officialbackend.service.contract.IDigitalniSertifikatService;
+import main.java.com.xml.officialbackend.service.contract.IPotvrdaOVakcinacijiService;
+import main.java.com.xml.officialbackend.service.contract.IVaccineStatusService;
 
 @Component
 public class Test {
@@ -60,12 +43,16 @@ public class Test {
     
     @Autowired 
     private IPotvrdaOVakcinacijiService potvrdaService;
+    
+    @Autowired
+    private IVaccineStatusService statusService;
 
     public void test() throws Exception {
-       //createDigitalni();
-       //createPotvrdu();
-
-
+       this.createPfizer();
+       this.createAstraZeneca();
+       this.createModerna();
+       this.createSinopharm();
+       this.createSputnikV();
     }
 
     public void testWriteToExistDb() throws Exception {
@@ -100,7 +87,40 @@ public class Test {
 
         potvrdaService.create(k);
     }
+    
+    private void createPfizer() throws Exception {
+    	StanjeVakcine stanje = new StanjeVakcine();
+    	stanje.setKolicina(10);
+    	stanje.setVakcina("Pfizer-BioNTech");
+    	statusService.create(stanje);
+    }
+    
+    private void createModerna() throws Exception {
+    	StanjeVakcine stanje = new StanjeVakcine();
+    	stanje.setKolicina(10);
+    	stanje.setVakcina("Moderna");
+    	statusService.create(stanje);
+    }
+    
+    private void createAstraZeneca() throws Exception {
+    	StanjeVakcine stanje = new StanjeVakcine();
+    	stanje.setKolicina(10);
+    	stanje.setVakcina("AstraZeneca-Oxford");
+    	statusService.create(stanje);
+    }
+    private void createSinopharm() throws Exception {
+    	StanjeVakcine stanje = new StanjeVakcine();
+    	stanje.setKolicina(10);
+    	stanje.setVakcina("Sinopharm");
+    	statusService.create(stanje);
+    }
 
+    private void createSputnikV() throws Exception {
+    	StanjeVakcine stanje = new StanjeVakcine();
+    	stanje.setKolicina(10);
+    	stanje.setVakcina("Sputnik V");
+    	statusService.create(stanje);
+    }
 //    public void testWriteToExistDb() throws Exception {
 //        File file = new File("data/documents/obrazac_za_sprovodjenje_imunizacije.xml");
 //        baseRepository.save("/db/obrazac_za_sprovodjenje_imunizacije", "1.xml", FileUtils.readFileToString(file, String.valueOf(StandardCharsets.UTF_8)));

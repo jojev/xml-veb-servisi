@@ -7,6 +7,7 @@ import main.java.com.xml.officialbackend.service.contract.IDigitalniSertifikatSe
 import main.java.com.xml.officialbackend.service.contract.IZahtevZaSertifikatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,6 +26,7 @@ public class ZahtevZaSertifikatController {
         this.zahtevZaSertifikatService = zahtevZaSertifikatService;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @PostMapping(value = "/odgovor")
     public ResponseEntity<?> response(@RequestBody RazlogDTO razlogDTO, @RequestHeader("Authorization") String accessToken) throws Exception {
 
@@ -33,12 +35,13 @@ public class ZahtevZaSertifikatController {
         HttpEntity<?> httpEntity = new HttpEntity<>(razlogDTO,headers);
         ResponseEntity<ZahtevZaIzdavanjeSertifikata> responseEntity =
 
-                restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/{documentId}",
-                        HttpMethod.GET,  httpEntity,ZahtevZaIzdavanjeSertifikata.class, razlogDTO.getZahtev());
+                restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/odgovor",
+                        HttpMethod.POST,  httpEntity,ZahtevZaIzdavanjeSertifikata.class);
         zahtevZaSertifikatService.response(razlogDTO, responseEntity.getBody(), accessToken);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @GetMapping(value = "/pending")
     public ResponseEntity<?> findPendingZahtevi(@RequestHeader("Authorization") String accessToken) {
 
@@ -52,6 +55,7 @@ public class ZahtevZaSertifikatController {
     }
 
     @GetMapping("/metadata/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> getMetadata(@PathVariable String id, @RequestHeader("Authorization") String accessToken) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", accessToken);
@@ -64,6 +68,7 @@ public class ZahtevZaSertifikatController {
     }
 
     @GetMapping("/metadata-json/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> getMetadataJson(@PathVariable String id, @RequestHeader("Authorization") String accessToken) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", accessToken);

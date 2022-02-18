@@ -144,7 +144,7 @@
 
             		</div>
             		<div class="value">
-            			<xsl:value-of select="b:razlog_za_podnosenje"></xsl:value-of>
+						<xsl:value-of select="b:razlog_za_podnosenje"/>
             		</div>
                	</div>
                	

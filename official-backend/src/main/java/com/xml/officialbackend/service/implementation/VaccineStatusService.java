@@ -4,17 +4,12 @@ import main.java.com.xml.officialbackend.exception.MissingEntityException;
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
 import main.java.com.xml.officialbackend.repository.BaseRepository;
 import main.java.com.xml.officialbackend.service.contract.IVaccineStatusService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.xml.sax.SAXException;
-import org.xmldb.api.base.XMLDBException;
 
-import javax.xml.bind.JAXBException;
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class VaccineStatusService implements IVaccineStatusService {
@@ -26,10 +21,11 @@ public class VaccineStatusService implements IVaccineStatusService {
     }
 
     @Override
-    public List<StanjeVakcine> findAll() throws JAXBException, XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SAXException {
+    public List<StanjeVakcine> findAll() throws Exception {
         List<StanjeVakcine> allDocuments = baseRepository.loadAllDocumentsFromCollection("/db/stanjeVakcine", "http://www.ftn.uns.ac.rs/stanjeVakcine",
                 "for $n in fn:collection('/db/stanjeVakcine')" +
                         "return $n", StanjeVakcine.class);
+        System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: " + allDocuments.size());
         return allDocuments;
     }
 

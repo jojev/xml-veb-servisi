@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IService<T> {
-    List<T> findAll() throws JAXBException, XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SAXException;
+    List<T> findAll() throws JAXBException, XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SAXException, Exception;
     T findById(String id) throws Exception;
     T create(T entity) throws Exception;
     T update(T entity, String id) throws Exception;

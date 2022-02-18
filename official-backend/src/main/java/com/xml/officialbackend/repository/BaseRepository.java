@@ -75,7 +75,7 @@ public class BaseRepository {
     }
 
     public  <T>  List<T> loadAllDocumentsFromCollection(String collectionUri, String targetNamespace, String xqueryExpression, Class genericClass)
-            throws XMLDBException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, JAXBException, SAXException {
+            throws Exception {
         final List<T> allDocuments = new ArrayList<>();
         for (Resource resource: existDbManager.loadAllDocumentsInCollection(collectionUri, targetNamespace, xqueryExpression)) {
             allDocuments.add(jaxBParser.<T>unmarshall((XMLResource) resource, genericClass));

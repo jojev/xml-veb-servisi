@@ -239,7 +239,7 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     }
 
     @Override
-    public ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws IOException, JAXBException, XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws Exception {
         String xqueryPath = "data/xquery/pretraga_po_tekstu_sertifikat.xqy";
         String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
 
@@ -367,5 +367,34 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     	DigitalniZeleniSertifikat sertifikat = findById(id);
     	return xslfoTransformer.generatePDFtoByteArray(sertifikat);
     }
+
+    @Override
+    public ArrayList<DigitalniZeleniSertifikat> searchMetadataLogical(MetadataSearchDTO searchDTO) throws Exception {
+        ArrayList<RDFNode> nodes = searchMETA(searchDTO.getSearch());
+        ArrayList<DigitalniZeleniSertifikat> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            DigitalniZeleniSertifikat digitalni = findById(parts[parts.length - 1]);
+            list.add(digitalni);
+        }
+        return list;
+    }
+
+    public ArrayList<RDFNode> searchMETA(String sparqlCondition) throws IOException {
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/digitalni_sertifikat", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+
+        }
+        return nodes;
+    }
+
+
+
 
 }

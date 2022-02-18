@@ -5,6 +5,7 @@ import main.java.com.xml.officialbackend.dto.SearchDTO;
 
 import main.java.com.xml.officialbackend.dto.MetadataSearchDTO;
 
+import main.java.com.xml.officialbackend.model.digitalni_sertifikat.DigitalniZeleniSertifikat;
 import main.java.com.xml.officialbackend.model.potvrda_o_vakcinaciji.PotvrdaOVakcinaciji;
 
 import javax.xml.bind.JAXBException;
@@ -28,4 +29,6 @@ public interface IPotvrdaOVakcinacijiService extends IService<PotvrdaOVakcinacij
     String readMetadata(String documentId, String format) throws IOException;
 
     public String findWhoIsReferenced(String documentId);
+  
+    ArrayList<PotvrdaOVakcinaciji> searchMetadataLogical(MetadataSearchDTO searchDTO) throws Exception;
 }

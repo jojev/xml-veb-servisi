@@ -12,13 +12,16 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MetadataSearchComponent } from './pages/metadata-search/metadata-search.component';
 import { TextSearchComponent } from './pages/text-search/text-search.component';
+import { LogicalSearchComponent } from './pages/logical-search/logical-search.component';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
   declarations: [
     DocumentsTableComponent,
     MetadataSearchComponent,
-    TextSearchComponent
+    TextSearchComponent,
+    LogicalSearchComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +32,8 @@ import { TextSearchComponent } from './pages/text-search/text-search.component';
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
-    MatTableModule
+    MatTableModule,
+    MatButtonModule
   ]
 })
 export class SearchModule { }

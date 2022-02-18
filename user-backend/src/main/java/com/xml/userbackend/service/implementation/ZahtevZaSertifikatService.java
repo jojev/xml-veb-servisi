@@ -307,4 +307,31 @@ public class ZahtevZaSertifikatService implements IZahtevZaSertifikatService {
         String[] documentUri = lastZahtev.split("/");
         return documentUri[documentUri.length - 1];
     }
+
+    @Override
+    public ArrayList<ZahtevZaIzdavanjeSertifikata> searchMetadataLogical(String search) throws Exception {
+        ArrayList<RDFNode> nodes = searchMETA(search);
+        ArrayList<ZahtevZaIzdavanjeSertifikata> list = new ArrayList<>();
+        for (RDFNode node : nodes) {
+            String[] parts = node.toString().split("/");
+            ZahtevZaIzdavanjeSertifikata zahtev = findById(parts[parts.length - 1]);
+            list.add(zahtev);
+        }
+        return list;
+    }
+
+    public ArrayList<RDFNode> searchMETA(String sparqlCondition) throws IOException {
+        ArrayList<RDFNode> nodes = new ArrayList<>();
+        try (RDFReadResult result = FusekiReader.readRDFWithSparqlQuery("/zahtev_za_sertifikat", sparqlCondition)) {
+            List<String> columnNames = result.getResult().getResultVars();
+            while (result.getResult().hasNext()) {
+                QuerySolution row = result.getResult().nextSolution();
+                String columnName = columnNames.get(0);
+                nodes.add(row.get(columnName));
+            }
+
+        }
+        return nodes;
+    }
+
 }

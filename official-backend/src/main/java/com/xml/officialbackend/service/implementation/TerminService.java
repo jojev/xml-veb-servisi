@@ -127,7 +127,8 @@ public class TerminService implements ITerminService {
         vaccineTypes.add("Moderna");
         vaccineTypes.add("Sputnik V");
         vaccineTypes.add("Sinopharm");
-        vaccineTypes.add("AstraZeneca-Oxford");
+        vaccineTypes.add("AstraZeneca");
+
 
         for(int i = 0; i < lista.getStavka().size(); i++) {
             ListaCekanja.Stavka stavka = lista.getStavka().get(i);
@@ -160,7 +161,6 @@ public class TerminService implements ITerminService {
 
         XMLGregorianCalendar now =  DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
         int result = date.toGregorianCalendar().compareTo(now.toGregorianCalendar());
-        
         if(result <= 0) {
         	date = now;
         }
@@ -181,7 +181,7 @@ public class TerminService implements ITerminService {
         while(true) {
         	String findDate = date.getYear() + "-" + date.getMonth() + "-" + date.getDay();
             PoslednjiTermin termin =  poslednjiTerminService.findById(findDate);
-            
+
             if(termin != null) {
                 if(termin.getBrojTermina() < 128 ) {
                     Termin newTermin = new Termin();
@@ -189,6 +189,7 @@ public class TerminService implements ITerminService {
                     newTermin.setEmailPacijenta(stavka.getEmailPacijenta());
                     newTermin.setJmbgPacijenta(stavka.getJmbgPacijenta());
                     newTermin.setIspostovan(false);
+                    newTermin.setObradjen(false);
                     newTermin.setDoza(stavka.getDoza());
                     newTermin.setTipVakcine(stavka.getTipVakcine());
                     newTermin.setDatumVreme(makeAppointment(termin.getBrojTermina(), date));
@@ -205,11 +206,13 @@ public class TerminService implements ITerminService {
                 newTermin.setEmailPacijenta(stavka.getEmailPacijenta());
                 newTermin.setJmbgPacijenta(stavka.getJmbgPacijenta());
                 newTermin.setIspostovan(false);
+                newTermin.setObradjen(false);
                 newTermin.setDoza(stavka.getDoza());
                 newTermin.setTipVakcine(stavka.getTipVakcine());
                 newTermin.setDatumVreme(makeAppointment(0, date));
 
                 Termin savedTermin = this.create(newTermin);
+
                 this.updateVaccineStatusAndLastAppointment(savedTermin, null, stanje, date);
                 
                 return savedTermin;
@@ -228,14 +231,18 @@ public class TerminService implements ITerminService {
         stavka.setEmailPacijenta(emailOFPatient);
         stavka.setTipVakcine(vaccineType);
         stavka.setDoza(numberOfVaccine);
+        
         GregorianCalendar calendar = dateOfLastVaccine.toGregorianCalendar();
         if(numberOfVaccine == 2) {
-            if(vaccineType.equalsIgnoreCase("AstraZeneca" )) {
+            if(vaccineType.equalsIgnoreCase("AstraZeneca" ) || vaccineType.equalsIgnoreCase("AstraZeneca-Oxford" )) {
                 calendar.add(Calendar.MONTH, 2);
             }
             else {
                 calendar.add(Calendar.DAY_OF_YEAR, 21);
             }
+        }
+        else if(numberOfVaccine == 1) {
+        	calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
         else {
             calendar.add(Calendar.MONTH, 6);
@@ -244,7 +251,6 @@ public class TerminService implements ITerminService {
         XMLGregorianCalendar xmlGregorianCalendar =
                 DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
         stavka.setPeriodCekanja(xmlGregorianCalendar);
-        
         Termin termin = findAvailableAppointment(vaccineType, stavka);
         
         if(termin == null) {

@@ -3,12 +3,14 @@ package main.java.com.xml.userbackend.controller;
 import main.java.com.xml.userbackend.dto.MetadataSearchDTO;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.text.ParseException;
 
 
 import main.java.com.xml.userbackend.dto.RazlogDTO;
 import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +24,7 @@ import main.java.com.xml.userbackend.model.zahtev_za_sertifikat.ZahtevList;
 import main.java.com.xml.userbackend.service.contract.IZahtevZaSertifikatService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -45,25 +48,28 @@ public class ZahtevZaSertifikatController {
     }
     
     @GetMapping("/count")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<CountResponse> findNumberOfZahteva(@RequestParam String startDate, @RequestParam String endDate) throws IOException, ParseException {
 
 		return new ResponseEntity<>(new CountResponse(zahtevZaSertifikatService.getNumberOfRequestForDigitalSertificate(startDate, endDate)), HttpStatus.OK);
     }
 
 
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @PostMapping("/odgovor")
     public ResponseEntity<?> getZahtev(@RequestBody RazlogDTO razlogDTO) throws Exception {
         ZahtevZaIzdavanjeSertifikata zahtevZaIzdavanjeSertifikata = zahtevZaSertifikatService.setOdgovor(razlogDTO);
         return new ResponseEntity<>(zahtevZaIzdavanjeSertifikata, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @PostMapping("/search_by_metadata")
     public ResponseEntity<?> searchByMetadata(@RequestBody MetadataSearchDTO metadataSearchDTO) throws Exception {
         ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchMetadata(metadataSearchDTO);
         ZahtevList list = new ZahtevList(zahtevi);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     @PostMapping("/search_by_text")
     public ResponseEntity<?> searchByText(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchByText(searchDTO.getSearch());
@@ -72,6 +78,7 @@ public class ZahtevZaSertifikatController {
     }
 
 
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @GetMapping("/pending")
     public ResponseEntity<?> getPendingZahtevi() throws Exception {
         ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.findPendingZahtevi();
@@ -99,5 +106,13 @@ public class ZahtevZaSertifikatController {
     public ResponseEntity<?> getById(@PathVariable String documentId, @RequestHeader("Authorization") String accessToken) throws Exception {
         ZahtevZaIzdavanjeSertifikata zahtev = zahtevZaSertifikatService.findById(documentId);
         return new ResponseEntity<>(zahtev, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
+    @GetMapping("/search_logical")
+    public ResponseEntity<?> searchLogical(@RequestParam(name="search") String search) throws Exception {
+        ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchMetadataLogical(URLDecoder.decode(search, "UTF-8"));
+        ZahtevList list = new ZahtevList(zahtevi);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

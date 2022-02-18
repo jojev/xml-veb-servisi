@@ -5,6 +5,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -37,28 +38,28 @@ public class XslfoTransformationController {
 	private SearchService searchService;
 	
 	@PostMapping("/digitalni")
-	//@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<?> getDigitalniTransformation(@RequestBody SearchDTO searchDTO) throws Exception {
         byte[] digitalniStream = sertifikatService.generateDigitalniToPDF(searchDTO.getSearch());
         return new ResponseEntity<>(digitalniStream, HttpStatus.OK);
     }
 	
 	@PostMapping("/potvrda")
-	//@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN', 'ROLE_ZDRAVSTVENI_RADNIK')")
     public ResponseEntity<?> getInteresovanjeTransformation(@RequestBody SearchDTO searchDTO) throws Exception {
         byte[] potvrdaStream = potvrdaService.generatePotvrdaToPDF(searchDTO.getSearch());
         return new ResponseEntity<>(potvrdaStream, HttpStatus.OK);
     }
 	
 	@PostMapping(value = "/izvestaj")
-	//@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
 	public ResponseEntity<?> getPotvrdaTransformation(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) throws Exception {
 		byte[] potvrdaStream = izvestajService.generateIzestajToPDF(searchDTO.getSearch());
         return new ResponseEntity<>(potvrdaStream, HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/obrazac")
-	//@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN', 'ROLE_ZDRAVSTVENI_RADNIK')")
 	public ResponseEntity<?> getObrazacTransformation(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
 		HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
 	    ResponseEntity<byte[]> response = restTemplate.exchange("http://localhost:8080/api/v1/xslfo_transformation/obrazac", HttpMethod.POST,
@@ -67,7 +68,7 @@ public class XslfoTransformationController {
 	}
 	
 	@PostMapping(value = "/interesovanje")
-	//@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
 	public ResponseEntity<?> getInteresovanjeTransformation(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
       HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
       ResponseEntity<byte[]> response = restTemplate.exchange("http://localhost:8081/api/v1/xslfo_transformation/interesovanje", HttpMethod.POST,
@@ -76,7 +77,7 @@ public class XslfoTransformationController {
 	}
 	
 	@PostMapping(value = "/zahtev")
-	//@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
 	public ResponseEntity<?> getZahtevTransformation(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
       HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
       ResponseEntity<byte[]> response = restTemplate.exchange("http://localhost:8081/api/v1/xslfo_transformation/zahtev", HttpMethod.POST,
