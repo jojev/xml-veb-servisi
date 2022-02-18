@@ -9,6 +9,8 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping(value = "/api/v1/zahtev_za_sertifikat", produces = {"application/xml"})
 public class ZahtevZaSertifikatController {
@@ -45,6 +47,30 @@ public class ZahtevZaSertifikatController {
         ResponseEntity<ZahtevList> responseEntity =
                 restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/pending",
                         HttpMethod.GET, httpEntity, ZahtevList.class);
+        return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
+    }
+
+    @GetMapping("/metadata/{id}")
+    public ResponseEntity<?> getMetadata(@PathVariable String id, @RequestHeader("Authorization") String accessToken) throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", accessToken);
+        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> responseEntity =
+
+                restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/metadata/{id}",
+                        HttpMethod.GET,  httpEntity,String.class, id);
+        return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
+    }
+
+    @GetMapping("/metadata-json/{id}")
+    public ResponseEntity<?> getMetadataJson(@PathVariable String id, @RequestHeader("Authorization") String accessToken) throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", accessToken);
+        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<String> responseEntity =
+
+                restTemplate.exchange("http://localhost:8080/api/v1/zahtev_za_sertifikat/metadata-json/{id}",
+                        HttpMethod.GET,  httpEntity,String.class, id);
         return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
     }
 }

@@ -1,6 +1,7 @@
 package main.java.com.xml.officialbackend.service.implementation;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 
 import java.text.DateFormat;
@@ -10,6 +11,8 @@ import java.util.*;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.namespace.QName;
 
+import main.java.com.xml.officialbackend.exception.MissingEntityException;
+import main.java.com.xml.officialbackend.rdf.FusekiReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xmldb.api.base.Resource;
@@ -240,5 +243,16 @@ public class IzvestajService implements IIzvestajService{
 		 IzvestajOImunizaciji izvestaj = findById(id);
 	     return xslfoTransformer.generatePDFtoByteArray(izvestaj);
 	 }
+
+	@Override
+	public String readMetadata(String documentId, String format) throws IOException {
+		String sparqlCondition = "<http://www.ftn.uns.ac.rs/rdf/izvestaj_o_imunizaciji//" + documentId + "> ?d ?s .";
+		try {
+			return FusekiReader.readMetadata("/izvestaj_o_imunizaciji", sparqlCondition, format);
+		}
+		catch (Exception e) {
+			throw new MissingEntityException("Ne postoji izvestaj sa tim id.");
+		}
+	}
 
 }

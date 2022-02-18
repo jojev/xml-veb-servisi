@@ -1,32 +1,18 @@
 package main.java.com.xml.officialbackend.controller;
 
-import main.java.com.xml.officialbackend.model.obrazac_za_sprovodjenje_imunizacije.PodaciKojeJePopunioZdravstveniRadnik;
-import main.java.com.xml.officialbackend.service.contract.IObrazacZaSprovodjenjeImunizacijeService;
+import main.java.com.xml.officialbackend.model.zahtev_za_sertifikat.ZahtevZaIzdavanjeSertifikata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
 @RestController
-@RequestMapping(value = "/api/v1/saglasnost",produces={"application/xml"})
-public class SaglasnostController {
+@RequestMapping(value = "/api/v1/interesovanje", produces = {"application/xml"})
+public class InteresovanjeController {
     @Autowired
     private RestTemplate restTemplate;
-
-    @Autowired
-    private IObrazacZaSprovodjenjeImunizacijeService saglasnostService;
-
-
-    @PreAuthorize("hasAnyRole('ROLE_ZDRAVSTVENI_RADNIK')")
-    @PutMapping("/{jmbg}")
-    public ResponseEntity<?> updateSaglanost(@RequestBody PodaciKojeJePopunioZdravstveniRadnik podaciKojeJePopunioZdravstveniRadnik,
-                                             @PathVariable String jmbg,@RequestHeader("Authorization") String accessToken
-    ) throws Exception {
-        return new ResponseEntity<>(saglasnostService.update(jmbg, podaciKojeJePopunioZdravstveniRadnik,accessToken), HttpStatus.OK);
-    }
 
     @GetMapping("/metadata/{id}")
     public ResponseEntity<?> getMetadata(@PathVariable String id, @RequestHeader("Authorization") String accessToken) throws IOException {
@@ -35,7 +21,7 @@ public class SaglasnostController {
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<String> responseEntity =
 
-                restTemplate.exchange("http://localhost:8080/api/v1/saglasnost/metadata/{id}",
+                restTemplate.exchange("http://localhost:8080/api/v1/interesovanje/metadata/{id}",
                         HttpMethod.GET,  httpEntity,String.class, id);
         return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
     }
@@ -47,7 +33,7 @@ public class SaglasnostController {
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<String> responseEntity =
 
-                restTemplate.exchange("http://localhost:8080/api/v1/saglasnost/metadata-json/{id}",
+                restTemplate.exchange("http://localhost:8080/api/v1/interesovanje/metadata-json/{id}",
                         HttpMethod.GET,  httpEntity,String.class, id);
         return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
     }

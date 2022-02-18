@@ -14,7 +14,7 @@ const routes: Routes = [
     path: "metadata",
     pathMatch: "full",
     component: MetadataSearchComponent,
-
+  },
   {
     path: "text-search",
     pathMatch: "full",

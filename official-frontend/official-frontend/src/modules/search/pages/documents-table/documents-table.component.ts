@@ -15,7 +15,7 @@ export class DocumentsTableComponent implements OnInit {
 
   search: string = " ";
 
-  displayedColumns: string[] = ['dokument', 'id', 'prikaz', 'preuzmi'];
+  displayedColumns: string[] = ['dokument', 'id', 'prikaz', 'preuzmi', 'metapodaci'];
   dataSource: any[] = [];
   all: number = 0;
 
@@ -251,6 +251,81 @@ export class DocumentsTableComponent implements OnInit {
       )
     }
 
+  }
+
+
+  downloadRdfMetadata(element: any): void {
+    let documentId = element.id;
+    if (element.dokument === 'Interesovanje') {
+      this.searchService.getMetadataRDFForInteresovanje(documentId).subscribe(
+        (result) => {
+            download( result, "interesovanje.txt", "text/plain" );
+        }
+      )
+    }else if (element.dokument == 'Obrazac za sprovođenje imunizacije') {
+      this.searchService.getMetadataRDFForSaglasnost(documentId).subscribe(
+        (result) => {
+          download( result, "saglasnost.txt", "text/plain" );
+      }
+      )
+    }
+    else if (element.dokument == 'Zahtev za izdavanje digitalnog sertifikata') {
+      this.searchService.getMetadataRDFForZahtev(documentId).subscribe(
+        (result) => {
+          download( result, "zahtev_za_sertifikat.txt", "text/plain" );
+      }
+      )
+    }
+    else if (element.dokument == 'Potvrda o vakcinaciji') {
+      this.searchService.getMetadataRDFForPotvrda(documentId).subscribe(
+        (result) => {
+          download( result, "potvrda_o_vakcinaciji.txt", "text/plain" );
+      }
+      )
+    } else if (element.dokument == 'Digitalni zeleni sertifikat') {
+      this.searchService.getMetadataRDFForSertifikat(documentId).subscribe(
+        (result) => {
+          download( result, "digitalni_sertifikat.txt", "text/plain" );
+      }
+      )
+    }
+  }
+
+  downloadJsonMetadata(element: any): void {
+    let documentId = element.id;
+    if (element.dokument === 'Interesovanje') {
+      this.searchService.getMetadataJsonForInteresovanje(documentId).subscribe(
+        (result) => {
+            download( result, "interesovanje.json", "text/plain" );
+        }
+      )
+    }else if (element.dokument == 'Obrazac za sprovođenje imunizacije') {
+      this.searchService.getMetadataJsonForSaglasnost(documentId).subscribe(
+        (result) => {
+          download( result, "saglasnost.json", "text/plain" );
+      }
+      )
+    }
+    else if (element.dokument == 'Zahtev za izdavanje digitalnog sertifikata') {
+      this.searchService.getMetadataJsonForZahtev(documentId).subscribe(
+        (result) => {
+          download( result, "zahtev_za_sertifikat.json", "text/plain" );
+      }
+      )
+    }
+    else if (element.dokument == 'Potvrda o vakcinaciji') {
+      this.searchService.getMetadataJsonForPotvrda(documentId).subscribe(
+        (result) => {
+          download( result, "potvrda_o_vakcinaciji.json", "text/plain" );
+      }
+      )
+    } else if (element.dokument == 'Digitalni zeleni sertifikat') {
+      this.searchService.getMetadataJsonForSertifikat(documentId).subscribe(
+        (result) => {
+          download( result, "digitalni_sertifikat.json", "text/plain" );
+      }
+      )
+    }
   }
 
 }
