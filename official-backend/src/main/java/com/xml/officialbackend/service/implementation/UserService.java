@@ -147,7 +147,7 @@ public class UserService implements IUserService {
              throw new BadCredentialException("Pogrešni kredencijali");
         }
         if(response.getBody().getRoles().get(0).equals("ROLE_GRADJANIN")){
-            throw new BadCredentialException("Logovanje isključivo za građanina");
+            throw new BadCredentialException("Logovanje isključivo za lekare");
         }
         return response.getBody();
     }
