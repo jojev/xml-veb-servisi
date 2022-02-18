@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./root-layout.component.scss']
 })
 export class RootLayoutComponent implements OnInit {
-
+  private role: any = localStorage.getItem("role")
   constructor() { }
 
   ngOnInit(): void {

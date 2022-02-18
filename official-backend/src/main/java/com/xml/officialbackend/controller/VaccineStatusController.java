@@ -2,6 +2,7 @@ package main.java.com.xml.officialbackend.controller;
 
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcine;
 import main.java.com.xml.officialbackend.model.stanjevakcine.StanjeVakcineList;
+import main.java.com.xml.officialbackend.service.contract.IVaccineStatusService;
 import main.java.com.xml.officialbackend.service.implementation.TerminService;
 import main.java.com.xml.officialbackend.service.implementation.VaccineStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value="/api/v1/vaccine-status", produces={"application/xml"})
 public class VaccineStatusController {
+	
     @Autowired
     private VaccineStatusService vaccineStatusService;
     
@@ -22,24 +24,24 @@ public class VaccineStatusController {
     private TerminService terminService;
 
     @PostMapping("")
-    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
-    private ResponseEntity<?> createVaccineStatus(@RequestBody StanjeVakcine vaccineStatus) throws Exception {
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_ZDRAVSTVENI_RADNIK')")
+    public ResponseEntity<?> createVaccineStatus(@RequestBody StanjeVakcine vaccineStatus) throws Exception {
     	StanjeVakcine stanje = vaccineStatusService.create(vaccineStatus);
     	terminService.assignToPatient();
         return new ResponseEntity<>(stanje, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
-    private ResponseEntity<?> updateVaccineStatus(@RequestBody StanjeVakcine vaccineStatus, @PathVariable String id) throws Exception {
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_ZDRAVSTVENI_RADNIK')")
+    public ResponseEntity<?> updateVaccineStatus(@RequestBody StanjeVakcine vaccineStatus, @PathVariable String id) throws Exception {
     	StanjeVakcine stanje = vaccineStatusService.update(vaccineStatus, id);
     	terminService.assignToPatient();
         return new ResponseEntity<>(stanje, HttpStatus.OK);
     }
 
     @GetMapping("")
-    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
-    private ResponseEntity<StanjeVakcineList> getAllVaccineStatus() throws Exception {
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_ZDRAVSTVENI_RADNIK')")
+    public ResponseEntity<StanjeVakcineList> getAllVaccineStatus() throws Exception {
         List<StanjeVakcine> stanjeVakcineList = vaccineStatusService.findAll();
         StanjeVakcineList list = new StanjeVakcineList(stanjeVakcineList);
         return new ResponseEntity<>(list, HttpStatus.OK);

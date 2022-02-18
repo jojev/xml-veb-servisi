@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.*;
  *               &lt;enumeration value="Pfizer-BioNTech"/&gt;
  *               &lt;enumeration value="Sinopharm"/&gt;
  *               &lt;enumeration value="Sputnik V"/&gt;
- *               &lt;enumeration value="AstraZeneca-Oxford"/&gt;
+ *               &lt;enumeration value="AstraZeneca"/&gt;
  *               &lt;enumeration value="Moderna"/&gt;
  *             &lt;/restriction&gt;
  *           &lt;/simpleType&gt;
