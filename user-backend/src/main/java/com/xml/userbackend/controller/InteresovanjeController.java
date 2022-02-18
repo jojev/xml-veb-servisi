@@ -70,6 +70,7 @@ public class InteresovanjeController {
         return new ResponseEntity<>(list, HttpStatus.OK);
 
     }
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     @PostMapping("/search_by_text")
 	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchByText(@RequestBody SearchDTO searchDTO) throws Exception {

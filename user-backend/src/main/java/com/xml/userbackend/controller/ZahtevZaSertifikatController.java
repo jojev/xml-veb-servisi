@@ -69,7 +69,7 @@ public class ZahtevZaSertifikatController {
         ZahtevList list = new ZahtevList(zahtevi);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     @PostMapping("/search_by_text")
     public ResponseEntity<?> searchByText(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchByText(searchDTO.getSearch());
