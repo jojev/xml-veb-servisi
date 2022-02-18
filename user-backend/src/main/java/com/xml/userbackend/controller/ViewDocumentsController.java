@@ -49,7 +49,7 @@ public class ViewDocumentsController {
 	private ISaglasnostService saglasnostService;
 	
 	@PostMapping(value = "/digitalni_sertifikat/search_jmbg")
-	  //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<?> searchDigitalniSertifikatByJMBG(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
         HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
         ResponseEntity<DigitalniSertifikatList> response = restTemplate.exchange("http://localhost:8081/api/v1/search/digitalni_sertifikat/search_jmbg", HttpMethod.POST,
@@ -58,7 +58,7 @@ public class ViewDocumentsController {
     }
 	
 	@PostMapping(value = "/potvrda_o_vakcinaciji/search_jmbg")
-	  //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<?> searchPotvrdaOVakcinacijiByJMBG(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) {
         HttpEntity<String> httpEntity = searchService.setEntity(searchDTO, accessToken);
         ResponseEntity<PotvrdaOVakcinacijiList> response = restTemplate.exchange("http://localhost:8081/api/v1/search/potvrda_o_vakcinaciji/search_jmbg", HttpMethod.POST,
@@ -67,7 +67,7 @@ public class ViewDocumentsController {
     }
 	
 	@PostMapping(value = "/obrazac/search_jmbg")
-	  //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
     public ResponseEntity<?> searchObrazacByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
 		ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazac = saglasnostService.searchByJMBG(searchDTO);
         ObrazacList list = new ObrazacList(obrazac);
@@ -75,8 +75,8 @@ public class ViewDocumentsController {
     }
 	
 	@PostMapping("/zahtev_za_sertifikat/search_jmbg")
-  //@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
-    public ResponseEntity<?> searchZahtevByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK', 'ROLE_GRADJANIN')")
+    public ResponseEntity<?> searchZahtevByJMBG(@RequestBody SearchDTO searchDTO, @RequestHeader("Authorization") String accessToken) throws Exception {
         ArrayList<ZahtevZaIzdavanjeSertifikata> zahtevi = zahtevZaSertifikatService.searchByJMBG(searchDTO);
         ZahtevList list = new ZahtevList(zahtevi);
         return new ResponseEntity<>(list, HttpStatus.OK);

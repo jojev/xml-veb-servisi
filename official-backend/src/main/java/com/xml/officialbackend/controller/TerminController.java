@@ -6,6 +6,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,7 @@ public class TerminController {
 	private TerminService terminService;
 	
 	@GetMapping("/add")
+	@PreAuthorize("hasAnyRole('ROLE_GRADJANIN')")
 	public ResponseEntity<?> addInteresovanjeTermin(@RequestParam String periodCekanja, @RequestParam String jmbg, @RequestParam String email, @RequestParam String tipVakcine, @RequestParam int doza ) throws Exception {
 		XMLGregorianCalendar period = 
 	  			  DatatypeFactory.newInstance().newXMLGregorianCalendar(periodCekanja);
@@ -31,7 +33,7 @@ public class TerminController {
 		stavka.setEmailPacijenta(email);
 		stavka.setJmbgPacijenta(jmbg);
 		stavka.setPeriodCekanja(period);
-		
+        System.out.println("TERMIN: " + stavka.getJmbgPacijenta() + " " + stavka.getEmailPacijenta() + " " + stavka.getDoza() + " " + stavka.getTipVakcine() + " " + stavka.getPeriodCekanja());
 		terminService.addTerminOrAddToListaCekanja(stavka.getTipVakcine(), stavka.getDoza(), stavka.getJmbgPacijenta(), stavka.getEmailPacijenta(), stavka.getPeriodCekanja());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

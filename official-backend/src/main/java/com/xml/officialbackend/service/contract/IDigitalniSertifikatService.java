@@ -40,7 +40,7 @@ public interface IDigitalniSertifikatService extends IService<DigitalniZeleniSer
 
     String readMetadata(String documentId, String format) throws IOException;
 
-    ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws IOException, JAXBException, XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException;
+    ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws IOException, JAXBException, XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException, Exception;
 
 	byte[] generateDigitalniToPDF(String id) throws Exception;
 

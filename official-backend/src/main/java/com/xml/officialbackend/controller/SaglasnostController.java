@@ -20,8 +20,8 @@ public class SaglasnostController {
     private IObrazacZaSprovodjenjeImunizacijeService saglasnostService;
 
 
-    @PreAuthorize("hasAnyRole('ROLE_ZDRAVSTVENI_RADNIK')")
     @PutMapping("/{jmbg}")
+    @PreAuthorize("hasAnyRole('ROLE_ZDRAVSTVENI_RADNIK')")
     public ResponseEntity<?> updateSaglanost(@RequestBody PodaciKojeJePopunioZdravstveniRadnik podaciKojeJePopunioZdravstveniRadnik,
                                              @PathVariable String jmbg,@RequestHeader("Authorization") String accessToken
     ) throws Exception {
@@ -29,6 +29,7 @@ public class SaglasnostController {
     }
 
     @GetMapping("/metadata/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ZDRAVSTVENI_RADNIK', 'ROLE_SLUZBENIK')")
     public ResponseEntity<?> getMetadata(@PathVariable String id, @RequestHeader("Authorization") String accessToken) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", accessToken);

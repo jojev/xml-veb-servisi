@@ -72,12 +72,10 @@ export class DocumentsPreviewComponent implements OnInit {
     const _this = this;
     this.saglasnostService.getAllSaglasnostByJmbg(this.searchDTO).subscribe(
       (result) => {
-        console.log(result);
         this.parser.parseString(result, function(err: any, res: any) {
           result = res;
           if(result.obrazacList.obrazac_za_sprovodjenje_imunizacije.length > 0) {
             _this.saglasnosti = result.obrazacList.obrazac_za_sprovodjenje_imunizacije;
-            console.log(_this.saglasnosti); 
           }
         })
       }
@@ -87,7 +85,6 @@ export class DocumentsPreviewComponent implements OnInit {
     const _this = this;
     this.digitalniService.getAllDigitalniByJmbg(this.searchDTO).subscribe(
       (result) => {
-        console.log(result);
         this.parser.parseString(result, function(err: any, res: any) {
           result = res;
           if(result.length > 0) {
@@ -102,7 +99,6 @@ export class DocumentsPreviewComponent implements OnInit {
     const _this = this;
     this.potvrdaService.getAllPotvrdaByJmbg(this.searchDTO).subscribe(
       (result) => {
-        console.log(result);
         this.parser.parseString(result, function(err: any, res: any) {
           result = res;
           if(result.potvrdaOVakcinacijiList.potvrda_o_vakcinaciji.length > 0) {
@@ -121,7 +117,7 @@ export class DocumentsPreviewComponent implements OnInit {
     const searchDTO = { searchdto: {search: documentId}};
     this.interesovanjeService.getHtmlTransformation(searchDTO).subscribe(
       (result) => {
-        console.log(result);
+        
         (document.getElementById("preview") as any).innerHTML = result;
         download( result, "interesovanje.html", "text/plain" );
       }
@@ -135,7 +131,7 @@ export class DocumentsPreviewComponent implements OnInit {
     const searchDTO = { searchdto: {search: documentId}};
     this.zahtevService.getHtmlTransformation(searchDTO).subscribe(
       (result) => {
-        console.log(result);
+        
         (document.getElementById("preview") as any).innerHTML = result;
         download( result, "zahtev.html", "text/plain" );
       }
@@ -148,7 +144,7 @@ export class DocumentsPreviewComponent implements OnInit {
     const searchDTO = { searchdto: {search: documentId}};
     this.saglasnostService.getHtmlTransformation(searchDTO).subscribe(
       (result) => {
-        console.log(result);
+        
         (document.getElementById("preview") as any).innerHTML = result;
         download( result, "saglasnost.html", "text/plain" );
       }
@@ -161,7 +157,6 @@ export class DocumentsPreviewComponent implements OnInit {
     const searchDTO = { searchdto: {search: documentId}};
     this.potvrdaService.getHtmlTransformation(searchDTO).subscribe(
       (result) => {
-        console.log(result);
         (document.getElementById("preview") as any).innerHTML = result;
         download( result, "potvrda.html", "text/plain" );
       }
@@ -174,7 +169,6 @@ export class DocumentsPreviewComponent implements OnInit {
     const searchDTO = { searchdto: {search: documentId}};
     this.digitalniService.getHtmlTransformation(searchDTO).subscribe(
       (result) => {
-        console.log(result);
         (document.getElementById("preview") as any).innerHTML = result;
         download( result, "digitalni.html", "text/plain" );
       }

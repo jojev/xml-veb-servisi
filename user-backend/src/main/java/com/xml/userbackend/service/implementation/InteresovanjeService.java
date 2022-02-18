@@ -110,7 +110,6 @@ public class InteresovanjeService implements IInteresovanjeService {
             System.out.println(columnNames.get(0));
             System.out.println(columnNames.size());
             if (result.getResult().hasNext()) {
-                System.out.println("Usao");
                 QuerySolution row = result.getResult().nextSolution();
                 String columnName = columnNames.get(0);
                 RDFNode rdfNode = row.get(columnName);
@@ -161,7 +160,7 @@ public class InteresovanjeService implements IInteresovanjeService {
         stavka.setPeriodCekanja(DatatypeFactory.newInstance().newXMLGregorianCalendar(strDate));
         
         
-        
+        System.out.println(stavka.getJmbgPacijenta() + " " + stavka.getEmailPacijenta() + " " + stavka.getDoza() + " " + stavka.getTipVakcine() + " " + stavka.getPeriodCekanja());
         
         
         XMLResource resource = existDbManager.load("/db/interesovanje", documentId);

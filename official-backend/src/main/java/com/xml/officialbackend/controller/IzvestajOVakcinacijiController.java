@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,6 +31,7 @@ public class IzvestajOVakcinacijiController {
 	private RestTemplate restTemplate;
 	
 	@GetMapping("")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
 	public ResponseEntity<IzvestajOImunizaciji> searchInteresovanjeByJMBG(@RequestHeader("Authorization") String accessToken, @RequestParam String startDate, 
 			@RequestParam String endDate) throws Exception {
 		HttpHeaders headers = new HttpHeaders();
@@ -47,11 +49,13 @@ public class IzvestajOVakcinacijiController {
     }
 
 	@GetMapping("/metadata/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
 	public ResponseEntity<?> getMetadata(@PathVariable String id) throws IOException {
 		return new ResponseEntity<>(izvestajService.readMetadata(id, "N-TRIPLE"), HttpStatus.OK);
 	}
 
 	@GetMapping("/metadata-json/{id}")
+	@PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
 	public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
 		return new ResponseEntity<>(izvestajService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
 	}

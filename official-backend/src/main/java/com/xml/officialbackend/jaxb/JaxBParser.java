@@ -46,11 +46,15 @@ public class JaxBParser {
 
     }
 
-    public <T> T unmarshall(XMLResource resource, Class genericClass) throws JAXBException, XMLDBException, SAXException {
+    public <T> T unmarshall(XMLResource resource, Class genericClass) throws Exception {
+    	if (resource.getContent() == null) {
+            throw new MissingEntityException("The entity with given id does not exist in the system.");
+    	}
+    	
         return unmarshall(resource.getContent().toString(), genericClass);
     }
 
-    public <T> T unmarshall(String serializedObj, Class genericClass) throws JAXBException, XMLDBException, SAXException {
+    public <T> T unmarshall(String serializedObj, Class genericClass) throws Exception {
         JAXBContext context = JAXBContext.newInstance(genericClass);
         Unmarshaller unmarshaller = context.createUnmarshaller();
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);

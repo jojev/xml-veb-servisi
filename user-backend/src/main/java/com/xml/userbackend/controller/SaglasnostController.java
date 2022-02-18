@@ -51,8 +51,8 @@ public class SaglasnostController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @PostMapping("/search_by_metadata")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchByMetadata(@RequestBody MetadataSearchDTO metadataSearchDTO) throws Exception {
         ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazac = saglasnostService.searchMetadata(metadataSearchDTO);
         ObrazacList list = new ObrazacList(obrazac);
@@ -61,16 +61,20 @@ public class SaglasnostController {
     }
 
     @GetMapping("/metadata/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> getMetadata(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(saglasnostService.readMetadata(id, "N-TRIPLE"), HttpStatus.OK);
     }
 
     @GetMapping("/metadata-json/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> getMetadataJson(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(saglasnostService.readMetadata(id, "RDF/JSON"), HttpStatus.OK);
 
     }
+
     @PostMapping("/search_by_text")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchByText(@RequestBody SearchDTO searchDTO) throws Exception {
         ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazacZaSprovodjenjeImunizacijes = saglasnostService.searchByText(searchDTO);
         ObrazacList obrazacList = new ObrazacList(obrazacZaSprovodjenjeImunizacijes);
@@ -79,14 +83,15 @@ public class SaglasnostController {
 
   
     @PostMapping("/find_one_jmbg")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> findByJMBG(@RequestBody SearchDTO searchDTO) throws Exception {
         ObrazacZaSprovodjenjeImunizacije obrazac = saglasnostService.searchByJMBG(searchDTO).get(0);
         return new ResponseEntity<>(obrazac, HttpStatus.OK);
     }
 
 
-    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     @GetMapping("/search_logical")
+    @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     public ResponseEntity<?> searchLogical(@RequestParam(name="search") String search) throws Exception {
         ArrayList<ObrazacZaSprovodjenjeImunizacije> obrazacZaSprovodjenjeImunizacijes = saglasnostService.searchMetadataLogical(URLDecoder.decode(search, "UTF-8"));
         ObrazacList obrazacList = new ObrazacList(obrazacZaSprovodjenjeImunizacijes);

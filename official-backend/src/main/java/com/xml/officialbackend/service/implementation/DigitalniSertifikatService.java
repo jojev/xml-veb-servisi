@@ -239,7 +239,7 @@ public class DigitalniSertifikatService implements IDigitalniSertifikatService {
     }
 
     @Override
-    public ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws IOException, JAXBException, XMLDBException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public ArrayList<DigitalniZeleniSertifikat> searchByText(SearchDTO searchDTO) throws Exception {
         String xqueryPath = "data/xquery/pretraga_po_tekstu_sertifikat.xqy";
         String xqueryExpression = readFile(xqueryPath, StandardCharsets.UTF_8);
 
