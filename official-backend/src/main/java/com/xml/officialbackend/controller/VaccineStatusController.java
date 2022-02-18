@@ -40,6 +40,7 @@ public class VaccineStatusController {
     @GetMapping("")
     @PreAuthorize("hasAnyRole('ROLE_SLUZBENIK')")
     private ResponseEntity<StanjeVakcineList> getAllVaccineStatus() throws Exception {
+        System.out.println("DADADDADADADAD");
         List<StanjeVakcine> stanjeVakcineList = vaccineStatusService.findAll();
         StanjeVakcineList list = new StanjeVakcineList(stanjeVakcineList);
         return new ResponseEntity<>(list, HttpStatus.OK);
