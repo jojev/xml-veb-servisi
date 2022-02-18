@@ -127,7 +127,6 @@ public class TerminService implements ITerminService {
         vaccineTypes.add("Moderna");
         vaccineTypes.add("Sputnik V");
         vaccineTypes.add("Sinopharm");
-        vaccineTypes.add("AstraZeneca-Oxford");
         vaccineTypes.add("AstraZeneca");
 
 

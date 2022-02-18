@@ -22,7 +22,7 @@ export class DocumentsPreviewComponent implements OnInit {
   domParser = new DOMParser();
   o2x = require('object-to-xml');
   searchDTO: any;
-  displayedColumns: string[] = ['dokument','jmbg', 'datum', "prikaz", "html", "pdf"];
+  displayedColumns: string[] = ['dokument','jmbg', 'datum', "prikaz", "pdf"];
   constructor(
     private interesovanjeService: InteresovanjeService,
     private zahtevService: ZahtevService,

@@ -12,7 +12,7 @@
                             <xs:enumeration value="Pfizer-BioNTech"/>
                             <xs:enumeration value="Sinopharm"/>
                             <xs:enumeration value="Sputnik V"/>
-                            <xs:enumeration value="AstraZeneca-Oxford"/>
+                            <xs:enumeration value="AstraZeneca"/>
                             <xs:enumeration value="Moderna"></xs:enumeration>
                         </xs:restriction>
                     </xs:simpleType>
